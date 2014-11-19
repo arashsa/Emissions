@@ -151,6 +151,10 @@ function stopMission() {
 	Array.prototype.push.apply(events, completedEvents);
 	completedEvents.length = 0;
 	
+	events.sort(function(e1, e2) {
+		return e2.timestamp - e1.timestamp;
+	});
+	
 	missionLength = 0;
 	missionTime = 0;
 	missionTimeLastUpdated = Date.now();
