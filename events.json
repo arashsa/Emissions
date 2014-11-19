@@ -1,0 +1,74 @@
+{
+	"respirationLevels": {
+		"low": [12, 15],
+		"normal": [17, 25],
+		"high": [30, 50]
+	},
+	
+	"oxygenUseLevels": {
+		"low": [0.10, 0.30],
+		"medium": [0.30, 0.60],
+		"high": [0.60, 1.00]
+	},
+	
+	"respirationEvents": [
+		[0, "low"],
+		[65, "normal"],
+		[100, "high"],
+		[140, "normal"],
+		[200, "high"]
+	],
+	
+	"heartRateLevels": {
+		"low": [40, 60],
+		"normal": [60, 80],
+		"high": [90, 120]
+	},
+	
+	"heartRateEvents": [
+		[0, "low"],
+		[40, "high"],
+		[60, "normal"],
+		[90, "high"],
+		[130, "low"]
+	],
+
+	"radiationLevels": {
+		"low": [15, 25],
+		"medium": [45, 65],
+		"high": [200, 300]
+	},
+	
+	"radiationEvents": [
+		[0, "low"],
+		[20, "medium"],
+		[40, "high"],
+		[75, "medium"],
+		[90, "low"]
+	],
+	
+	"receptionLevels": {
+		"weak": [5, 35],
+		"medium": [40, 70],
+		"strong": [75, 100]
+	},
+	
+	"satelite1Events": [
+		[0, "strong"],
+		[25, "medium"],
+		[35, "strong"],
+		[40, "medium"],
+		[50, "weak"]
+	],
+	
+	"satelite2Events": [
+		[0, "medium"],
+		[30, "strong"]
+	],
+	
+	"satelite3Events": [
+		[0, "medium"],
+		[25, "weak"],
+		[35, "strong"]
+	]
+}

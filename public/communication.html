@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<link rel="stylesheet" type="text/css" href="css/communication.css">
+<script src="js/lib/jquery.js"></script>
+<script src="js/lib/amcharts.js"></script>
+<script src="js/lib/socket.io.js"></script>
+<script src="js/lib/adapter.js"></script>
+<script src="js/webrtc.js"></script>
+<script src="js/polyfill.js"></script>
+<script src="js/common.js"></script>
+<script src="js/communication.js"></script>
+</head>
+
+<body>
+
+<p id="missionTime">Oppdraget har ikke startet</p>
+
+<div>
+	<p>Astronaut</p>
+
+	<video id="astronautVideo" width="540" height="360" autoplay="true" loop="true">
+		<source type="video/webm"></source>
+	</video>
+</div>
+
+<div id="chartdiv" style="width: 300px; height: 200px;"></div>
+
+<div>
+	<table>
+		<tr>
+			<th>Satelitt</th>
+			<th>Frekvensområde</th>
+			<th>Status</th>
+		</tr>
+		<tr>
+			<td>Satelitt 1</td>
+			<td>2,3 - 2,9 GHz</td>
+			<td id="satelite1Status">Aktiv</td>
+		</tr>
+		<tr>
+			<td>Satelitt 2</td>
+			<td>2,6 - 3,2 GHz</td>
+			<td id="satelite2Status">Inaktiv</td>
+		</tr>
+		<tr>
+			<td>Satelitt 3</td>
+			<td>3,8 - 4,0 GHz</td>
+			<td id="satelite3Status">Inaktiv</td>
+		</tr>
+	</table>
+</div>
+
+<div>
+	Ny frekvens <input id="frequencyInput" type="text" size="4"></input> <button id="connect">Koble til</button>
+</div>
+
+<div>
+<button id="callMissionCommander">Ring oppdragskoordinator</button>
+</div>
+
+<div>
+<video id="localVideo" autoplay="true" muted="true"></video>
+<video id="commanderVideo" autoplay="true"></video>
+</div>
+
+</body>
+</html>

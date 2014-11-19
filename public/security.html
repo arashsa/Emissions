@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<script src="js/lib/jquery.js"></script>
+<script src="js/lib/amcharts.js"></script>
+<script src="js/lib/socket.io.js"></script>
+<script src="js/lib/adapter.js"></script>
+<script src="js/webrtc.js"></script>
+<script src="js/polyfill.js"></script>
+<script src="js/common.js"></script>
+<script src="js/security.js"></script>
+</head>
+
+<body>
+	<div>
+		<video id="localVideo" width="300px" height="300px" autoplay="true" muted="true"></video>
+		<video id="remoteVideo" width="300px" height="300px" autoplay="true"></video>
+	</div>
+	
+	<div id="incomingCall" style="display: none">
+		<span id="callerId">X ringer</span>
+		<button id="answerButton">Svar</button> 
+	</div>
+</body>
+</html>

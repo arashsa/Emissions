@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<script src="js/lib/jquery.js"></script>
+<script src="js/lib/socket.io.js"></script>
+<script src="js/lib/adapter.js"></script>
+<script src="js/webrtc.js"></script>
+<script src="js/polyfill.js"></script>
+<script src="js/common.js"></script>
+<script src="js/commander.js"></script>
+</head>
+
+<body>
+
+<p id="missionTime">Oppdraget har ikke startet</p>
+
+<div>
+	Oppdragstid: <input type="text" id="missionLength" size="3" /> minutter
+	<button id="startMission">Start oppdrag</button>
+<div>
+
+<video id="astronautVideo" width="270" height="180" autoplay="true" loop="true" controls="true" muted="true">
+	<source type="video/webm"></source>
+</video>
+</div>
+
+<div>
+	<button id="stopButton">Stopp</button>
+	<button id="astronautHappy">Glad</button>
+	<button id="astronautNervous">Nervøs</button>
+</div>
+
+<div id="incomingCall" style="display: none">
+	<span id="callerId">X ringer</span>
+	<button id="answerButton">Svar</button> 
+</div>
+
+<div>
+	<video id="localVideo" autoplay="true" muted="true"></video>
+	<video id="communicationTeamVideo" autoplay="true"></video>
+</div>
+
+</body>
+</html>

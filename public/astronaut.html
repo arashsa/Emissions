@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<script src="js/lib/jquery.js"></script>
+<script src="js/lib/amcharts.js"></script>
+<script src="js/lib/socket.io.js"></script>
+<script src="js/lib/adapter.js"></script>
+<script src="js/webrtc.js"></script>
+<script src="js/polyfill.js"></script>
+<script src="js/common.js"></script>
+<script src="js/astronaut.js"></script>
+</head>
+
+<body>
+
+<p id="missionTime">Oppdraget har ikke startet</p>
+
+<div id="breathRateChart" style="width: 700px; height: 200px;"></div>
+
+<div>
+	Gjenomsnittlig oksygenforbruk i minuttet i prosent: <input type="text" id="averageOxygenUse" size="6" /> <button id="evaluateOxygenUse">Evaluer</button> <span id="oxygenUseEvaluation"></span>
+</div>
+
+<div id="heartRateChart" style="width: 700px; height: 200px;"></div>
+
+<div>
+	Gjenomsnittlig hjerteslag i minuttet: <input type="text" id="averageHeartBeat" size="6" /> <button id="evaluateHeartRate">Evaluer</button> <span id="heartRateEvaluation"></span>
+</div>
+
+<div>
+	<button id="callSecurityTeam">Ring sikkerhets-teamet</button>
+</div>
+
+<div>
+	<video id="localVideo" width="300px" height="300px" autoplay="true" muted="true"></video>
+	<video id="remoteVideo" width="300px" height="300px" autoplay="true"></video>
+</div>
+
+</body>
+</html>

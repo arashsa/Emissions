@@ -1,0 +1,17 @@
+{
+  "name": "WebRTC_Signaling_Server",
+  "version": "1.0.0",
+  "description": "A minimalistic server that initiates audio / video calls between browser clients.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Leo Martin Westby",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.10.1",
+    "node-static": "^0.7.6",
+    "socket.io": "^1.2.0"
+  }
+}
