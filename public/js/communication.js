@@ -1,6 +1,6 @@
 var chart;
-var videoUrl;
-var badReceptionVideoUrl;
+var videoUrl = "";
+var badReceptionVideoUrl = "";
 var receptionLevels;
 var statuses = ["Aktiv", "Inaktiv", "Kobler til...", "Utilgjengelig"];
 var satelites = [ {name: "Satelitt 1", receptionRange: [0, 0], reception: 92, color: "green", status: 0, msUntilConnected: 0, frequency: [2.3, 2.9]},
@@ -55,7 +55,7 @@ function startEventLoop() {
 		for (var i = 0; i < satelites.length; i++) {
 			satelites[i].reception = Math.randomInt(satelites[i].receptionRange[0], satelites[i].receptionRange[1]);
 			
-			if (satelites[i].status == 2) {
+			if (satelites[i].status === 2) {
 				satelites[i].msUntilConnected -= updateFrequency;
 				
 				if (satelites[i].msUntilConnected <= 0) {
@@ -65,7 +65,7 @@ function startEventLoop() {
 			}
 			
 			if (satelites[i].reception <= receptionLevels["weak"][1]) {
-				if (satelites[i].status == 0) {
+				if (satelites[i].status === 0) {
 					changeVideo(badReceptionVideoUrl);
 				}
 				
@@ -126,11 +126,11 @@ window.onload = function() {
 		console.log("Mission started");
 		startEventLoop();
 	});
-	
+
 	socket.on("mission stopped", function() {
-		clearInterval(chartUpdater);
 		stopMissionTimer();
-	});	
+		clearInterval(chartUpdater);
+	});
 	
 	$("#callMissionCommander").click(function () {
 		rtc.connect(id, "commander", socket, $("#localVideo")[0], $("#commanderVideo")[0]);
