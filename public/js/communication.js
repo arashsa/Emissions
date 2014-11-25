@@ -11,7 +11,8 @@ function changeVideo(url) {
 	$("#astronautVideo source").attr("src", url);
 	$("#astronautVideo")[0].load();
 }
-		 
+
+//Configure the reception chart		 
 AmCharts.ready(function() {
 	chart = new AmCharts.AmSerialChart();
 	
@@ -44,17 +45,46 @@ AmCharts.ready(function() {
 	chart.write("chartdiv");
 });
 
+//Updates the satelite receptions and disables the video feed if the active satelite reception is too bad
+function updateReception() {
+	for (var i = 0; i < satelites.length; i++) {
+		satelites[i].reception = Math.randomInt(satelites[i].receptionRange[0], satelites[i].receptionRange[1]);
+		
+		if (satelites[i].reception <= receptionLevels["weak"][1]) {
+			//If the reception of the active satelite is weak, disable the video feed
+			if (satelites[i].status === 0) {
+				changeVideo(badReceptionVideoUrl);
+			}
+			
+			satelites[i].color = "red";
+			satelites[i].status = 3;
+		}
+		else if (satelites[i].reception <= receptionLevels["medium"][1]) {
+			satelites[i].color = "yellow";
+			if (satelites[i].status == 3) satelites[i].status = 1;
+		}
+		else {
+			satelites[i].color = "green";
+			if (satelites[i].status == 3) satelites[i].status = 1;
+		}
+	}
+		
+	chart.validateData();
+	$("#satelite1Status").html(statuses[satelites[0].status]);
+	$("#satelite2Status").html(statuses[satelites[1].status]);
+	$("#satelite3Status").html(statuses[satelites[2].status]);
+}
+
 var chartUpdater;
 
 function startEventLoop() {
-	var updateFrequency = 3500;
-	var startTime = Date.now();
+	var updateFrequency = 2500;
 	clearInterval(chartUpdater);
+	updateReception();
 	
 	chartUpdater = setInterval(function() {
 		for (var i = 0; i < satelites.length; i++) {
-			satelites[i].reception = Math.randomInt(satelites[i].receptionRange[0], satelites[i].receptionRange[1]);
-			
+			//Set any satelites that are done connecting as active
 			if (satelites[i].status === 2) {
 				satelites[i].msUntilConnected -= updateFrequency;
 				
@@ -63,29 +93,9 @@ function startEventLoop() {
 					changeVideo(videoUrl);
 				}
 			}
-			
-			if (satelites[i].reception <= receptionLevels["weak"][1]) {
-				if (satelites[i].status === 0) {
-					changeVideo(badReceptionVideoUrl);
-				}
-				
-				satelites[i].color = "red";
-				satelites[i].status = 3;
-			}
-			else if (satelites[i].reception <= receptionLevels["medium"][1]) {
-				satelites[i].color = "yellow";
-				if (satelites[i].status == 3) satelites[i].status = 1;
-			}
-			else {
-				satelites[i].color = "green";
-				if (satelites[i].status == 3) satelites[i].status = 1;
-			}
 		}
 		
-		chart.validateData();
-		$("#satelite1Status").html(statuses[satelites[0].status]);
-		$("#satelite2Status").html(statuses[satelites[1].status]);
-		$("#satelite3Status").html(statuses[satelites[2].status]);
+		updateReception();
 	}, updateFrequency);
 }
 
@@ -129,6 +139,7 @@ window.onload = function() {
 
 	socket.on("mission stopped", function() {
 		stopMissionTimer();
+		console.log("Mission stopped");
 		clearInterval(chartUpdater);
 	});
 	
@@ -137,10 +148,11 @@ window.onload = function() {
 		socket.emit('call', id, 'commander');
 	});
 	
+	//Disconnect from the currently active satelite and start connecting to a new one
 	$("#connect").click(function() {
 		var msToConnect = 5000;
 		var frequency = parseFloat($("#frequencyInput").val(), 10);
-		$("#frequencyInput").val("");
+		
 		changeVideo(badReceptionVideoUrl);
 		
 		//Start connecting to the new satelite
@@ -164,6 +176,7 @@ window.onload = function() {
 		$("#satelite3Status").html(statuses[satelites[2].status]);
 	});
 	
+	//Changes the currently playing astronaut video if we are connected to a satelite
 	socket.on("change video", function(url) {
 		var activeSateliteExists = false;
 		videoUrl = url;
