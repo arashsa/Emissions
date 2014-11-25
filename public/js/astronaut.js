@@ -10,8 +10,8 @@ var breathRateSamples = [];
 var heartRateSamples = [];
 var breathRateChart;
 var heartRateChart;
-var remainingMissionTime;
 	
+//Configure the charts
 AmCharts.ready(function() {
 	breathRateChart = new AmCharts.AmSerialChart();
 	
@@ -106,6 +106,7 @@ var heartRateBufferIndex;
 var msUntilNextHeartRateBufferFrame;
 
 //Fills the heart rate buffer with samples from the specified range
+//The heart rate buffer contains twice as many samples as the heart rate chart and is used to animate the chart
 function createHeartRateSamples(range) {
 	heartRateBuffer = [];
 	heartRateBufferIndex = 0;
@@ -114,8 +115,6 @@ function createHeartRateSamples(range) {
 	var beatsPerMinute = Math.randomInt(range[0], range[1]);
 	var msBetweenBeats = 60 * 1000 / beatsPerMinute;
 	var msUntilNextBeat = msBetweenBeats;
-	
-	console.log("Changing heart rate to " + beatsPerMinute + " BPM");
 	
 	for (var i = 0; i <= 200; i++) {
 		var mV;
@@ -128,6 +127,7 @@ function createHeartRateSamples(range) {
 			mV = Math.random() * 0.2;
 		}
 		
+		//The resolution of the chart is ten samples per second
 		heartRateBuffer.push({timestamp: i / 10, mV: mV});
 		msUntilNextBeat -= 50;
 	}
@@ -138,6 +138,7 @@ var breathRateBufferIndex;
 var msUntilNextBreathRateBufferFrame;
 
 //Fills the breath rate buffer with samples from the specified range
+//The breath rate buffer contains twice as many samples as the breath rate chart and is used to animate the chart
 function createBreathRateSamples(range) {
 	breathRateBuffer = [];
 	breathRateBufferIndex = 0;
@@ -146,8 +147,6 @@ function createBreathRateSamples(range) {
 	var breathsPerMinute = Math.randomInt(range[0], range[1]);
 	var msBetweenBreaths = 60 * 1000 / breathsPerMinute;
 	var msUntilNextBreath = msBetweenBreaths;
-	
-	console.log("Changing respiration rate to " + breathsPerMinute + " breaths per minute");
 				
 	for (var i = 0; i <= 120; i++) {
 		var lungVolume;
@@ -160,6 +159,7 @@ function createBreathRateSamples(range) {
 			lungVolume = lowVolume * 1.05;
 		}
 		
+		//The resolution of the chart is two samples per second
 		breathRateBuffer.push({timestamp: i / 2, volume: lungVolume});
 		msUntilNextBreath -= 500;
 	}
@@ -167,7 +167,7 @@ function createBreathRateSamples(range) {
 
 var chartUpdater;
 
-//Animates the breath rate and heart rate buffers
+//Animates the breath rate and heart rate charts
 function startEventLoop() {
 	var startTime = Date.now();
 	var msSinceLastUpdate = 0;
@@ -193,6 +193,7 @@ function startEventLoop() {
 				
 				breathRateSamples.push(breathRateBuffer[breathRateBufferIndex]);
 				
+				//When the chart grows to 30 seconds, start cutting off the oldest sample to give the chart a sliding effect
 				if (breathRateSamples.length > 60) {
 					breathRateSamples.shift();
 				}
@@ -201,6 +202,7 @@ function startEventLoop() {
 			msUntilNextBreathRateBufferFrame = 250;
 		}
 		
+		//Always show from 0 to 30 seconds on the X axis
 		if (breathRateSamples.length >= 60) {
 			for (var i = 0; i < breathRateSamples.length; i++) {
 				breathRateSamples[i].timestamp = Math.floor(i / (breathRateSamples.length - 1) * 30);
@@ -224,6 +226,7 @@ function startEventLoop() {
 				
 				heartRateSamples.push(heartRateBuffer[heartRateBufferIndex]);
 				
+				//When the chart grows to 10 seconds, start cutting off the oldest sample to give the chart a sliding effect
 				if (heartRateSamples.length > 100) {
 					heartRateSamples.shift();
 				}
@@ -232,6 +235,7 @@ function startEventLoop() {
 			msUntilNextHeartRateBufferFrame = 100;
 		}
 		
+		//Always show from 0 to 10 seconds on the X axis
 		if (heartRateSamples.length >= 100) {
 			for (var i = 0; i < heartRateSamples.length; i++) {
 				heartRateSamples[i].timestamp = Math.floor(i / (heartRateSamples.length - 1) * 10);
@@ -265,7 +269,6 @@ window.onload = function() {
 	socket.on("levels", function(levels) {
 		$("#evaluateOxygenUse").click(function() {
 			var averageOxygenUse = parseFloat($("#averageOxygenUse").val(), 10);
-			$("#averageOxygenUse").val("");
 			
 			if (averageOxygenUse < levels.oxygenUse["low"][1]) {
 				$("#oxygenUseEvaluation").html("Lav");
@@ -310,10 +313,12 @@ window.onload = function() {
 	});
 	
 	socket.on("change heart rate", function(heartRate) {
+		console.log("Changing heart rate to " + heartRate + " BPM");
 		createHeartRateSamples(heartRate);
 	});
 	
 	socket.on("change respiration", function(respiration) {
+		console.log("Changing respiration rate to " + respiration + " breaths per minute");
 		createBreathRateSamples(respiration);
 	});
 	
@@ -324,6 +329,7 @@ window.onload = function() {
 	});
 	
 	socket.on("mission stopped", function() {
+		console.log("Mission stopped");
 		stopEventLoop();
 		stopMissionTimer();
 	});

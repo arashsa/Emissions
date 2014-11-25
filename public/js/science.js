@@ -1,8 +1,8 @@
 var chart;
-var remainingMissionTime;
+var radiationRange = [0, 0];
 var radiationSamples = [];
 
-//Create radiation graph
+//Configure the radiation graph
 AmCharts.ready(function() {
 	chart = new AmCharts.AmSerialChart();
 	
@@ -36,7 +36,7 @@ AmCharts.ready(function() {
 	graph.lineColor = "#b5030d";
 	graph.negativeLineColor = "#228B22";
 	graph.negativeBase = 60;
-	graph.hideBulletsCount = 50; // this makes the chart to hide bullets when there are more than 50 series in selection
+	graph.hideBulletsCount = 50;
 	chart.addGraph(graph);
 	
 	//Mouseover
@@ -47,10 +47,9 @@ AmCharts.ready(function() {
 	chart.write("radiationChart");
 });
 
-var radiationRange = [0, 0];
 var chartUpdater;
 
-//Inserts a new radiation sample into the chart every few seconds
+//Adds a new radiation sample to the chart every few seconds
 function startEventLoop() {
 	var updateFrequency = 2000;
 	var startTime = Date.now();
@@ -62,6 +61,7 @@ function startEventLoop() {
 		var radiation = Math.randomInt(radiationRange[0], radiationRange[1]);
 		radiationSamples.push({timestamp: Math.floor(secondsPassed + 0.5), radiation: radiation});
 		
+		//When the chart grows to 30 seconds, start cutting off the oldest sample to give the chart a sliding effect
 		if (radiationSamples.length > 15) {
 			radiationSamples.shift();
 		}
@@ -127,6 +127,7 @@ window.onload = function() {
 	socket.on("mission stopped", function() {
 		stopEventLoop();
 		stopMissionTimer();
+		console.log("Mission stopped");
 	});
 	
 	var timerStarted = false;

@@ -1,5 +1,6 @@
 var missionTimeUpdater;
 
+//Initializes the missiontime element and starts a timer that decrements it by one every minute until it is 0
 function startMissionTimer(missionTime) {
 	var updateMissionTime = function() {
 		if (missionTime > 0) {
