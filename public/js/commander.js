@@ -3,6 +3,7 @@ var missionStarted = false;
 window.onload = function() {
 	var socket = io.connect();
 	var id = "commander";
+	var rtcConnection;
 	var happyVideoUrl = "http://video.webmfiles.org/big-buck-bunny_trailer.webm";
 	var nervousVideoUrl = "http://video.webmfiles.org/elephants-dream.webm";
 	
@@ -85,7 +86,16 @@ window.onload = function() {
 	
 	$("#answerButton").click(function() {
 		$("#incomingCall").hide();
-		rtc.connect(id, "communication", socket, $("#localVideo")[0], $("#communicationTeamVideo")[0]);
-		rtc.answer();
+		$("#hangUp").show();
+		rtcConnection = rtc.connect(id, "communication", socket, $("#localVideo")[0], $("#communicationTeamVideo")[0]);
+		rtcConnection.answer();
+	});
+	
+	$("#hangUp").click(function() {
+		if (rtcConnection) {
+			rtcConnection.disconnect();
+			rtcConnection = undefined;
+			$("#hangUp").hide();
+		}
 	});
 };

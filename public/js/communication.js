@@ -102,6 +102,7 @@ function startEventLoop() {
 window.onload = function() {
 	var socket = io.connect();
 	var id = "communication";
+	var rtcConnection;
 	
 	socket.emit("get levels");
 	
@@ -144,9 +145,20 @@ window.onload = function() {
 	});
 	
 	$("#callMissionCommander").click(function () {
-		rtc.connect(id, "commander", socket, $("#localVideo")[0], $("#commanderVideo")[0]);
-		rtc.call();
+		rtcConnection = rtc.connect(id, "commander", socket, $("#localVideo")[0], $("#commanderVideo")[0]);
+		rtcConnection.call();
+		$("#callMissionCommander").hide();
+		$("#hangUp").show();
 	});
+	
+	$("#hangUp").click(function() {
+		if (rtcConnection) {
+			rtcConnection.disconnect();
+			rtcConnection = undefined;
+			$("#callMissionCommander").show();
+			$("#hangUp").hide();
+		}
+	});	
 	
 	//Disconnect from the currently active satelite and start connecting to a new one
 	$("#connect").click(function() {

@@ -263,6 +263,7 @@ function stopEventLoop() {
 window.onload = function() {
 	var socket = io.connect();
 	var id = "astronaut";
+	var rtcConnection;
 	
 	socket.emit("get levels");
 	
@@ -335,7 +336,18 @@ window.onload = function() {
 	});
 	
 	$("#callSecurityTeam").click(function() {
-		rtc.connect(id, "security", socket, $("#localVideo")[0], $("#remoteVideo")[0]);
-		rtc.call();
+		rtcConnection = rtc.connect(id, "security", socket, $("#localVideo")[0], $("#remoteVideo")[0]);
+		rtcConnection.call();
+		$("#callSecurityTeam").hide();
+		$("#hangUp").show();
+	});
+	
+	$("#hangUp").click(function() {
+		if (rtcConnection) {
+			rtcConnection.disconnect();
+			rtcConnection = undefined;
+			$("#callSecurityTeam").show();
+			$("#hangUp").hide();
+		}
 	});
 };

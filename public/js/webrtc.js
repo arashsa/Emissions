@@ -18,18 +18,13 @@ var iceServers = [	{url:'stun:stun01.sipphone.com'},
 					{url:'stun:stun.voipstunt.com'},
 					{url:'stun:stun.voxgratia.org'},
 					{url:'stun:stun.xten.com'},
-					{url: 'turn:numb.viagenie.ca', credential: 'muazkh', username: 'webrtc@live.com'},
-					{url: 'turn:192.158.29.39:3478?transport=udp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username: '28224511:1379330808'},
-					{url: 'turn:192.158.29.39:3478?transport=tcp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username: '28224511:1379330808'}
+					{url:'turn:numb.viagenie.ca', credential: 'muazkh', username: 'webrtc@live.com'},
+					{url:'turn:192.158.29.39:3478?transport=udp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username: '28224511:1379330808'},
+					{url:'turn:192.158.29.39:3478?transport=tcp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username: '28224511:1379330808'}
 				];
 				
 rtc = {
-	//These functions become defined when an RTC connection has been established
-	call: undefined,
-	answer: undefined,
-	
-	//Initializes an RTC connection between two clients
-	//Must be called before calling or answering a call
+	//Initializes and returns a new RTC connection between two clients
 	connect: function(from, to, socket, localVideo, remoteVideo) {
 		var pcConfig = {"iceServers": iceServers};
 		
@@ -97,6 +92,14 @@ rtc = {
 			}, printError);		
 		};
 		
+		//Stops the RTC call
+		var stop = function() {
+			pc.close();
+			socket.removeAllListeners("signal");
+		};
+		
+		socket.removeAllListeners("signal");
+		
 		socket.on("signal", function(signal, sender, receiver) {
 			if (signal.sdp) {
 				pc.setRemoteDescription(new RTCSessionDescription(signal), function() {
@@ -111,14 +114,26 @@ rtc = {
 					//Success callback for addIceCandidate
 				}, printError);
 			}
+			else if (signal === "stop") {
+				stop();
+			}
 		});
 		
-		rtc.call = function() {
-			socket.emit("call", from, to);
-		}
-		
-		rtc.answer = function() {
-			start(true);
+		//Return the RTC connection
+		return {
+			rand: Math.random(),
+			call: function() {
+				socket.emit("call", from, to);
+			},
+			
+			answer: function() {
+				start(true);
+			},
+			
+			disconnect: function() {
+				sendSignal("stop");
+				stop();
+			}
 		};
 	}
 };

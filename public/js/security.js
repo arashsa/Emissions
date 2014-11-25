@@ -1,6 +1,7 @@
 window.onload = function() {
 	var socket = io.connect();
 	var id = "security";
+	var rtcConnection;
 	var callerId;
 	
 	socket.on('call', function(from, to) {
@@ -18,9 +19,20 @@ window.onload = function() {
 		}
 	});
 	
+	var rtcConnection;
+	
 	$("#answerButton").click(function() {
 		$("#incomingCall").hide();
-		rtc.connect(id, callerId, socket, $("#localVideo")[0], $("#remoteVideo")[0]);
-		rtc.answer();
+		$("#hangUp").show();
+		rtcConnection = rtc.connect(id, callerId, socket, $("#localVideo")[0], $("#remoteVideo")[0]);
+		rtcConnection.answer();
+	});
+	
+	$("#hangUp").click(function() {
+		if (rtcConnection) {
+			rtcConnection.disconnect();
+			rtcConnection = undefined;
+			$("#hangUp").hide();
+		}
 	});
 };
