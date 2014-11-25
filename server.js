@@ -99,41 +99,37 @@ function updateMissionTime() {
 var rangeUpdater;
 
 function updateRanges() {
-	var secondsPassed = 0;
-
 	if (missionStarted) {
 		updateMissionTime();
-		secondsPassed = missionTime / 1000;
-	}
+		var secondsPassed = missionTime / 1000;
 		
-	while (events.length > 0) {
-		var nextEvent = events[events.length - 1];
-		
-		if (secondsPassed >= nextEvent.timestamp) {
-			ranges[nextEvent.type] = nextEvent.range;
+		while (events.length > 0) {
+			var nextEvent = events[events.length - 1];
 			
-			if (nextEvent.type === "radiation") {
-				io.emit("change radiation", nextEvent.range);
+			if (secondsPassed >= nextEvent.timestamp) {
+				ranges[nextEvent.type] = nextEvent.range;
+				
+				if (nextEvent.type === "radiation") {
+					io.emit("change radiation", nextEvent.range);
+				}
+				else if (nextEvent.type === "respiration") {
+					io.emit("change respiration", nextEvent.range);
+				}
+				else if (nextEvent.type === "heartRate") {
+					io.emit("change heart rate", nextEvent.range);
+				}
+				else if (nextEvent.type.indexOf("satelite") === 0) {
+					io.emit("change reception", parseInt(nextEvent.type.slice(-1)), nextEvent.range);
+				}
+				
+				completedEvents.push(events.pop());
 			}
-			else if (nextEvent.type === "respiration") {
-				io.emit("change respiration", nextEvent.range);
+			else {
+				break;
 			}
-			else if (nextEvent.type === "heartRate") {
-				io.emit("change heart rate", nextEvent.range);
-			}
-			else if (nextEvent.type.indexOf("satelite") === 0) {
-				io.emit("change reception", parseInt(nextEvent.type.slice(-1)), nextEvent.range);
-			}
-			
-			completedEvents.push(events.pop());
 		}
-		else {
-			break;
-		}
-	}
-	
-	//Schedule the next update based on when the next event will occur or when the mission ends if all events have run
-	if (missionStarted) {
+
+		//Schedule the next update based on when the next event will occur or when the mission ends if all events have run
 		var nextUpdate = missionLength - missionTime;
 		
 		if (events.length > 0) {
