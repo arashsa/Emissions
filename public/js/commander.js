@@ -86,6 +86,6 @@ window.onload = function() {
 	$("#answerButton").click(function() {
 		$("#incomingCall").hide();
 		rtc.connect(id, "communication", socket, $("#localVideo")[0], $("#communicationTeamVideo")[0]);
-		rtc.call();
+		rtc.answer();
 	});
 };

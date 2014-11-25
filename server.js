@@ -35,6 +35,7 @@ var io = socketIo.listen(server);
 console.log("Server listening on port " + port);
 
 io.sockets.on("connection", function (socket) {
+	//Initiates an RTC call with another client
 	socket.on("call", function(from, to) {
 		socket.broadcast.emit("call", from, to);
 	});

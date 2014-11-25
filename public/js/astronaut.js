@@ -336,6 +336,6 @@ window.onload = function() {
 	
 	$("#callSecurityTeam").click(function() {
 		rtc.connect(id, "security", socket, $("#localVideo")[0], $("#remoteVideo")[0]);
-		socket.emit('call', id, "security");
+		rtc.call();
 	});
 };

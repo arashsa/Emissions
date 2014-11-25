@@ -24,9 +24,12 @@ var iceServers = [	{url:'stun:stun01.sipphone.com'},
 				];
 				
 rtc = {
+	//These functions become defined when an RTC connection has been established
 	call: undefined,
+	answer: undefined,
 	
 	//Initializes an RTC connection between two clients
+	//Must be called before calling or answering a call
 	connect: function(from, to, socket, localVideo, remoteVideo) {
 		var pcConfig = {"iceServers": iceServers};
 		
@@ -74,7 +77,7 @@ rtc = {
 		}
 
 		//Starts the RTC call
-		var start = function(isCaller) {
+		var start = function(isHost) {
 			getUserMedia({"audio": true, "video": true}, function(stream) {
 				attachMediaStream(localVideo, stream);
 				pc.addStream(stream);
@@ -85,7 +88,7 @@ rtc = {
 					}, printError);
 				};
 				
-				if (isCaller) {
+				if (isHost) {
 					pc.createOffer(setDescription, printError, sdpConstraints);
 				}
 				else {
@@ -111,6 +114,10 @@ rtc = {
 		});
 		
 		rtc.call = function() {
+			socket.emit("call", from, to);
+		}
+		
+		rtc.answer = function() {
 			start(true);
 		};
 	}

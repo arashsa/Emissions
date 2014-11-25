@@ -21,6 +21,6 @@ window.onload = function() {
 	$("#answerButton").click(function() {
 		$("#incomingCall").hide();
 		rtc.connect(id, callerId, socket, $("#localVideo")[0], $("#remoteVideo")[0]);
-		rtc.call();
+		rtc.answer();
 	});
 };

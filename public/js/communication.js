@@ -145,7 +145,7 @@ window.onload = function() {
 	
 	$("#callMissionCommander").click(function () {
 		rtc.connect(id, "commander", socket, $("#localVideo")[0], $("#commanderVideo")[0]);
-		socket.emit('call', id, 'commander');
+		rtc.call();
 	});
 	
 	//Disconnect from the currently active satelite and start connecting to a new one
