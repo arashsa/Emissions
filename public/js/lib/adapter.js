@@ -4,17 +4,7 @@ var attachMediaStream = null;
 var reattachMediaStream = null;
 var webrtcDetectedBrowser = null;
 
-function trace(text) {
-  return;
-	
-  if (text[text.length - 1] == '\n') {
-    text = text.substring(0, text.length - 1);
-  }
-  console.log((performance.now() / 1000).toFixed(3) + ": " + text);
-}
-
 if (navigator.mozGetUserMedia) {
-  trace("This appears to be Firefox");
   webrtcDetectedBrowser = "firefox";
 
   // The RTCPeerConnection object.
@@ -32,13 +22,11 @@ if (navigator.mozGetUserMedia) {
 
   // Attach a media stream to an element.
   attachMediaStream = function(element, stream) {
-    trace("Attaching media stream");
     element.mozSrcObject = stream;
     element.play();
   };
 
   reattachMediaStream = function(to, from) {
-    trace("Reattaching media stream");
     to.mozSrcObject = from.mozSrcObject;
     to.play();
   };
@@ -52,7 +40,6 @@ if (navigator.mozGetUserMedia) {
     return [];
   };
 } else if (navigator.webkitGetUserMedia) {
-  trace("This appears to be Chrome");
   webrtcDetectedBrowser = "chrome";
 
   // The RTCPeerConnection object.
@@ -71,7 +58,7 @@ if (navigator.mozGetUserMedia) {
     } else if (typeof element.src !== 'undefined') {
       element.src = URL.createObjectURL(stream);
     } else {
-      trace('Error attaching stream to element.');
+      console.log('Error attaching stream to element.');
     }
   };
 
@@ -100,5 +87,5 @@ if (navigator.mozGetUserMedia) {
     };
   }
 } else {
-  trace("Browser does not appear to be WebRTC-capable");
+  console.log("Browser does not appear to be WebRTC-capable");
 }
