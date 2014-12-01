@@ -144,6 +144,10 @@ window.onload = function() {
 		clearInterval(chartUpdater);
 	});
 	
+	socket.on("mission length changed", function(missionLength) {
+		startMissionTimer(Math.floor(missionLength / 1000 / 60));
+	});	
+	
 	$("#callMissionCommander").click(function () {
 		rtcConnection = rtc.connect(id, "commander", socket, $("#localVideo")[0], $("#commanderVideo")[0]);
 		rtcConnection.call();

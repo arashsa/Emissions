@@ -95,6 +95,8 @@ rtc = {
 		//Stops the RTC call
 		var stop = function() {
 			pc.close();
+			localVideo.src = undefined;
+			remoteVideo.src = undefined;
 			socket.removeAllListeners("signal");
 		};
 		

@@ -39,6 +39,7 @@ window.onload = function() {
 	//Check if the mission has already started
 	socket.on("mission time left", function(timeLeft) {
 		if (timeLeft > 0) {
+			$("#changeMissionTime").show();
 			startMissionTimer(Math.floor(timeLeft / 1000 / 60));
 			$("#startMission").html("Stopp oppdrag");
 			missionStarted = true;
@@ -49,6 +50,7 @@ window.onload = function() {
 		startMissionTimer(Math.floor(missionLength / 1000 / 60));
 		$("#startMission").html("Stopp oppdrag");
 		$("#startMission").removeAttr("disabled");
+		$("#changeMissionTime").show();
 		missionStarted = true;
 		console.log("Mission started");
 	});
@@ -56,6 +58,7 @@ window.onload = function() {
 	socket.on("mission stopped", function() {
 		$("#startMission").html("Start oppdrag");
 		$("#startMission").removeAttr("disabled");
+		$("#changeMissionTime").hide();
 		missionStarted = false;
 		stopMissionTimer();
 		console.log("Mission stopped");
@@ -72,6 +75,18 @@ window.onload = function() {
 			$("#startMission").attr("disabled", "true");
 			socket.emit("stop mission");
 		}
+	});
+	
+	$("#changeMissionTime").click(function() {
+		var missionLength = parseInt($("#missionLength").val(), 10);
+		
+		if (missionStarted && missionLength > 0) {
+			socket.emit("change mission length", missionLength * 60 * 1000);
+		}
+	});
+	
+	socket.on("mission length changed", function(missionLength) {
+		startMissionTimer(Math.floor(missionLength / 1000 / 60));
 	});
 	
 	socket.on('call', function(from, to) {

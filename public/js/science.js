@@ -131,6 +131,10 @@ window.onload = function() {
 		console.log("Mission stopped");
 	});
 	
+	socket.on("mission length changed", function(missionLength) {
+		startMissionTimer(Math.floor(missionLength / 1000 / 60));
+	});
+	
 	var timerStarted = false;
 	var timerValue = 30;
 

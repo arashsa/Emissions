@@ -335,6 +335,10 @@ window.onload = function() {
 		stopMissionTimer();
 	});
 	
+	socket.on("mission length changed", function(missionLength) {
+		startMissionTimer(Math.floor(missionLength / 1000 / 60));
+	});	
+	
 	$("#callSecurityTeam").click(function() {
 		rtcConnection = rtc.connect(id, "security", socket, $("#localVideo")[0], $("#remoteVideo")[0]);
 		rtcConnection.call();

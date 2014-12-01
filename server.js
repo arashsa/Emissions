@@ -25,6 +25,7 @@ events.sort(function(e1, e2) {
 
 var missionStarted = false;
 var missionLength = 0;
+var originalMissionLength = 0;
 var missionTime = 0;
 var missionTimeLastUpdated = 0;
 var ranges = {respiration: [0, 0], heartRate: [0, 0], radiation: [0, 0], satelite1: [0, 0], satelite2: [0, 0], satelite3: [0, 0]};
@@ -63,17 +64,11 @@ io.sockets.on("connection", function (socket) {
 		socket.emit("mission time left", missionLength - missionTime);
 	});
 	
-	socket.on("start mission", function(length) {
-		missionLength = length;
-		missionTime = 0;
-		missionTimeLastUpdated = Date.now();
-		missionStarted = true;
-		updateRanges();
-		io.emit("mission started", length);
-		console.log((length / 60 / 1000) + " minute mission started");
-	});
+	socket.on("start mission", startMission);
 	
 	socket.on("stop mission", stopMission);
+	
+	socket.on("change mission length", updateMissionLength);
 });
 
 function parseEvents(events, levels, type) {
@@ -91,7 +86,7 @@ function updateMissionTime() {
 		missionTime += Date.now() - missionTimeLastUpdated;
 		missionTimeLastUpdated = Date.now();
 		
-		if (missionTime >= missionLength) {
+		if (missionTime >= originalMissionLength) {
 			stopMission();
 		}		
 	}
@@ -143,6 +138,17 @@ function updateRanges() {
 	}
 }
 
+function startMission(length) {
+	originalMissionLength = length;
+	missionLength = length;
+	missionTime = 0;
+	missionTimeLastUpdated = Date.now();
+	missionStarted = true;
+	updateRanges();
+	io.emit("mission started", length);
+	console.log((length / 60 / 1000) + " minute mission started");
+}
+
 function stopMission() {
 	//Mark all events as unfinished
 	Array.prototype.push.apply(events, completedEvents);
@@ -159,4 +165,13 @@ function stopMission() {
 	clearInterval(rangeUpdater);
 	io.emit("mission stopped");
 	console.log("Mission stopped");
+}
+
+function updateMissionLength(length) {
+	missionLength = length;
+	missionTime = originalMissionLength - missionLength;
+	missionTimeLastUpdated = Date.now();
+	updateRanges();
+	io.emit("mission length changed", length);
+	console.log("Mission time left set to " + (length / 60 / 1000) + " minutes");
 }
