@@ -91,26 +91,36 @@ window.onload = function() {
 	
 	socket.on('call', function(from, to) {
 		if (to === id) {
-			if (from === 'communication') {
-				callerId = "communication";
-				$("#callerId").html("Kommunikasjons-teamet ringer");
-				$("#incomingCall").show();
-			}
+			callerId = from;
+			rtcConnection = rtc.connect(id, callerId, socket, $("#localVideo")[0], $("#remoteVideo")[0]);
+			
+			rtcConnection.onCallStarted = function() {
+				$("#localVideo").show();
+				$("#remoteVideo").show();			
+			};
+			
+			rtcConnection.onCallEnded = function() {
+				rtcConnection = undefined;
+				$("#incomingCall").hide();
+				$("#hangUp").hide();
+				$("#localVideo").hide();
+				$("#remoteVideo").hide();	
+			};
+			
+			$("#hangUp").show();
+			$("#incomingCall").show();
+			$("#callerId").html("Kommunikasjons-teamet ringer");
 		}
 	});
 	
 	$("#answerButton").click(function() {
 		$("#incomingCall").hide();
-		$("#hangUp").show();
-		rtcConnection = rtc.connect(id, "communication", socket, $("#localVideo")[0], $("#communicationTeamVideo")[0]);
 		rtcConnection.answer();
 	});
 	
 	$("#hangUp").click(function() {
 		if (rtcConnection) {
 			rtcConnection.disconnect();
-			rtcConnection = undefined;
-			$("#hangUp").hide();
 		}
 	});
 };

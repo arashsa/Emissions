@@ -162,14 +162,24 @@ window.onload = function() {
 		rtcConnection.call();
 		$("#callSecurityTeam").hide();
 		$("#hangUp").show();
+		
+		rtcConnection.onCallStarted = function() {
+			$("#localVideo").show();
+			$("#remoteVideo").show();		
+		};
+		
+		rtcConnection.onCallEnded = function() {
+			$("#localVideo").hide();
+			$("#remoteVideo").hide();
+			$("#callSecurityTeam").show();
+			$("#hangUp").hide();			
+		};
 	});
 	
 	$("#hangUp").click(function() {
 		if (rtcConnection) {
 			rtcConnection.disconnect();
 			rtcConnection = undefined;
-			$("#callSecurityTeam").show();
-			$("#hangUp").hide();
 		}
 	});
 };

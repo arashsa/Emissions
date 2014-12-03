@@ -7,32 +7,41 @@ window.onload = function() {
 	socket.on('call', function(from, to) {
 		if (to === id) {
 			callerId = from;
+			rtcConnection = rtc.connect(id, callerId, socket, $("#localVideo")[0], $("#remoteVideo")[0]);
+			
+			rtcConnection.onCallStarted = function() {
+				$("#localVideo").show();
+				$("#remoteVideo").show();			
+			};
+			
+			rtcConnection.onCallEnded = function() {
+				rtcConnection = undefined;
+				$("#incomingCall").hide();
+				$("#hangUp").hide();
+				$("#localVideo").hide();
+				$("#remoteVideo").hide();	
+			};
+			
+			$("#hangUp").show();
+			$("#incomingCall").show();
 			
 			if (callerId === "astronaut") {
 				$("#callerId").html("Astronaut-teamet ringer");
-				$("#incomingCall").show();
 			}
 			else if (callerId === "science") {
 				$("#callerId").html("Science-teamet ringer");
-				$("#incomingCall").show();	
 			}
 		}
 	});
 	
-	var rtcConnection;
-	
 	$("#answerButton").click(function() {
 		$("#incomingCall").hide();
-		$("#hangUp").show();
-		rtcConnection = rtc.connect(id, callerId, socket, $("#localVideo")[0], $("#remoteVideo")[0]);
 		rtcConnection.answer();
 	});
 	
 	$("#hangUp").click(function() {
 		if (rtcConnection) {
 			rtcConnection.disconnect();
-			rtcConnection = undefined;
-			$("#hangUp").hide();
 		}
 	});
 };

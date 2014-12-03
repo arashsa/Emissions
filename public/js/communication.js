@@ -148,21 +148,31 @@ window.onload = function() {
 		startMissionTimer(Math.floor(missionLength / 1000 / 60));
 	});	
 	
-	$("#callMissionCommander").click(function () {
-		rtcConnection = rtc.connect(id, "commander", socket, $("#localVideo")[0], $("#commanderVideo")[0]);
+	$("#callMissionCommander").click(function() {
+		rtcConnection = rtc.connect(id, "commander", socket, $("#localVideo")[0], $("#remoteVideo")[0]);
 		rtcConnection.call();
 		$("#callMissionCommander").hide();
 		$("#hangUp").show();
+		
+		rtcConnection.onCallStarted = function() {
+			$("#localVideo").show();
+			$("#remoteVideo").show();		
+		};
+		
+		rtcConnection.onCallEnded = function() {
+			$("#localVideo").hide();
+			$("#remoteVideo").hide();
+			$("#callMissionCommander").show();
+			$("#hangUp").hide();			
+		};
 	});
 	
 	$("#hangUp").click(function() {
 		if (rtcConnection) {
 			rtcConnection.disconnect();
 			rtcConnection = undefined;
-			$("#callMissionCommander").show();
-			$("#hangUp").hide();
 		}
-	});	
+	});
 	
 	//Disconnect from the currently active satelite and start connecting to a new one
 	$("#connect").click(function() {

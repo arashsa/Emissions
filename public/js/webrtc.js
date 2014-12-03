@@ -25,7 +25,19 @@ var iceServers = [	{url:'stun:stun01.sipphone.com'},
 				
 rtc = {
 	//Initializes and returns a new RTC connection between two clients
+	//The RTC connection object has the following methods:
+	//call: Sends an incoming call to the 'to' ID.
+	//answer: Answers an incoming call. If this operation completes without errors, the RTC call will start.
+	//disconnect: Ends the call and permanently closes the RTC connection.
+	//onCallStarted: Called when the RTC call has successfully started.
+	//onCallEnded: Called after the RTC connection has closed.
 	connect: function(from, to, socket, localVideo, remoteVideo) {
+		var rtcConnection = {};
+		var localStream;
+		var remoteStream;
+		var disconnected = false;
+		
+		//Peer connection configuration
 		var pcConfig = {"iceServers": iceServers};
 		
 		//DTLS/SRTP is preferred on Chrome to interop with Firefox which supports them by default
@@ -60,22 +72,49 @@ rtc = {
 			};
 			
 			pc.onaddstream = function(event) {
+				remoteStream = event.stream;
 				attachMediaStream(remoteVideo, event.stream);
-			};
-			
-			pc.onremovestream = function(event) {
-				remoteVideo.src = undefined;
 			};
 		}
 		catch(e) {
 			printError(e);
 		}
-
+		
+		//Stops the RTC call
+		var stop = function() {
+			if (!disconnected) {
+				pc.close();
+				disconnected = true;
+			}
+			
+			if (localStream && localStream.stop) {
+				localStream.stop();
+			}
+			
+			if (remoteStream && remoteStream.stop) {
+				remoteStream.stop();
+			}
+			
+			if (typeof(rtcConnection.onCallEnded) == "function") {
+				rtcConnection.onCallEnded();
+			}
+			
+			socket.removeAllListeners("signal");
+		};
+		
 		//Starts the RTC call
 		var start = function(isHost) {
 			getUserMedia({"audio": true, "video": true}, function(stream) {
-				attachMediaStream(localVideo, stream);
-				pc.addStream(stream);
+				localStream = stream;
+				
+				if (disconnected) {
+					stop();
+					return;
+				}
+				else {
+					attachMediaStream(localVideo, stream);
+					pc.addStream(stream);
+				}
 				
 				var setDescription = function(description) {
 					pc.setLocalDescription(description, function() {
@@ -88,16 +127,12 @@ rtc = {
 				}
 				else {
 					pc.createAnswer(setDescription, printError, sdpConstraints);
+					
+					if (typeof(rtcConnection.onCallStarted) == "function") {
+						rtcConnection.onCallStarted();
+					}
 				}
 			}, printError);		
-		};
-		
-		//Stops the RTC call
-		var stop = function() {
-			pc.close();
-			localVideo.src = undefined;
-			remoteVideo.src = undefined;
-			socket.removeAllListeners("signal");
 		};
 		
 		socket.removeAllListeners("signal");
@@ -108,6 +143,9 @@ rtc = {
 					if (signal.type === "offer") {
 						//Answer the call
 						start(false);
+					}
+					else if (signal.type === "answer" && typeof(rtcConnection.onCallStarted) == "function") {
+						rtcConnection.onCallStarted();
 					}
 				}, printError);
 			}
@@ -121,21 +159,27 @@ rtc = {
 			}
 		});
 		
-		//Return the RTC connection
-		return {
-			rand: Math.random(),
-			call: function() {
-				socket.emit("call", from, to);
-			},
-			
-			answer: function() {
-				start(true);
-			},
-			
-			disconnect: function() {
-				sendSignal("stop");
+		//Called when the other peer closes the browser window (doesn't work on firefox)
+		pc.oniceconnectionstatechange = function() {
+			if (pc.iceConnectionState == "disconnected") {
 				stop();
 			}
+		}
+		
+		//Create and return the RTC connection
+		rtcConnection.call = function() {
+			socket.emit("call", from, to);
 		};
+		
+		rtcConnection.answer = function() {
+			start(true);
+		};
+		
+		rtcConnection.disconnect = function() {
+			sendSignal("stop");
+			stop();
+		};
+		
+		return rtcConnection;
 	}
 };
