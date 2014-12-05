@@ -54,11 +54,6 @@ rtc = {
 			}
 		};
 		
-		var sendSignal = function(signal) {
-			console.log("Sending RTC signal: " + JSON.stringify(signal));
-			socket.emit("signal", signal, from, to);
-		};
-		
 		//Create an RTC peer connection
 		var pc;
 		
@@ -99,8 +94,41 @@ rtc = {
 				rtcConnection.onCallEnded();
 			}
 			
-			socket.removeAllListeners("signal");
+			socket.removeListener("signal", receiveSignal);
 		};
+		
+		var sendSignal = function(signal) {
+			console.log("Sending RTC signal to " + to + ": " + JSON.stringify(signal));
+			socket.emit("signal", signal, from, to);
+		};
+		
+		var receiveSignal = function(signal, sender, receiver) {
+			if (receiver === from) {
+				console.log("Received RTC signal from " + sender + ": " + JSON.stringify(signal));
+				
+				if (signal.sdp) {
+					pc.setRemoteDescription(new RTCSessionDescription(signal), function() {
+						if (signal.type === "offer") {
+							//Answer the call
+							start(false);
+						}
+						else if (signal.type === "answer" && typeof(rtcConnection.onCallStarted) == "function") {
+							rtcConnection.onCallStarted();
+						}
+					}, printError);
+				}
+				else if (signal.candidate) {
+					pc.addIceCandidate(new RTCIceCandidate(signal), function() { 
+						//Success callback for addIceCandidate
+					}, printError);
+				}
+				else if (signal === "stop") {
+					stop();
+				}
+			}			
+		};
+		
+		socket.on("signal", receiveSignal);
 		
 		//Starts the RTC call
 		var start = function(isHost) {
@@ -134,30 +162,6 @@ rtc = {
 				}
 			}, printError);		
 		};
-		
-		socket.removeAllListeners("signal");
-		
-		socket.on("signal", function(signal, sender, receiver) {
-			if (signal.sdp) {
-				pc.setRemoteDescription(new RTCSessionDescription(signal), function() {
-					if (signal.type === "offer") {
-						//Answer the call
-						start(false);
-					}
-					else if (signal.type === "answer" && typeof(rtcConnection.onCallStarted) == "function") {
-						rtcConnection.onCallStarted();
-					}
-				}, printError);
-			}
-			else if (signal.candidate) {
-				pc.addIceCandidate(new RTCIceCandidate(signal), function() { 
-					//Success callback for addIceCandidate
-				}, printError);
-			}
-			else if (signal === "stop") {
-				stop();
-			}
-		});
 		
 		//Called when the other peer closes the browser window (doesn't work on firefox)
 		pc.oniceconnectionstatechange = function() {
