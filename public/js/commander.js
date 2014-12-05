@@ -100,8 +100,6 @@ window.onload = function() {
 			pendingConnection = rtc.connect(id, callerId, socket, $("#localVideo")[0], $("#remoteVideo")[0]);
 			
 			pendingConnection.onCallStarted = function() {
-				activeConnection = pendingConnection;
-				pendingConnection = undefined;
 				$("#localVideo").show();
 				$("#remoteVideo").show();
 			};
@@ -114,11 +112,13 @@ window.onload = function() {
 				
 				if (!activeConnection) {
 					$("#hangUp").hide();
+					$("#callSecurityTeam").show();
 				}
 			};
 			
 			$("#hangUp").show();
 			$("#incomingCall").show();
+			$("#callSecurityTeam").hide();
 			$("#callerId").html("Kommunikasjons-teamet ringer");
 		}
 	});
@@ -134,11 +134,46 @@ window.onload = function() {
 			activeConnection = undefined;
 			$("#localVideo").hide();
 			$("#remoteVideo").hide();
-			$("#hangUp").hide();			
+			
+			if (!pendingConnection) {
+				$("#hangUp").hide();
+				$("#callSecurityTeam").show();
+			}
 		};
 		
 		$("#incomingCall").hide();
 		pendingConnection.answer();
+		activeConnection = pendingConnection;
+		pendingConnection = undefined;
+	});
+	
+	$("#callSecurityTeam").click(function() {
+		if (activeConnection) {
+			activeConnection.disconnect();
+		}
+		
+		activeConnection = rtc.connect(id, "security", socket, $("#localVideo")[0], $("#remoteVideo")[0]);
+		activeConnection.call();
+		$("#callSecurityTeam").hide();
+		$("#hangUp").show();
+		
+		activeConnection.onCallStarted = function() {
+			$("#localVideo").show();
+			$("#remoteVideo").show();		
+		};
+		
+		activeConnection.onCallEnded = function() {
+			activeConnection.onCallStarted = undefined;
+			activeConnection.onCallEnded = undefined;
+			activeConnection = undefined;
+			$("#localVideo").hide();
+			$("#remoteVideo").hide();
+			
+			if (!pendingConnection) {
+				$("#hangUp").hide();
+				$("#callSecurityTeam").show();
+			}				
+		};
 	});
 	
 	$("#hangUp").click(function() {

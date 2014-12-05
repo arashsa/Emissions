@@ -15,8 +15,6 @@ window.onload = function() {
 			pendingConnection = rtc.connect(id, callerId, socket, $("#localVideo")[0], $("#remoteVideo")[0]);
 			
 			pendingConnection.onCallStarted = function() {
-				activeConnection = pendingConnection;
-				pendingConnection = undefined;
 				$("#localVideo").show();
 				$("#remoteVideo").show();
 			};
@@ -34,13 +32,7 @@ window.onload = function() {
 			
 			$("#hangUp").show();
 			$("#incomingCall").show();
-			
-			if (callerId === "astronaut") {
-				$("#callerId").html("Astronaut-teamet ringer");
-			}
-			else if (callerId === "science") {
-				$("#callerId").html("Science-teamet ringer");
-			}
+			$("#callerId").html(callerId.charAt(0).toUpperCase() + callerId.slice(1) + "-teamet ringer");
 		}
 	});
 	
@@ -55,11 +47,13 @@ window.onload = function() {
 			activeConnection = undefined;
 			$("#localVideo").hide();
 			$("#remoteVideo").hide();
-			$("#hangUp").hide();			
+			$("#hangUp").hide();
 		};
 		
 		$("#incomingCall").hide();
 		pendingConnection.answer();
+		activeConnection = pendingConnection;
+		pendingConnection = undefined;
 	});
 	
 	$("#hangUp").click(function() {
