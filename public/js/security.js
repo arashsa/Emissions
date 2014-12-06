@@ -9,9 +9,13 @@ window.onload = function() {
 
 	$("#answerButton").click(rtcHelper.answerIncomingCall);
 
-	$("#callSecurityTeam").click(function() {
-		rtcHelper.call("security");
+	$("#callMissionCommander").click(function() {
+		rtcHelper.call("commander");
 	});
 
+	$("#callCommunicationTeam").click(function() {
+		rtcHelper.call("communication");
+	});
+	
 	$("#hangUp").click(rtcHelper.hangUp);
 };

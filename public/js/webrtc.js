@@ -212,7 +212,7 @@ rtcHelper = {
 				rtcHelper.pendingConnection.onCallStarted = undefined;
 				rtcHelper.pendingConnection.onCallEnded = undefined;
 				rtcHelper.pendingConnection = undefined;
-				$("#incomingCall").hide();
+				$(".incomingCall").hide();
 				
 				if (!rtcHelper.activeConnection) {
 					$("#hangUp").hide();
@@ -221,7 +221,7 @@ rtcHelper = {
 			};
 			
 			$("#hangUp").show();
-			$("#incomingCall").show();
+			$(".incomingCall").show();
 			$(".call").hide();
 			$("#callerId").html(from.charAt(0).toUpperCase() + from.slice(1) + "-teamet ringer");
 		}
@@ -250,7 +250,7 @@ rtcHelper = {
 			}
 		};
 		
-		$("#incomingCall").hide();
+		$(".incomingCall").hide();
 		rtcHelper.pendingConnection.answer();
 		rtcHelper.activeConnection = rtcHelper.pendingConnection;
 		rtcHelper.pendingConnection = undefined;

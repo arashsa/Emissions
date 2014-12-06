@@ -12,18 +12,19 @@
 </head>
 
 <body>
-	<div>
-		<video id="localVideo" class="rtcVideo" width="300px" height="300px" autoplay="true" muted="true"></video>
-		<video id="remoteVideo" class="rtcVideo" width="300px" height="300px" autoplay="true"></video>
-	</div>
+<div>
+	<video id="localVideo" class="rtcVideo" width="300px" height="300px" autoplay="true" muted="true"></video>
+	<video id="remoteVideo" class="rtcVideo" width="300px" height="300px" autoplay="true"></video>
+</div>
 	
-	<div>
-		<span id="incomingCall" style="display: none">
-			<span id="callerId">X ringer</span>
-			<button id="answerButton">Svar</button> 
-		</span>
-			<button id="hangUp" style="display: none">Legg på</button>
-	</div>
+<div>
+<button id="callMissionCommander" class="call">Ring oppdragskoordinator</button>
+<br>
+<button id="callCommunicationTeam" class="call">Ring kommunikasjons-teamet</button>
+<span id="callerId" class="incomingCall" style="display: none">X ringer</span>
+<button id="answerButton" class="incomingCall" style="display: none">Svar</button> 
+<button id="hangUp" style="display: none">Legg på</button>
+</div>
 	
 </body>
 </html>
