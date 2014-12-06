@@ -5,8 +5,6 @@ window.onload = function() {
 	var id = "commander";
 	var happyVideoUrl = "http://video.webmfiles.org/big-buck-bunny_trailer.webm";
 	var nervousVideoUrl = "http://video.webmfiles.org/elephants-dream.webm";
-	var pendingConnection; //An RTC connection that has not yet been answered
-	var activeConnection; //An RTC connection where a call is currently ongoing
 	
 	//Changes the url of the astronaut video
 	var changeLocalVideo = function(videoUrl) {
@@ -90,98 +88,16 @@ window.onload = function() {
 		startMissionTimer(Math.floor(missionLength / 1000 / 60));
 	});
 	
-	socket.on('call', function(from, to) {
-		if (to === id) {
-			if (pendingConnection) {
-				pendingConnection.disconnect();
-			}
-			
-			callerId = from;
-			pendingConnection = rtc.connect(id, callerId, socket, $("#localVideo")[0], $("#remoteVideo")[0]);
-			
-			pendingConnection.onCallStarted = function() {
-				$("#localVideo").show();
-				$("#remoteVideo").show();
-			};
-			
-			pendingConnection.onCallEnded = function() {
-				pendingConnection.onCallStarted = undefined;
-				pendingConnection.onCallEnded = undefined;
-				pendingConnection = undefined;
-				$("#incomingCall").hide();
-				
-				if (!activeConnection) {
-					$("#hangUp").hide();
-					$("#callSecurityTeam").show();
-				}
-			};
-			
-			$("#hangUp").show();
-			$("#incomingCall").show();
-			$("#callSecurityTeam").hide();
-			$("#callerId").html("Kommunikasjons-teamet ringer");
-		}
-	});
+	rtcHelper.id = id;
+	rtcHelper.socket = socket;
 	
-	$("#answerButton").click(function() {
-		if (activeConnection) {
-			activeConnection.disconnect();
-		}
-		
-		pendingConnection.onCallEnded = function() {
-			activeConnection.onCallStarted = undefined;
-			activeConnection.onCallEnded = undefined;
-			activeConnection = undefined;
-			$("#localVideo").hide();
-			$("#remoteVideo").hide();
-			
-			if (!pendingConnection) {
-				$("#hangUp").hide();
-				$("#callSecurityTeam").show();
-			}
-		};
-		
-		$("#incomingCall").hide();
-		pendingConnection.answer();
-		activeConnection = pendingConnection;
-		pendingConnection = undefined;
-	});
+	socket.on('call', rtcHelper.onIncomingCall);
+	
+	$("#answerButton").click(rtcHelper.answerIncomingCall);
 	
 	$("#callSecurityTeam").click(function() {
-		if (activeConnection) {
-			activeConnection.disconnect();
-		}
-		
-		activeConnection = rtc.connect(id, "security", socket, $("#localVideo")[0], $("#remoteVideo")[0]);
-		activeConnection.call();
-		$("#callSecurityTeam").hide();
-		$("#hangUp").show();
-		
-		activeConnection.onCallStarted = function() {
-			$("#localVideo").show();
-			$("#remoteVideo").show();		
-		};
-		
-		activeConnection.onCallEnded = function() {
-			activeConnection.onCallStarted = undefined;
-			activeConnection.onCallEnded = undefined;
-			activeConnection = undefined;
-			$("#localVideo").hide();
-			$("#remoteVideo").hide();
-			
-			if (!pendingConnection) {
-				$("#hangUp").hide();
-				$("#callSecurityTeam").show();
-			}				
-		};
+		rtcHelper.call("security");
 	});
 	
-	$("#hangUp").click(function() {
-		if (pendingConnection) {
-			pendingConnection.disconnect();
-		}
-		else if (activeConnection) {
-			activeConnection.disconnect();
-		}
-	});
+	$("#hangUp").click(rtcHelper.hangUp);
 };

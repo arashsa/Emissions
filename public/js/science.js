@@ -157,29 +157,12 @@ window.onload = function() {
 		}
 	});
 	
+	rtcHelper.id = id;
+	rtcHelper.socket = socket;
+	
 	$("#callSecurityTeam").click(function() {
-		rtcConnection = rtc.connect(id, "security", socket, $("#localVideo")[0], $("#remoteVideo")[0]);
-		rtcConnection.call();
-		$("#callSecurityTeam").hide();
-		$("#hangUp").show();
-		
-		rtcConnection.onCallStarted = function() {
-			$("#localVideo").show();
-			$("#remoteVideo").show();		
-		};
-		
-		rtcConnection.onCallEnded = function() {
-			$("#localVideo").hide();
-			$("#remoteVideo").hide();
-			$("#callSecurityTeam").show();
-			$("#hangUp").hide();			
-		};
+		rtcHelper.call("security");
 	});
 	
-	$("#hangUp").click(function() {
-		if (rtcConnection) {
-			rtcConnection.disconnect();
-			rtcConnection = undefined;
-		}
-	});
+	$("#hangUp").click(rtcHelper.hangUp);
 };

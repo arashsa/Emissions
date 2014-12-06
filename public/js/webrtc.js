@@ -187,3 +187,108 @@ rtc = {
 		return rtcConnection;
 	}
 };
+
+//A wrapper object containing simple functions to call other clients and answer incoming calls using WebRTC
+rtcHelper = {
+	pendingConnection: undefined, //An incoming RTC connection that has not yet been answered
+	activeConnection: undefined, //An RTC connection where a call is currently ongoing
+	id: undefined,
+	socket: undefined,
+	
+	onIncomingCall: function(from, to) {
+		if (to === rtcHelper.id) {
+			//If multiple people are calling the same person at the same time, only the last call will show up
+			if (rtcHelper.pendingConnection) {
+				rtcHelper.pendingConnection.disconnect();
+			}
+			
+			rtcHelper.pendingConnection = rtc.connect(to, from, rtcHelper.socket, $("#localVideo")[0], $("#remoteVideo")[0]);
+			
+			rtcHelper.pendingConnection.onCallStarted = function() {
+				$(".rtcVideo").show();
+			};
+			
+			rtcHelper.pendingConnection.onCallEnded = function() {
+				rtcHelper.pendingConnection.onCallStarted = undefined;
+				rtcHelper.pendingConnection.onCallEnded = undefined;
+				rtcHelper.pendingConnection = undefined;
+				$("#incomingCall").hide();
+				
+				if (!rtcHelper.activeConnection) {
+					$("#hangUp").hide();
+					$(".call").show();
+				}
+			};
+			
+			$("#hangUp").show();
+			$("#incomingCall").show();
+			$(".call").hide();
+			$("#callerId").html(from.charAt(0).toUpperCase() + from.slice(1) + "-teamet ringer");
+		}
+	},
+	
+	answerIncomingCall: function() {
+		//If no one is calling, do nothing
+		if (!rtcHelper.pendingConnection) {
+			return;
+		}
+		
+		//End any ongoing calls
+		if (rtcHelper.activeConnection) {
+			rtcHelper.activeConnection.disconnect();
+		}
+		
+		rtcHelper.pendingConnection.onCallEnded = function() {
+			rtcHelper.activeConnection.onCallStarted = undefined;
+			rtcHelper.activeConnection.onCallEnded = undefined;
+			rtcHelper.activeConnection = undefined;
+			$(".rtcVideo").hide();
+			
+			if (!rtcHelper.pendingConnection) {
+				$("#hangUp").hide();
+				$(".call").show();
+			}
+		};
+		
+		$("#incomingCall").hide();
+		rtcHelper.pendingConnection.answer();
+		rtcHelper.activeConnection = rtcHelper.pendingConnection;
+		rtcHelper.pendingConnection = undefined;
+	},
+	
+	call: function(to) {
+		if (rtcHelper.activeConnection) {
+			rtcHelper.activeConnection.disconnect();
+		}
+		
+		rtcHelper.activeConnection = rtc.connect(rtcHelper.id, to, rtcHelper.socket, $("#localVideo")[0], $("#remoteVideo")[0]);
+		rtcHelper.activeConnection.call();
+		$(".call").hide();
+		$("#hangUp").show();
+		
+		rtcHelper.activeConnection.onCallStarted = function() {
+			$(".rtcVideo").show();
+		};
+		
+		rtcHelper.activeConnection.onCallEnded = function() {
+			rtcHelper.activeConnection.onCallStarted = undefined;
+			rtcHelper.activeConnection.onCallEnded = undefined;
+			rtcHelper.activeConnection = undefined;
+			$(".rtcVideo").hide();
+			
+			if (!rtcHelper.pendingConnection) {
+				$("#hangUp").hide();
+				$(".call").show();
+			}				
+		};		
+	},
+	
+	hangUp: function() {
+		if (rtcHelper.pendingConnection) {
+			rtcHelper.pendingConnection.disconnect();
+		}
+		else if (rtcHelper.activeConnection) {
+			rtcHelper.activeConnection.disconnect();
+		}
+	}
+};
