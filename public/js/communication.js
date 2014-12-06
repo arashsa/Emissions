@@ -159,6 +159,10 @@ window.onload = function() {
 		rtcHelper.call("commander");
 	});
 	
+	$("#callSecurityTeam").click(function() {
+		rtcHelper.call("security");
+	});
+	
 	$("#hangUp").click(rtcHelper.hangUp);
 	
 	//Disconnect from the currently active satelite and start connecting to a new one
