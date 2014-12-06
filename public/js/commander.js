@@ -99,5 +99,9 @@ window.onload = function() {
 		rtcHelper.call("security");
 	});
 	
+	$("#callCommunicationTeam").click(function() {
+		rtcHelper.call("communication");
+	});
+	
 	$("#hangUp").click(rtcHelper.hangUp);
 };
