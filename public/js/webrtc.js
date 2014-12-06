@@ -257,30 +257,44 @@ rtcHelper = {
 	},
 	
 	call: function(to) {
+		if (rtcHelper.pendingConnection) {
+			rtcHelper.pendingConnection.disconnect();
+		}
+		
 		if (rtcHelper.activeConnection) {
 			rtcHelper.activeConnection.disconnect();
 		}
 		
-		rtcHelper.activeConnection = rtc.connect(rtcHelper.id, to, rtcHelper.socket, $("#localVideo")[0], $("#remoteVideo")[0]);
-		rtcHelper.activeConnection.call();
+		rtcHelper.pendingConnection = rtc.connect(rtcHelper.id, to, rtcHelper.socket, $("#localVideo")[0], $("#remoteVideo")[0]);
+		rtcHelper.pendingConnection.call();
 		$(".call").hide();
 		$("#hangUp").show();
 		
-		rtcHelper.activeConnection.onCallStarted = function() {
+		rtcHelper.pendingConnection.onCallStarted = function() {
+			rtcHelper.activeConnection = rtcHelper.pendingConnection;
+			rtcHelper.pendingConnection = undefined;
 			$(".rtcVideo").show();
+			
+			rtcHelper.activeConnection.onCallEnded = function() {
+				rtcHelper.activeConnection.onCallStarted = undefined;
+				rtcHelper.activeConnection.onCallEnded = undefined;
+				rtcHelper.activeConnection = undefined;
+				$(".rtcVideo").hide();
+				
+				if (!rtcHelper.pendingConnection) {
+					$("#hangUp").hide();
+					$(".call").show();
+				}				
+			};
 		};
 		
-		rtcHelper.activeConnection.onCallEnded = function() {
-			rtcHelper.activeConnection.onCallStarted = undefined;
-			rtcHelper.activeConnection.onCallEnded = undefined;
-			rtcHelper.activeConnection = undefined;
-			$(".rtcVideo").hide();
-			
-			if (!rtcHelper.pendingConnection) {
-				$("#hangUp").hide();
-				$(".call").show();
-			}				
-		};		
+		rtcHelper.pendingConnection.onCallEnded = function() {
+			rtcHelper.pendingConnection.onCallStarted = undefined;
+			rtcHelper.pendingConnection.onCallEnded = undefined;
+			rtcHelper.pendingConnection = undefined;
+			$("#hangUp").hide();
+			$(".call").show();			
+		};
 	},
 	
 	hangUp: function() {
