@@ -1,3 +1,4 @@
+var socket = io.connect();
 var chart;
 var oxygenUseRange = [0, 0];
 var oxygenRemaining = 100;
@@ -53,11 +54,10 @@ function startEventLoop() {
 	var updateFrequency = 60000;
 	var startTime = Date.now();
 	
-	oxygenRemaining = 100;
 	oxygenSamples.length = 0;
 	
 	//Create the red guide line that goes from 100% oxygen to 0% oxygen
-	oxygenSamples[0] = {timestamp: missionLength, oxygen: 100, guide: 100};
+	oxygenSamples[0] = {timestamp: missionLength, oxygen: oxygenRemaining, guide: oxygenRemaining};
 	oxygenSamples[missionLength - 1] = {timestamp: 0, guide: 0};
 	
 	//Create one empty data point per minute
@@ -66,16 +66,19 @@ function startEventLoop() {
 	}
 	
 	chart.validateData();
-	
+
 	chartUpdater = setInterval(function() {
 		var oxygenUse = Math.randomInt(oxygenUseRange[0], oxygenUseRange[1]);
 		
-		missionTime++;
 		oxygenRemaining -= oxygenUse;
+		missionTime++;
 		
 		oxygenSamples[missionTime].oxygen = oxygenRemaining;
 		
 		chart.validateData();
+		
+		//The server has to remember the oxygen remaining in case the security window is closed during the mission
+		socket.emit("set oxygen remaining", oxygenRemaining);
 	}, updateFrequency);
 }
 
@@ -84,8 +87,29 @@ function stopEventLoop() {
 }
 
 window.onload = function() {
-	var socket = io.connect();
 	var id = "security";
+	
+	socket.emit("get mission time left");
+	
+	//Check if the mission has already started
+	socket.on("mission time left", function(timeLeft) {
+		if (timeLeft > 0) {
+			missionLength = Math.floor(timeLeft / 1000 / 60);
+			startMissionTimer(missionLength);
+			socket.emit("get ranges");
+			
+			socket.on("ranges", function(ranges) {
+				oxygenUseRange = ranges.oxygenUse;
+				socket.emit("get oxygen remaining");
+				
+				socket.on("oxygen remaining", function(oxygen) {
+					oxygenRemaining = oxygen;
+					chart.valueAxes[0].maximum = oxygen;
+					startEventLoop();
+				});
+			});
+		}
+	});
 	
 	socket.on("change oxygen use", function(range) {
 		oxygenUseRange = range;

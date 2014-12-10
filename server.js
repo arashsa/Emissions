@@ -29,6 +29,7 @@ var missionLength = 0;
 var originalMissionLength = 0;
 var missionTime = 0;
 var missionTimeLastUpdated = 0;
+var oxygenRemaining = 100;
 var ranges = {respiration: [0, 0], oxygenUse: [0, 0], heartRate: [0, 0], radiation: [0, 0], satelite1: [0, 0], satelite2: [0, 0], satelite3: [0, 0]};
 var levels = {respiration: eventData.respirationLevels, heartRate: eventData.heartRateLevels, oxygenUse: eventData.oxygenUseLevels, radiation: eventData.radiationLevels, reception: eventData.receptionLevels};
 
@@ -63,6 +64,15 @@ io.sockets.on("connection", function (socket) {
 	socket.on("get mission time left", function() {
 		updateMissionTime();
 		socket.emit("mission time left", missionLength - missionTime);
+	});
+	
+	socket.on("get oxygen remaining", function() {
+		socket.emit("oxygen remaining", oxygenRemaining);
+	});
+	
+	socket.on("set oxygen remaining", function(oxygen) {
+		oxygenRemaining = oxygen;
+		console.log(oxygenRemaining);
 	});
 	
 	socket.on("start mission", startMission);
