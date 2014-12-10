@@ -12,6 +12,7 @@ var eventData = JSON.parse(fs.readFileSync('events.json'));
 
 //Parses the events to objects and adds them to a single array
 Array.prototype.push.apply(events, parseEvents(eventData.respirationEvents, eventData.respirationLevels, "respiration"));
+Array.prototype.push.apply(events, parseEvents(eventData.oxygenUseEvents, eventData.oxygenUseLevels, "oxygenUse"));
 Array.prototype.push.apply(events, parseEvents(eventData.heartRateEvents, eventData.heartRateLevels, "heartRate"));
 Array.prototype.push.apply(events, parseEvents(eventData.radiationEvents, eventData.radiationLevels, "radiation"));
 Array.prototype.push.apply(events, parseEvents(eventData.satelite1Events, eventData.receptionLevels, "satelite1"));
@@ -28,7 +29,7 @@ var missionLength = 0;
 var originalMissionLength = 0;
 var missionTime = 0;
 var missionTimeLastUpdated = 0;
-var ranges = {respiration: [0, 0], heartRate: [0, 0], radiation: [0, 0], satelite1: [0, 0], satelite2: [0, 0], satelite3: [0, 0]};
+var ranges = {respiration: [0, 0], oxygenUse: [0, 0], heartRate: [0, 0], radiation: [0, 0], satelite1: [0, 0], satelite2: [0, 0], satelite3: [0, 0]};
 var levels = {respiration: eventData.respirationLevels, heartRate: eventData.heartRateLevels, oxygenUse: eventData.oxygenUseLevels, radiation: eventData.radiationLevels, reception: eventData.receptionLevels};
 
 var server = app.listen(port);
@@ -110,6 +111,9 @@ function updateRanges() {
 				}
 				else if (nextEvent.type === "respiration") {
 					io.emit("change respiration", nextEvent.range);
+				}
+				else if (nextEvent.type === "oxygenUse") {
+					io.emit("change oxygen use", nextEvent.range);
 				}
 				else if (nextEvent.type === "heartRate") {
 					io.emit("change heart rate", nextEvent.range);

@@ -5,18 +5,23 @@
 		"high": [30, 50]
 	},
 	
-	"oxygenUseLevels": {
-		"low": [0.10, 0.30],
-		"medium": [0.30, 0.60],
-		"high": [0.60, 1.00]
-	},
-	
 	"respirationEvents": [
 		[0, "low"],
 		[65, "normal"],
 		[100, "high"],
 		[140, "normal"],
 		[200, "high"]
+	],
+	
+	"oxygenUseLevels": {
+		"low": [0.20, 0.40],
+		"medium": [0.70, 1.20],
+		"high": [3.00, 6.00]
+	},
+
+	"oxygenUseEvents": [
+		[0, "low"],
+		[30, "high"]
 	],
 	
 	"heartRateLevels": {
