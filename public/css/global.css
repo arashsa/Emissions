@@ -1,0 +1,3 @@
+.rtcVideo, .incomingCall, #hangUp {
+	display: none;
+}
