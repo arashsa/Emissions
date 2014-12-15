@@ -30,6 +30,8 @@ var originalMissionLength = 0;
 var missionTime = 0;
 var missionTimeLastUpdated = 0;
 var oxygenRemaining = 100;
+var co2Level = 0;
+var scrubFilterChanged = false;
 var ranges = {respiration: [0, 0], oxygenUse: [0, 0], heartRate: [0, 0], radiation: [0, 0], satelite1: [0, 0], satelite2: [0, 0], satelite3: [0, 0]};
 var levels = {respiration: eventData.respirationLevels, heartRate: eventData.heartRateLevels, oxygenUse: eventData.oxygenUseLevels, radiation: eventData.radiationLevels, reception: eventData.receptionLevels};
 
@@ -72,7 +74,22 @@ io.sockets.on("connection", function (socket) {
 	
 	socket.on("set oxygen remaining", function(oxygen) {
 		oxygenRemaining = oxygen;
-		console.log(oxygenRemaining);
+	});
+	
+	socket.on("get co2 level", function() {
+		socket.emit("co2 level", co2Level);
+	});
+	
+	socket.on("set co2 level", function(co2) {
+		co2Level = co2;
+	});
+	
+	socket.on("is scrub filter changed", function() {
+		socket.emit("scrub filter changed", scrubFilterChanged);
+	});
+	
+	socket.on("set scrub filter changed", function() {
+		scrubFilterChanged = true;
 	});
 	
 	socket.on("start mission", startMission);
@@ -157,6 +174,9 @@ function startMission(length) {
 	missionLength = length;
 	missionTime = 0;
 	missionTimeLastUpdated = Date.now();
+	oxygenRemaining = 100;
+	co2Level = 0;
+	scrubFilterChanged = false;
 	missionStarted = true;
 	updateRanges();
 	io.emit("mission started", length);

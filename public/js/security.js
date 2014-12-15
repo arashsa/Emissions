@@ -2,7 +2,9 @@ var socket = io.connect();
 var chart;
 var oxygenUseRange = [0, 0];
 var oxygenRemaining = 100;
+var co2Level = 0;
 var missionTime = 0;
+var scrubFilterChangedTimestamp = 0;
 var missionLength;
 var oxygenSamples = [];
 
@@ -66,6 +68,8 @@ function startEventLoop() {
 	}
 	
 	chart.validateData();
+	
+	$("#co2Level").html(Math.floor(co2Level) + "%");
 
 	chartUpdater = setInterval(function() {
 		var oxygenUse = Math.randomInt(oxygenUseRange[0], oxygenUseRange[1]);
@@ -77,8 +81,18 @@ function startEventLoop() {
 		
 		chart.validateData();
 		
-		//The server has to remember the oxygen remaining in case the security window is closed during the mission
+		//Changing the scrub filter resets the co2 level. This should only be done once per mission, so make the co2 level reach critical levels (25%) when the mission is halfway done
+		co2Level = (missionTime - scrubFilterChangedTimestamp) / missionLength * 50;
+		
+		if (co2Level > 100) {
+			co2Level = 100;
+		}
+		
+		$("#co2Level").html(Math.floor(co2Level) + "%");
+		
+		//The server has to remember the oxygen remaining and co2 level in case the security window is closed during the mission
 		socket.emit("set oxygen remaining", oxygenRemaining);
+		socket.emit("set co2 level", co2Level);
 	}, updateFrequency);
 }
 
@@ -105,10 +119,22 @@ window.onload = function() {
 				socket.on("oxygen remaining", function(oxygen) {
 					oxygenRemaining = oxygen;
 					chart.valueAxes[0].maximum = oxygen;
-					startEventLoop();
+					socket.emit("get co2 level");
+					
+					socket.on("co2 level", function(co2) {
+						co2Level = co2;
+						
+						startEventLoop();
+					});
 				});
 			});
 		}
+	});
+
+	socket.emit("is scrub filter changed");
+	
+	socket.on("scrub filter changed", function(scrubFilterChanged) {
+		$("#changeScrubFilter").prop("disabled", scrubFilterChanged);
 	});
 	
 	socket.on("change oxygen use", function(range) {
@@ -119,6 +145,7 @@ window.onload = function() {
 	socket.on("mission started", function(length) {
 		missionLength = Math.floor(length / 1000 / 60);
 		startMissionTimer(missionLength);
+		$("#changeScrubFilter").prop("disabled", false);
 		startEventLoop();
 		console.log("Mission started");
 	});
@@ -133,10 +160,20 @@ window.onload = function() {
 		startMissionTimer(Math.floor(length / 1000 / 60));
 	});
 	
+	//Reset the co2 level when changing the scrub filter
+	$("#changeScrubFilter").click(function() {
+		$("#changeScrubFilter").prop("disabled", true);
+		socket.emit("set scrub filter changed");
+		scrubFilterChangedTimestamp = missionTime;
+		co2Level = 0;
+		$("#co2Level").html("0%");
+		socket.emit("set co2 level", co2Level);
+	});
+	
 	rtcHelper.id = id;
 	rtcHelper.socket = socket;
 
-	socket.on('call', rtcHelper.onIncomingCall);
+	socket.on("call", rtcHelper.onIncomingCall);
 
 	$("#answerButton").click(rtcHelper.answerIncomingCall);
 
