@@ -146,6 +146,7 @@ window.onload = function() {
 		missionLength = Math.floor(length / 1000 / 60);
 		startMissionTimer(missionLength);
 		$("#changeScrubFilter").prop("disabled", false);
+		$("#runSateliteTests").hide();
 		startEventLoop();
 		console.log("Mission started");
 	});
@@ -160,6 +161,10 @@ window.onload = function() {
 		startMissionTimer(Math.floor(length / 1000 / 60));
 	});
 	
+	socket.on("job finished", function() {
+		$("#runSateliteTests").show();
+	});
+	
 	//Reset the co2 level when changing the scrub filter
 	$("#changeScrubFilter").click(function() {
 		$("#changeScrubFilter").prop("disabled", true);
@@ -168,6 +173,35 @@ window.onload = function() {
 		co2Level = 0;
 		$("#co2Level").html("0%");
 		socket.emit("set co2 level", co2Level);
+	});
+	
+	var testingProgress = 0;
+	
+	$("#runSateliteTests").click(function() {
+		if (testingProgress == 0) {
+			$("#communicationStatus").html("Tester status...");
+			
+			setTimeout(function() {
+				$("#communicationStatus").html("Status OK");
+				$("#runSateliteTests").html("Test datakvalitet");
+				testingProgress++;
+			}, 3000);
+		}
+		else {
+			$("#communicationStatus").html("Tester datakvalitet...");
+			
+			setTimeout(function() {
+				//As specified in the requirements, the data quality test will fail the first time it is run and succeed the second time
+				if (testingProgress == 1) {
+					$("#communicationStatus").html("Signal for svakt. Prøv igjen.");
+				}
+				else {
+					$("#communicationStatus").html("Datakvalitet OK");
+				}
+				
+				testingProgress++;
+			}, 3000);
+		}
 	});
 	
 	rtcHelper.id = id;

@@ -23,6 +23,11 @@ window.onload = function() {
 		changeVideo("");
 	});
 	
+	$("#jobFinished").click(function() {
+		socket.emit("job finished");
+		$("#jobFinished").attr("disabled", "true");
+	});
+	
 	$("#astronautHappy").click(function() {
 		changeVideo(happyVideoUrl);
 	});
@@ -39,6 +44,7 @@ window.onload = function() {
 	socket.on("mission time left", function(timeLeft) {
 		if (timeLeft > 0) {
 			$("#changeMissionTime").show();
+			$("#jobFinished").show();
 			startMissionTimer(Math.floor(timeLeft / 1000 / 60));
 			$("#startMission").html("Stopp oppdrag");
 			missionStarted = true;
@@ -49,6 +55,8 @@ window.onload = function() {
 		startMissionTimer(Math.floor(missionLength / 1000 / 60));
 		$("#startMission").html("Stopp oppdrag");
 		$("#startMission").removeAttr("disabled");
+		$("#jobFinished").show();
+		$("#jobFinished").removeAttr("disabled");
 		$("#changeMissionTime").show();
 		missionStarted = true;
 		console.log("Mission started");
@@ -58,6 +66,7 @@ window.onload = function() {
 		$("#startMission").html("Start oppdrag");
 		$("#startMission").removeAttr("disabled");
 		$("#changeMissionTime").hide();
+		$("#jobFinished").hide();
 		missionStarted = false;
 		stopMissionTimer();
 		console.log("Mission stopped");

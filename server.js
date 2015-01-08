@@ -92,6 +92,11 @@ io.sockets.on("connection", function (socket) {
 		scrubFilterChanged = true;
 	});
 	
+	//Event fired by the mission commander when the astronaut has finished repairing the satelite
+	socket.on("job finished", function() {
+		socket.broadcast.emit("job finished");
+	});
+	
 	socket.on("start mission", startMission);
 	
 	socket.on("stop mission", stopMission);
