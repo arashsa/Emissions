@@ -1,3 +1,4 @@
+
 //A list of public STUN and TURN servers from https://gist.github.com/yetithefoot/7592580
 var iceServers = [	{url:'stun:stun01.sipphone.com'},
 					{url:'stun:stun.ekiga.net'},
@@ -23,7 +24,7 @@ var iceServers = [	{url:'stun:stun01.sipphone.com'},
 					{url:'turn:192.158.29.39:3478?transport=tcp', credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=', username: '28224511:1379330808'}
 				];
 				
-rtc = {
+var rtc = {
 	//Initializes and returns a new RTC connection between two clients
 	//The RTC connection object has the following methods:
 	//call: Sends an incoming call to the 'to' ID.
@@ -306,3 +307,5 @@ rtcHelper = {
 		}
 	}
 };
+
+module.exports = rtc;
