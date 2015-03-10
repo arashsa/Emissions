@@ -1,37 +1,60 @@
-var React = require('react');
-var MissionCommanderApp = require('./CommanderApp.js');
-var IndexApp = require('./IndexApp.js');
-var ScienceTeamApp = require('./ScienceApp.js');
-var CommunicationTeamApp = require('./CommunicationApp.js');
-var Router = require('./router.js');
-//var document = require('global/document');
-var window = require('global/window');
-var location = window.location;
-var appDiv = document.querySelector('body');
+//require("babel/polyfill");
 
-Router.config({mode: 'hash'})
-    .add(/start/, function () {
-        React.render(<IndexApp/>, appDiv);
-    })
-    .add(/commander/, function () {
-        React.render(<MissionCommanderApp/>, appDiv);
-    })
-    .add(/science/, function () {
-        React.render(<ScienceTeamApp/>, appDiv);
-    })
-    .add(/communication/, function () {
-        React.render(<CommunicationTeamApp/>, appDiv);
-    })
-    // default
-    .add(function () {
-        console.log('No route configured for this url');
-        Router.navigate('/start');
-    })
-    .listen()
-    // make sure we start at one of the defined routes above
-    .check(location.href.substr(location.origin.length));
+const React = require('react');
+const Router = require('react-router');
+
+const document = require('global/document');
+const window = require('global/window');
+
+const AppDispatcher = require('./appdispatcher');
+const MissionCommanderApp = require('./components/commander-app.react');
+const IndexApp = require('./components/index-app.react');
+const ScienceTeamApp = require('./components/science-app.react');
+const CommunicationTeamApp = require('./components/communications-app.react');
+
+const TeamDisplayer = require('./components/team-displayer.react');
+const constants = require('./constants');
+
+const TickTock = require('./components/tick-tock.react')
+
+const App = React.createClass({
+    mixins: [],
+
+    render: function () {
+        return (
+            <div>
+
+                <header>
+                    <TeamDisplayer />
+                    <TickTock />
+                    <h1>Under en solstorm</h1>
+                </header>
 
 
-console.log('Routes set up')
+                {/* this is the important part */}
+                <RouteHandler/>
+            </div>
+        );
+    }
+});
 
-window.Router = Router;
+const Route = Router.Route;
+const NotFoundRoute = Router.NotFoundRoute;
+const DefaultRoute = Router.DefaultRoute;
+const Link = Router.Link;
+const RouteHandler = Router.RouteHandler;
+
+const routes = (
+    <Route name="app" path="/" handler={App}>
+        <Route name="science" handler={ScienceTeamApp}/>
+        <Route name="communication" handler={CommunicationTeamApp}/>
+        <Route name="leader" handler={MissionCommanderApp}/>
+        <DefaultRoute handler={IndexApp}/>
+    </Route>
+);
+
+
+Router.run(routes, (Handler, state) => {
+    AppDispatcher.dispatch({ action : constants.ROUTE_CHANGED_EVENT, state });
+    React.render(<Handler/>, document.body);
+});

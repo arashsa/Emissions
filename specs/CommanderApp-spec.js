@@ -1,4 +1,4 @@
-var App = require('./../app/CommanderApp.js');
+var App = require('./../app/CommanderApp.react');
 var TestUtils = require('react-addons').TestUtils;
 
 describe("App", function() {
