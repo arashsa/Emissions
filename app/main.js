@@ -1,10 +1,14 @@
-//require("babel/polyfill");
+const document = require('global/document');
+const window = require('global/window');
+
+
+// include these into the build
+// bootstrap requires jQuery
+window.jQuery = require('jquery');
+const bootstrap = require('bootstrap');
 
 const React = require('react');
 const Router = require('react-router');
-
-const document = require('global/document');
-const window = require('global/window');
 
 const AppDispatcher = require('./appdispatcher');
 const MissionCommanderApp = require('./components/commander-app.react');
@@ -22,12 +26,14 @@ const App = React.createClass({
 
     render: function () {
         return (
-            <div>
+            <div className='container-fluid'>
 
                 <header>
-                    <TeamDisplayer />
-                    <TickTock />
-                    <h1>Under en solstorm</h1>
+                    <div className='row'>
+                        <TeamDisplayer className = 'col-xs-6'/>
+                        <TickTock className = 'col-xs-6'/>
+                    </div>
+                    <h1 className = 'row'>Under en solstorm</h1>
                 </header>
 
 
@@ -55,6 +61,6 @@ const routes = (
 
 
 Router.run(routes, (Handler, state) => {
-    AppDispatcher.dispatch({ action : constants.ROUTE_CHANGED_EVENT, state });
+    AppDispatcher.dispatch({action: constants.ROUTE_CHANGED_EVENT, state});
     React.render(<Handler/>, document.body);
 });

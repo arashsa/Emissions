@@ -39,7 +39,7 @@ const TickTock = React.createClass({
     },
 
     render() {
-        console.log('tick tock', this.state.seconds);
+        //console.log('tick tock', this.state.seconds);
 
         return (
             <div>

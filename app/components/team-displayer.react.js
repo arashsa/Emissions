@@ -31,13 +31,7 @@ const TeamWidget = React.createClass({
     },
 
     render() {
-        return (
-            <div>
-                { /* Why does it work in the JSX ? */}
-                <h2> { this.teamName()  }</h2>
-                <br />
-            </div>
-        );
+        return ( <div>{ this.teamName()  }</div> );
     }
 });
 
