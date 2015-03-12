@@ -26,20 +26,38 @@ const App = React.createClass({
 
     render: function () {
         return (
-            <div className='container-fluid'>
+        <div>
+            <div className='container'>
 
-                <header>
-                    <div className='row'>
-                        <TeamDisplayer className = 'col-xs-6'/>
-                        <TickTock className = 'col-xs-6'/>
+                <header id='narom-header' className = 'row'>
+                    <div className = 'col-xs-12' >
+                        <img className = 'narom-logo-img'  src='/images/logo.png' />
+                        NAROM e-Mission prototype
                     </div>
-                    <h1 className = 'row'>Under en solstorm</h1>
                 </header>
+            </div>
+
+            <div id='main-header' >
+                <header className='container'>
+                    <h1 className = ''>Under en solstorm</h1>
+                </header>
+            </div>
+
+            <div id='team-name' >
+                <header className='container'>
+                    <TeamDisplayer className=''/>
+                </header>
+            </div>
+
+            <div className = 'container'>
+                <span>Gjenstående tid: </span>
+                <TickTock />
+            </div>
 
 
                 {/* this is the important part */}
-                <RouteHandler/>
-            </div>
+            <RouteHandler/>
+        </div>
         );
     }
 });

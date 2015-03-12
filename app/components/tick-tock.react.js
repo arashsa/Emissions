@@ -5,15 +5,15 @@ var React = require('react');
 
 var SetIntervalMixin = {
 
-    componentWillMount () {
+    componentWillMount() {
         this.intervals = [];
     },
 
-    setInterval () {
+    setInterval() {
         this.intervals.push(setInterval.apply(null, arguments));
     },
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         this.intervals.map(clearInterval);
     }
 
@@ -27,7 +27,7 @@ const TickTock = React.createClass({
     },
 
     getInitialState() {
-        return {seconds: 0};
+        return {seconds: 1200};
     },
 
     componentDidMount() {
@@ -35,16 +35,23 @@ const TickTock = React.createClass({
     },
 
     tick() {
-        this.setState({seconds: this.state.seconds + 1});
+        this.setState({seconds: this.state.seconds - 1});
+    },
+
+    minutes() {
+        return this.state.seconds / 60 >> 0;
+    },
+
+    seconds () {
+        return this.state.seconds % 60;
     },
 
     render() {
-        //console.log('tick tock', this.state.seconds);
 
         return (
-            <div>
-                Oppgavetid: {this.state.seconds} sekunder.
-            </div>
+            <span {...this.props}>
+            {this.minutes()}:{this.seconds()}
+            </span>
         );
     }
 });

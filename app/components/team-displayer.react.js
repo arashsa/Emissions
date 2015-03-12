@@ -1,5 +1,12 @@
 const React = require('react');
 const PathStore = require('../stores/path-store');
+const teamMap = {
+    //'leader': 'Operasjonsleder',
+    'science': 'forskningsteam',
+    'communication': 'kommunikasjonsteam',
+    'security': 'sikkerhetsteam',
+    'astronaut': 'astronautteam'
+};
 
 const TeamWidget = React.createClass({
 
@@ -18,20 +25,26 @@ const TeamWidget = React.createClass({
     },
 
     teamName() {
-        switch (PathStore.getPathname()) {
-            case 'leader' :
-                return 'Operasjonsleder';
-            case 'science' :
-                return 'Forskningsteamet';
-            case 'communication' :
-                return 'Kommunikasjonsteamet';
-            default:
-                return 'Velg lag';
-        }
+        var name = teamMap[(PathStore.getPathname())];
+        return name || 'Velg lag';
+    },
+
+    otherTeamNames() {
+        const pathname = PathStore.getPathname();
+
+        return Object.keys(teamMap)
+            .filter((n) => n !== pathname)
+            .map((n) => teamMap[n])
+            .join(', ')
     },
 
     render() {
-        return ( <div>{ this.teamName()  }</div> );
+
+        return (
+            <div className = { this.props.className + ' teamwidget'} >
+                <span className = 'active' >{ this.teamName()  }</span>
+                <span className = ''>, { this.otherTeamNames() } </span>
+            </div> );
     }
 });
 

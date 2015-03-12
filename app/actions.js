@@ -1,5 +1,7 @@
 const AppDispatcher = require('./appdispatcher');
 
-const methods = {};
+const methods = {
+    science
+};
 
 module.exports = methods;

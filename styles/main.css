@@ -1,5 +1,42 @@
+/*
+   dark blue #3F63B2
+   grey CCDCFF
+   light blue 739FFF
+   orangebrown B28A2D
+   sundown FFD573
+*/
 
-* {
-    box-sizing: border-box;
+#main-header {
+  background-color: #ffd573;
+}
+#main-header h1 {
+    margin: 20px 0;
 }
 
+#team-name {
+    /*background-color: #739fff;*/
+}
+
+#narom-header{
+    font-family: Orbitron, sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+#narom-header img{
+    height: 20px;
+    padding-right:8px;
+}
+
+.container {
+    padding-top: 5px;
+}
+
+.teamwidget {
+    font-weight: 200;
+    color: lightgray;
+}
+.teamwidget .active {
+    text-transform: capitalize;
+    color: black;
+}
