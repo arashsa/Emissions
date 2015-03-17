@@ -40,3 +40,16 @@
     text-transform: capitalize;
     color: black;
 }
+
+
+.messagebox  {
+    list-style-type: none;
+    padding: 0; /* remove start padding in lists */
+}
+.messagebox .alert {
+    margin-bottom : 5px;
+}
+
+.introscreen h2{
+    margin-top: 0;
+}

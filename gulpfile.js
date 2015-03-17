@@ -31,14 +31,13 @@ var browserifyTask = function (options) {
         debug: options.development, // Gives us sourcemapping
         cache: {}, packageCache: {}, fullPaths: options.development // Requirement of watchify
     }).transform(
-
         // We want to convert JSX to normal javascript
         babelify.configure({
             optional: ["runtime"]
         })
     );
 
-        // We set our dependencies as externals on our app bundler when developing
+    // We set our dependencies as externals on our app bundler when developing
     (options.development ? dependencies : []).forEach(function (dep) {
         appBundler.external(dep);
     });
@@ -76,9 +75,12 @@ var browserifyTask = function (options) {
         var testBundler = browserify({
             entries: testFiles,
             debug: true, // Gives us sourcemapping
-            transform: [babelify],
             cache: {}, packageCache: {}, fullPaths: true // Requirement of watchify
-        });
+        }).transform(
+            babelify.configure({
+                optional: ["runtime"]
+            })
+        );
 
         dependencies.forEach(function (dep) {
             testBundler.external(dep);

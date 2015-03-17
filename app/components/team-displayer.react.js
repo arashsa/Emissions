@@ -25,8 +25,7 @@ const TeamWidget = React.createClass({
     },
 
     teamName() {
-        var name = teamMap[(PathStore.getPathname())];
-        return name || 'Velg lag';
+        return teamMap[(PathStore.getPathname())];
     },
 
     otherTeamNames() {
@@ -40,11 +39,20 @@ const TeamWidget = React.createClass({
 
     render() {
 
-        return (
-            <div className = { this.props.className + ' teamwidget'} >
-                <span className = 'active' >{ this.teamName()  }</span>
-                <span className = ''>, { this.otherTeamNames() } </span>
-            </div> );
+        if (this.teamName()) {
+
+            return (
+                <div className = { this.props.className + ' teamwidget'} >
+                    <span className = 'active' >{ this.teamName()  }</span>
+                    <span className = ''>, { this.otherTeamNames() } </span>
+                </div> );
+        } else {
+            return (
+                <div className = { this.props.className } >
+                    <h2>Velg lag</h2>
+                </div> );
+
+        }
     }
 });
 

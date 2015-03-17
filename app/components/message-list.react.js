@@ -1,25 +1,30 @@
 var React = require('react');
 
+var ListMessageWrapper = React.createClass({
+
+    render() {
+        let button = (
+            <button type="button" className="close" data-dismiss="alert">
+                <span>×</span>
+            </button>);
+
+        return <li className={ 'alert alert-dismissible alert-' + this.props.data.level} >
+        { this.props.data.dismissable ? button : ''}
+            {this.props.data.text}
+        </li>;
+    }
+});
 
 var App = React.createClass({
 
-    getInitialState() {
-        return {
-            messages: [
-                {text: 'Ta fire målinger', level: 'info'}
-                {text: 'Faretruende høyt strålingsnivå', level: 'danger'}
-            ]
-        }
-    },
-
-    _onIntroClick() {
-    },
-
     render() {
         return (
-            <div className = 'messagelist'>
-                <h2>Meldinger</h2>
-            </div>
+            <ul className = 'messagebox'>
+            { this.props.messages.map((msg) => {
+                return (<ListMessageWrapper key={msg.id} data={msg} />);
+            })
+                }
+            </ul>
         );
     }
 
