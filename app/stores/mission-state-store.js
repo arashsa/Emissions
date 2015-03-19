@@ -3,8 +3,7 @@
 const { Emitter } = require('events');
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const { MISSION_STARTED,MISSION_STOPPED, NOT_READY_MSG  } =  require('../constants');
-const actions = require('../actions');
+const { MISSION_STARTED_EVENT,MISSION_STOPPED_EVENT, NOT_READY_MSG  } =  require('../constants');
 
 var missionRunning = false, missionHasBeenStopped = false;
 
@@ -14,13 +13,15 @@ var MissionStateStore = Object.assign(new BaseStore(), {
         missionRunning = true;
         missionHasBeenStopped = false;
 
-        this.emit('change');
+        this.emitChange();
     },
 
     handleMissionStopped() {
+        console.log('mission stopped')
         missionRunning = false;
         missionHasBeenStopped = true;
-        this.emit('change');
+
+        this.emitChange();
     },
 
     isMissionRunning() {
@@ -35,10 +36,10 @@ var MissionStateStore = Object.assign(new BaseStore(), {
         var { action} = payload;
 
         switch (action) {
-            case MISSION_STARTED:
+            case MISSION_STARTED_EVENT:
                 return MissionStateStore.handleMissionStarted();
 
-            case MISSION_STOPPED:
+            case MISSION_STOPPED_EVENT:
                 return MissionStateStore.handleMissionStopped();
         }
 
@@ -47,5 +48,5 @@ var MissionStateStore = Object.assign(new BaseStore(), {
 
 });
 
-window.MissionStateStore = MissionStateStore;
+window.__MissionStateStore = MissionStateStore;
 module.exports = MissionStateStore;

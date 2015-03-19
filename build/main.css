@@ -7051,7 +7051,9 @@ button.close {
 */
 
 #main-header {
-  background-color: #ffd573;
+    background: #000 url('./images/flare-small.jpeg') no-repeat;
+    background-position-x: 0%;
+    background-position-y: 50%;
 }
 #main-header h1 {
     margin: 20px 0;
@@ -7096,4 +7098,8 @@ button.close {
 
 .introscreen h2{
     margin-top: 0;
+}
+
+.btn:focus {
+    /*outline: none;*/
 }

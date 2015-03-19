@@ -20,8 +20,7 @@ const CommunicationTeamApp = require('./components/communications-app.react');
 const TeamDisplayer = require('./components/team-displayer.react');
 const constants = require('./constants');
 
-const CountdownWidget = require('./components/countdown-widget.react.js');
-const missionTimeStore = require('./stores/time-store').getMissionInstance();
+const MissionTimer = require('./components/mission-timer.react.js');
 const StateStore = require('./stores/mission-state-store');
 
 // run startup actions
@@ -30,23 +29,27 @@ require('./bootstrap-actions').run();
 const App = React.createClass({
     mixins: [],
 
+    getInitialState() {
+        return {isMissionRunning: StateStore.isMissionRunning()};
+    },
+
+    componentWillMount() {
+        StateStore.addChangeListener(() => {
+            this.setState({isMissionRunning: StateStore.isMissionRunning()});
+        })
+    },
+
     render: function () {
         var countDownBox;
 
-        if (StateStore.isMissionStopped()) {
+        if (StateStore.isMissionRunning()) {
+            countDownBox = <MissionTimer />
+        } else {
             countDownBox = (
                 <div className={this.props.className}>
-                    Oppdraget er stoppet.
+                    Oppdraget er ikke i gang.
                 </div>
             );
-        } else {
-
-            countDownBox =
-                <CountdownWidget
-                    notStartedText = 'Tiden løper ikke ennå.'
-                    runningText = 'Gjenværende tid:'
-                    className = 'container'
-                    timeStore = { missionTimeStore } />
         }
 
 
@@ -74,7 +77,9 @@ const App = React.createClass({
                     </header>
                 </div>
 
+                <section className='container'>
                 { countDownBox }
+                </section>
 
                 {/* this is the important part */}
                 <RouteHandler/>

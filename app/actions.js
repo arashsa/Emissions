@@ -1,25 +1,53 @@
 const AppDispatcher = require('./appdispatcher'),
+    { format } = require('util'),
     constants = require('./constants');
 
-const actions = {
+function addStub(name, stub) {
+    actions[name] = () => {
+        console.log(format('[UNIMPLEMENTED] %s(%s)', name, arguments.join(',')));
+        stub && stub(...arguments);
+    }
+}
 
-    startMission(data){
-        AppDispatcher.dispatch({action : constants.MISSION_STARTED});
+var actions = {
+
+    /** @param data.missionLength */
+    startMission(data) {
+        actions.setMissionTime(data.missionLength);
+        AppDispatcher.dispatch({action: constants.MISSION_STARTED_EVENT});
+        actions.startTimer(constants.MISSION_TIMER_ID);
         actions.removeMessage(constants.NOT_READY_MSG);
-        actions.changeRemainingTime(data.missionLength, constants.MISSION_STARTED);
     },
 
-    stopMission(){
-        AppDispatcher.dispatch({action : constants.MISSION_STOPPED});
-        actions.changeRemainingTime(0, constants.MISSION_STOPPED);
+    startTimer(id) {
+        AppDispatcher.dispatch({action: 'START_TIMER', data: {timerId: id}});
     },
 
-    changeRemainingTime(remainingTime, reason){
+    resetTimer(id) {
+        AppDispatcher.dispatch({action: 'RESET_TIMER', data: {timerId: id}});
+    },
+
+    stopTimer(id) {
+        AppDispatcher.dispatch({action: 'STOP_TIMER', data: {timerId: id}});
+    },
+
+    endMission() {
+        AppDispatcher.dispatch({action: constants.MISSION_STOPPED_EVENT});
+        //actions.setMissionTime(0);
+    },
+
+    setMissionTime(remainingTime) {
+        actions.setTimer(constants.MISSION_TIMER_ID, remainingTime);
+    },
+
+    setTimer(timerId, time) {
         AppDispatcher.dispatch({
-                action: constants.REMAINING_MISSION_TIME_CHANGED,
-                data : { remainingTime, reason }
+            action: constants.SET_TIMER,
+            data: {
+                remainingTime: time,
+                timerId
             }
-        );
+        });
     },
 
     addMessage(msg) {
@@ -31,7 +59,6 @@ const actions = {
     },
 
     removeMessage(id) {
-
         AppDispatcher.dispatch({
                 action: constants.REMOVE_MESSAGE,
                 data: id
@@ -39,9 +66,22 @@ const actions = {
         );
     },
 
-
-
+    takeRadiationSample() {
+        AppDispatcher.dispatch({
+            action: constants.SCIENCE_TAKE_RADIATION_SAMPLE
+        })
+    }
 };
+
+// dummy return 400 seconds remaining
+addStub('askServerForRemainingTime', () => {
+    AppDispatcher.dispatch({
+        action: constants.REMAINING_MISSION_TIME_CHANGED,
+        data: 400
+    })
+});
+
+Object.freeze(actions);
 
 window.__actions = actions;
 module.exports = actions;

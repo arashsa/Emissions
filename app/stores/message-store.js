@@ -42,7 +42,6 @@ var MessageStore = Object.assign(new BaseStore(), {
 
         switch (action) {
             case MESSAGE_ADDED:
-                console.log('fikk melding',data)
                 MessageStore.handleAddedMessage(data);
                 break;
             case REMOVE_MESSAGE:

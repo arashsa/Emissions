@@ -6,17 +6,24 @@ var socketIo = require('socket.io');
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 5000;
+var htmlCssDir;
 
-var publicPath = __dirname + '/build';
+if ('production' === process.env.NODE_ENV) {
+    htmlCssDir = __dirname + '/dist';
+} else {
+    htmlCssDir = __dirname + '/build';
+}
+console.log('Serving html files from ', htmlCssDir);
 
 // set up routing
 
-// serve assets from the public folder
-app.use(express.static(publicPath));
+app.use(express.static(htmlCssDir));
+app.use(express.static(__dirname + '/assets'));
 
 // every path that is not matched by the existing files will get the index file served
 app.get('*', function (req, res) {
-    res.sendFile(publicPath + '/index.html');
+    res.set('Content-Type', 'text/html');
+    res.sendFile(htmlCssDir + '/index.html');
 });
 
 

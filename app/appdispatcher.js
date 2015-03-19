@@ -13,5 +13,5 @@ const AppDispatcher = Object.assign(new Dispatcher(), {
 
 });
 
-window.AppDispatcher= AppDispatcher;
+window.__AppDispatcher= AppDispatcher;
 module.exports = AppDispatcher;

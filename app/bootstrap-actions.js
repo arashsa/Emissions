@@ -11,21 +11,27 @@ function run() {
     //    level: 'danger'
     //});
     //
-    //actions.addMessage({
-    //    id: 'science_something',
-    //    text: 'ikke glem tannbørste nå da',
-    //    level: 'info'
-    //});
+
+    actions.setTimer(constants.SCIENCE_TIMER_1, 30);
+
+    setTimeout(()=> {
+        actions.addMessage({
+            id: 'science_something',
+            text: 'ikke glem tannbørste nå da',
+            level: 'info'
+        });
+    }, 100 * 1000)
 
     // dummy until we have integration with websockets
     setTimeout(() => {
-        actions.startMission({missionLength: 60*15});
+        actions.startMission({missionLength: 60 * 15});
     }, 1000);
 
     actions.addMessage({
-        id : constants.NOT_READY_MSG,
-        text : 'Ikke klar. Venter på at oppgaven skal starte.',
-        level : 'warning', dismissable : false});
+        id: constants.NOT_READY_MSG,
+        text: 'Ikke klar. Venter på at oppgaven skal starte.',
+        level: 'warning', dismissable: false
+    });
 }
 
 module.exports = {run};

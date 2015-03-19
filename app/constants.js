@@ -1,28 +1,27 @@
-var constants = {
-    add(stringConstantName) {
-        constants[stringConstantName] = stringConstantName;
-        return this
-    }
-};
-
-constants
+const constants = {
     // events
-    .add('ROUTE_CHANGED_EVENT')
-    .add('CHANGE_EVENT')
-    .add('MISSION_STARTED')
-    .add('MISSION_STOPPED')
-    .add('REMAINING_MISSION_TIME_CHANGED')
-    .add('MISSION_TIMEOUT')
-    .add('MESSAGE_ADDED')
-    .add('REMOVE_MESSAGE')
-    .add('SCIENCE_COUNTDOWN_TIMER_CHANGED')
-    // message ids
-    .add('NOT_READY_MSG')
-    // .add('other')
-    .add('MISSION_TIME_UNSET');
+    ROUTE_CHANGED_EVENT: 'ROUTE_CHANGED_EVENT',
+    CHANGE_EVENT: 'CHANGE_EVENT',
+    MISSION_STARTED_EVENT: 'MISSION_STARTED_EVENT',
+    MISSION_STOPPED_EVENT: 'MISSION_STOPPED_EVENT',
+    REMAINING_MISSION_TIME_CHANGED: 'REMAINING_MISSION_TIME_CHANGED',
+    MISSION_TIMEOUT: 'MISSION_TIMEOUT',
+    MESSAGE_ADDED: 'MESSAGE_ADDED',
+    REMOVE_MESSAGE: 'REMOVE_MESSAGE',
+    SCIENCE_COUNTDOWN_TIMER_CHANGED: 'SCIENCE_COUNTDOWN_TIMER_CHANGED',
+    SCIENCE_TAKE_RADIATION_SAMPLE : 'SCIENCE_TAKE_RADIATION_SAMPLE',
 
-// remove the temporary function
-delete constants.add;
+    SCIENCE_SET_RADIATION_LEVEL : 'SCIENCE_SET_RADIATION_LEVEL',
+    SET_TIMER: 'SET_TIMER',
+    START_TIMER: 'START_TIMER',
+    STOP_TIMER: 'STOP_TIMER',
+    // message ids
+    NOT_READY_MSG: 'NOT_READY_MSG',
+    // other
+    MISSION_TIMER_ID: 'MISSION_TIMER',
+    SCIENCE_TIMER_1: 'SCIENCE_TIMER_1',
+    TIME_UNSET: 'TIME_UNSET',
+};
 
 // prevent new properties from being added or removed
 Object.freeze(constants);
