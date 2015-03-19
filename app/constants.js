@@ -1,20 +1,31 @@
-const constants = {
-
-    // events
-    ROUTE_CHANGED_EVENT: 'ROUTE_CHANGED_EVENT',
-    CHANGE_EVENT: 'change',
-    MISSION_STARTED: 'MISSION_STARTED',
-    MISSION_STOPPED: 'MISSION_STOPPED',
-    MESSAGE_ADDED: 'MESSAGE_ADDED',
-    REMOVE_MESSAGE: 'REMOVE_MESSAGE',
-    REMAINING_MISSION_TIME_CHANGED: 'REMAINING_MISSION_TIME_CHANGED',
-    MISSION_TIMEOUT : 'MISSION_TIMEOUT',
-    SCIENCE_COUNTDOWN_TIMER_CHANGED :  'SCIENCE_COUNTDOWN_TIMER_CHANGED',
-
-
-    // message ids
-    NOT_READY_MSG : 'NOT_READY_MSG'
+var constants = {
+    add(stringConstantName) {
+        constants[stringConstantName] = stringConstantName;
+        return this
+    }
 };
 
-window.constant = constants;
+constants
+    // events
+    .add('ROUTE_CHANGED_EVENT')
+    .add('CHANGE_EVENT')
+    .add('MISSION_STARTED')
+    .add('MISSION_STOPPED')
+    .add('REMAINING_MISSION_TIME_CHANGED')
+    .add('MISSION_TIMEOUT')
+    .add('MESSAGE_ADDED')
+    .add('REMOVE_MESSAGE')
+    .add('SCIENCE_COUNTDOWN_TIMER_CHANGED')
+    // message ids
+    .add('NOT_READY_MSG')
+    // .add('other')
+    .add('MISSION_TIME_UNSET');
+
+// remove the temporary function
+delete constants.add;
+
+// prevent new properties from being added or removed
+Object.freeze(constants);
+
+window.__constants = constants;
 module.exports = constants;
