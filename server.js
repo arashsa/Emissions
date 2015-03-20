@@ -20,6 +20,10 @@ console.log('Serving html files from ', htmlCssDir);
 app.use(express.static(htmlCssDir));
 app.use(express.static(__dirname + '/assets'));
 
+app.get('/environment', function (req, res) {
+    res.json(process.env);
+});
+
 // every path that is not matched by the existing files will get the index file served
 app.get('*', function (req, res) {
     res.set('Content-Type', 'text/html');
