@@ -7,12 +7,12 @@ var React = require('react'),
 module.exports = React.createClass({
 
     getInitialState() {
-        return {running: false};
+        return {ready: false};
     },
 
     componentDidMount: function () {
         TimerStore.addChangeListener(() => this.setState({
-            running: TimerStore.isRunning(SCIENCE_TIMER_1)
+            ready: TimerStore.isReady(SCIENCE_TIMER_1)
         }));
     },
 
@@ -25,7 +25,7 @@ module.exports = React.createClass({
             <div className="timer row">
                 <div className='timer--button col-xs-6 '>
                     <button
-                        className={ 'btn btn-default ' + (this.state.running ? 'disabled' : '') }
+                        className={ 'btn btn-default ' + (this.state.ready? '' : 'disabled' ) }
                         onClick={this.handleClick}>Start klokka</button>
                 </div>
                 <div className='timer--value col-xs-6' >

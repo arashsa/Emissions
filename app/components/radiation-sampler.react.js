@@ -15,7 +15,7 @@ var RadiationSampler = React.createClass({
         })
     },
 
-    isDisabled() {
+    _isDisabled() {
         return !this.state.timerActive
     },
 
@@ -39,7 +39,7 @@ var RadiationSampler = React.createClass({
         return (<div className="radiation-sampler row">
             <div className="col-xs-6">
                 <button
-                    className={'btn btn-default ' + (this.isDisabled() ? 'disabled' : '') }
+                    className={'btn btn-default ' + (this._isDisabled() ? 'disabled' : '') }
                     onClick={this._handleClick}
                 >Ta strålingsprøve</button>
             </div>

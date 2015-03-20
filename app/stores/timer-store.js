@@ -6,25 +6,31 @@ const constants = require('../constants');
 
 // keeping state hidden in the module
 var remainingTime = {},
+    initialTime = {},
     intervalId = {};
 
 
 function reset(timerId) {
     stop(timerId);
-    start(timerId);
-    remainingTime[timerId] = constants.TIME_UNSET;
+    remainingTime[timerId] = initialTime[timerId];
 }
 
 function start(timerId) {
+    assertExists(timerId);
+
     intervalId[timerId] = setInterval(function fn() {
         if (remainingTime[timerId] >= 0) {
             remainingTime[timerId]--;
             TimerStore.emitChange();
+        } else {
+            stop(timerId);
         }
     }, 1000);
 }
 
 function stop(timerId) {
+    assertExists(timerId);
+
     clearInterval(intervalId[timerId]);
     delete intervalId[timerId];
     TimerStore.emitChange();
@@ -39,11 +45,12 @@ function handleRemainingTimeChanged(data) {
     if (remaining <= 0) throw new TypeError('Got invalid remaining time :' + remaining);
 
     remainingTime[data.timerId] = remaining;
+    initialTime[data.timerId] = remaining;
     TimerStore.emitChange();
 }
 
 function assertExists(timerId) {
-    if (!remainingTime[timerId]) {
+    if (remainingTime[timerId] === undefined) {
         throw new TypeError('No time set for timer with id ' + timerId);
     }
 }
@@ -58,8 +65,19 @@ const TimerStore = Object.assign(new BaseStore(), {
         return !!intervalId[timerId];
     },
 
+    /**
+     * The timer is set (or has been reset), but not started
+     * @param timerId
+     * @returns true if ready, false if running or stopped (timed out)
+     */
+    isReady(timerId) {
+        if(this.isRunning()) return false;
+        return this.getRemainingTime(timerId) === initialTime[timerId];
+    },
+
     dispatcherIndex: AppDispatcher.register(function (payload) {
         var { action, data} = payload;
+        console.log(payload);
 
         switch (action) {
 
@@ -77,8 +95,11 @@ const TimerStore = Object.assign(new BaseStore(), {
                 break;
 
             case constants.STOP_TIMER:
-                assertExists(data.timerId);
                 stop(data.timerId);
+                break;
+
+            case constants.RESET_TIMER:
+                reset(data.timerId)
                 break;
         }
 

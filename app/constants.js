@@ -15,6 +15,7 @@ const constants = {
     SET_TIMER: 'SET_TIMER',
     START_TIMER: 'START_TIMER',
     STOP_TIMER: 'STOP_TIMER',
+    RESET_TIMER: 'RESET_TIMER',
     // message ids
     NOT_READY_MSG: 'NOT_READY_MSG',
     // other
