@@ -23,16 +23,14 @@ const TeamWidget = React.createClass({
     },
 
     teamName() {
-        return teamNames.nameMap[(RouteStore.getTeamName())];
+        return teamNames.nameMap[(RouteStore.getTeamId())];
     },
 
     otherTeamNames() {
-        return teamNames.otherTeamNames(RouteStore.getTeamName());
+        return teamNames.otherTeamNames(RouteStore.getTeamId());
     },
 
     render() {
-
-        console.log('Team path', this.context.router.getCurrentPath())
 
         if (this.teamName()) {
 

@@ -11,11 +11,10 @@ module.exports = {
         <p>Ved hjelp av instrumentene som er tilgjengelig må dere jevnlig
             ta prøver og regne ut verdiene for gjennomsnittlig og totalt
             strålingsnivå. Finner dere ut at nivåene er blitt farlig
-            høye
-            <em>må</em>
-            dere si fra til oppdragslederen så vi kan
+            høye <em>må</em> dere si fra til oppdragslederen så vi kan
             få ut astronauten!
         </p>
+
 
         <p>
             Er oppdraget forstått?

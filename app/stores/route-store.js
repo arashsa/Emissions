@@ -19,7 +19,7 @@ var RouteStore = Object.assign(new BaseStore(), {
         return pathname ? pathname.slice(1) : '';
     },
 
-    getTeamName() {
+    getTeamId() {
         return cleanRootPath(this.getPathname());
     },
 

@@ -5,9 +5,10 @@ const RouteHandler = Router.RouteHandler;
 
 const Header = require('./header.react');
 
-const TeamDisplayer = require('../components/team-displayer.react');
+const TeamDisplayer = require('./team-displayer.react');
+const MessageList = require('./message-list.react');
+const MissionTimer = require('./mission-timer.react.js');
 
-const MissionTimer = require('../components/mission-timer.react.js');
 const MissionStateStore = require('../stores/mission-state-store');
 
 const constants = require('../constants');
@@ -35,6 +36,13 @@ const App = React.createClass({
             countDownBox = <MissionTimer />;
 
             mainContent = <div>
+
+                <div id='team-name' className='' >
+                    <header className=''>
+                        <TeamDisplayer className=''/>
+                    </header>
+                </div>
+
                 <section id='mission-timer' className=''>
                 { countDownBox }
                 </section>
@@ -43,19 +51,18 @@ const App = React.createClass({
                 <RouteHandler/>
             </div>
         } else {
-            mainContent = <div>Ikke klar. Venter på at oppdraget skal starte.</div>;
+            let message = {
+                id : 'not_used',
+                text : 'Ikke klar. Venter på at oppdraget skal starte.',
+                level : 'info'
+            };
+            mainContent =  <MessageList className='row' messages={[message]} />
         }
 
         return (
             <div className='container'>
 
                 <Header/>
-
-                <div id='team-name' className='' >
-                    <header className=''>
-                        <TeamDisplayer className=''/>
-                    </header>
-                </div>
 
                 {mainContent}
             </div>

@@ -1,25 +1,47 @@
 const React = require('react');
-/**
- * Available properties
- * missionStarted {Boolean}
- * buttonText = what text to give the button
- * nextAction = what action to trigger when pressing the button
- */
-module.exports = React.createClass({
+const dialogs = require('./dialogs.react');
+const actions = require('../actions');
+var { cleanRootPath } = require('../utils');
+
+const RouteStore = require('../stores/route-store');
+var IntroStore = require('../stores/introduction-store');
+
+ const IntroductionScreen = React.createClass({
+
+    mixins: [],
+
+    statics: {
+        willTransitionTo(transition) {
+            var teamId = cleanRootPath(transition.path);
+
+            if (IntroStore.isIntroductionRead(teamId)) {
+                transition.redirect('team-task', {taskId: 1, teamId : teamId});
+            }
+        }
+    },
+
+    _handleClick() {
+        var teamId = RouteStore.getTeamId();
+        actions.introWasRead(teamId);
+        actions.transitionTo('team-task', {taskId : 1, teamId : teamId })
+    },
+
     render() {
-        var disabled = this.props.missionStarted? '' : 'disabled';
+        var teamId= RouteStore.getTeamId();
+        var introText = dialogs[teamId + '_intro'];
 
         return (<div className = 'jumbotron introscreen'>
             <h2>Mål for oppdraget</h2>
-            {this.props.children}
+
+            { introText }
+
             <button
                 className = 'btn btn-primary btn-lg'
-                onClick={this.props.nextAction}
-                disabled={disabled}
-            >
-            { this.props.buttonText || 'Jeg forstår' }
-            </button>
+                onClick={this._handleClick}
+            >Jeg forstår</button>
         </div>)
 
     }
 });
+
+module.exports = IntroductionScreen;

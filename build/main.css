@@ -7097,7 +7097,7 @@ padding: 0 0 10px;
 
 .messagebox  {
     list-style-type: none;
-    padding: 0; /* remove start padding in lists */
+    padding: 10px 0; /* remove start padding in lists */
 }
 .messagebox .alert {
     margin-bottom : 5px;

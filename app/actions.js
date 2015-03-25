@@ -14,16 +14,18 @@ var actions = {
 
     /**
      *
-     * @param path {String} absolute or relative
+     * @param to {String} absolute or relative path or path-name
+     * @param param params if given path-name
      *
      * @example
      * transitionTo('/science/task')
+     * transitionTo('team-task',{teamId : 'science'})
      *
      * Or when already in /science
      * transitionTo('task') => /science/task
      */
-    transitionTo(path) {
-        router.transitionTo(path);
+    transitionTo(to,param,query) {
+        router.transitionTo(to,param,query);
     },
 
     /** @param data.missionLength */
@@ -79,6 +81,10 @@ var actions = {
                 data: id
             }
         );
+    },
+
+    introWasRead(teamId){
+        AppDispatcher.dispatch({ action : constants.INTRODUCTION_READ, teamName : teamId });
     },
 
     takeRadiationSample() {

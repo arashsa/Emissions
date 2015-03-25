@@ -4,8 +4,8 @@
 var router;
 
 module.exports = {
-    transitionTo(...args) {
-        return router.transitionTo(...args)
+    transitionTo(to,params,query) {
+        return router.transitionTo(to,params,query)
     },
 
     getCurrentPathname() {

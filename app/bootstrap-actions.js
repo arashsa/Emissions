@@ -26,18 +26,18 @@ function run() {
             text: 'ikke glem tannbørste nå da',
             level: 'info'
         });
-    }, 100 * 1000);
+    }, 10 * 1000);
 
     // dummy until we have integration with websockets
     setTimeout(() => {
         actions.startMission({missionLength: 60 * 15});
-    }, 300);
+    }, 3000);
 
-    actions.addMessage({
-        id: constants.NOT_READY_MSG,
-        text: 'Ikke klar. Venter på at oppgaven skal starte.',
-        level: 'warning', dismissable: false
-    });
+    //actions.addMessage({
+    //    id: constants.NOT_READY_MSG,
+    //    text: 'Ikke klar. Venter på at oppgaven skal starte.',
+    //    level: 'warning', dismissable: false
+    //});
 }
 
 module.exports = {run};
