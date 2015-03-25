@@ -12,7 +12,9 @@
     background-position-y: 50%;
 }
 #main-header h1 {
-    margin: 20px 0;
+    padding: 20px 15px;
+    /* Avoid coloring the link blue */
+    color: black;
 }
 
 #team-name {
@@ -35,12 +37,17 @@
 }
 
 .teamwidget {
+    padding: 10px 0;
     font-weight: 200;
     color: lightgray;
 }
 .teamwidget .active {
     text-transform: capitalize;
     color: black;
+}
+
+#mission-timer {
+padding: 0 0 10px;
 }
 
 

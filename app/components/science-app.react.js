@@ -1,10 +1,12 @@
 const React = require('react'),
+    Router = require('react-router'),
     MessageStore = require('../stores/message-store'),
     MissionStateStore = require('../stores/mission-state-store'),
     MessageList = require('./message-list.react'),
     IntroductionScreen = require('./introduction-screen.react.js'),
     RadiationSampler = require('./radiation-sampler.react'),
     TimerPanel = require('./timer-panel.react'),
+    dialogs = require('./dialogs.react'),
     actions = require('../actions'),
     constants = require('../constants');
 
@@ -14,9 +16,16 @@ assignments[1] = 'Start klokken og ta fire målinger fordelt jevnt utover tidsin
 
 const ScienceApp = React.createClass({
 
+    mixins: [Router.State],
+
     componentDidMount: function () {
+        console.log('componentDidMount');
         MissionStateStore.addChangeListener(this._handleMissionStatusChange);
         MessageStore.addChangeListener(this._handleMessageStoreChange);
+    },
+
+    componentWillMount: function () {
+        console.log('componentWillMount');
     },
 
     componentWillUnmount: function () {
@@ -48,7 +57,7 @@ const ScienceApp = React.createClass({
         }
 
         return (
-            <div className = 'container'>
+            <div className = 'row'>
                 <MessageList messages={this.state.messages} />
             {content}
             </div>
@@ -60,21 +69,7 @@ const ScienceApp = React.createClass({
         return (<IntroductionScreen className='introscreen'
             missionStarted = {this.state.isMissionStarted}
             nextAction={this._handleIntroClick} >
-            <p>
-                Dere skal overvåke strålingsnivået astronatuen utsettes for.
-                Dere må da passe på at astronauten ikke blir utsatt
-                for strålingsnivåer som er skadelig.
-            </p>
-            <p>Ved hjelp av instrumentene som er tilgjengelig må dere jevnlig
-                ta prøver og regne ut verdiene for gjennomsnittlig og totalt
-                strålingsnivå. Finner dere ut at nivåene er blitt farlig
-                høye <em>må</em> dere si fra til oppdragslederen så vi kan
-                få ut astronauten!
-            </p>
-
-            <p>
-                Er oppdraget forstått?
-            </p>
+          {dialogs.science_intro}
         </IntroductionScreen>);
     },
 
@@ -95,7 +90,7 @@ const ScienceApp = React.createClass({
     },
 
     _handleIntroClick() {
-        this.setState({step: 1});
+        actions
     },
 
     _handleMissionStatusChange() {
@@ -105,7 +100,7 @@ const ScienceApp = React.createClass({
 
     _handleMessageStoreChange() {
         this.setState({messages: MessageStore.getMessages()});
-    },
+    }
 
 });
 

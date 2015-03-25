@@ -1,6 +1,7 @@
 const AppDispatcher = require('./appdispatcher'),
     { format } = require('util'),
-    constants = require('./constants');
+    constants = require('./constants'),
+    router = require('./router-container');
 
 function addStub(name, stub) {
     actions[name] = () => {
@@ -10,6 +11,20 @@ function addStub(name, stub) {
 }
 
 var actions = {
+
+    /**
+     *
+     * @param path {String} absolute or relative
+     *
+     * @example
+     * transitionTo('/science/task')
+     *
+     * Or when already in /science
+     * transitionTo('task') => /science/task
+     */
+    transitionTo(path) {
+        router.transitionTo(path);
+    },
 
     /** @param data.missionLength */
     startMission(data) {

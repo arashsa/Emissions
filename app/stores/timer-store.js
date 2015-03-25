@@ -77,7 +77,6 @@ const TimerStore = Object.assign(new BaseStore(), {
 
     dispatcherIndex: AppDispatcher.register(function (payload) {
         var { action, data} = payload;
-        console.log(payload);
 
         switch (action) {
 

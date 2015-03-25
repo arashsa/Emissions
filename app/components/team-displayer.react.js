@@ -1,5 +1,5 @@
 const React = require('react');
-const PathStore = require('../stores/path-store');
+const RouteStore = require('../stores/route-store');
 const teamMap = {
     //'leader': 'Operasjonsleder',
     'science': 'forskningsteam',
@@ -10,6 +10,10 @@ const teamMap = {
 
 const TeamWidget = React.createClass({
 
+    contextTypes: {
+        router: React.PropTypes.func
+    },
+
     mixins: [],
 
     _onChange() {
@@ -17,19 +21,19 @@ const TeamWidget = React.createClass({
     },
 
     componentDidMount: function () {
-        PathStore.addChangeListener(this._onChange);
+        RouteStore.addChangeListener(this._onChange);
     },
 
     componentWillUnmount: function () {
-        PathStore.removeChangeListener(this._onChange);
+        RouteStore.removeChangeListener(this._onChange);
     },
 
     teamName() {
-        return teamMap[(PathStore.getPathname())];
+        return teamMap[(RouteStore.getTeamName())];
     },
 
     otherTeamNames() {
-        const pathname = PathStore.getPathname();
+        const pathname = RouteStore.getTeamName();
 
         return Object.keys(teamMap)
             .filter((n) => n !== pathname)
@@ -38,6 +42,8 @@ const TeamWidget = React.createClass({
     },
 
     render() {
+
+        console.log('Team path', this.context.router.getCurrentPath())
 
         if (this.teamName()) {
 
