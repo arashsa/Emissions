@@ -19,13 +19,16 @@ const ScienceTmp = React.createClass({
 
     mixins: [],
 
+    statics: {
+        willTransitionTo(transition) {
+            if (IntroStore.isIntroductionRead('science')) {
+                transition.redirect('task', {taskId: 1});
+            }
+        }
+    },
+
     render() {
-        return (
-            <div> ScienceAppTmp
-                <div>
-                    <RouteHandler/>
-                </div>
-            </div>);
+        throw new Error('DUMMY RENDER');
     }
 });
 
@@ -47,20 +50,21 @@ const Task = React.createClass({
     }
 });
 
+var routerMixin = require('./components/router.mixin');
+var { cleanRootPath } = require('./utils');
 
 const Intro = React.createClass({
-    mixins: [],
+    mixins: [routerMixin],
 
     statics: {
         willTransitionTo(transition) {
-            if (IntroStore.isIntroductionRead('science')) {
-                transition.redirect('task', {taskId: 1});
+
+            var teamId= cleanRootPath(transition.path);
+
+            if (IntroStore.isIntroductionRead(teamId)) {
+                transition.redirect('team-task', {taskId: 1, teamId : teamId});
             }
         }
-    },
-
-    _transitionTo(...args) {
-        this.context.router.transitionTo(...args);
     },
 
     render() {
@@ -72,12 +76,12 @@ const Intro = React.createClass({
 
 const routes = (
     <Route name="app" path="/" handler={App}>
-        <Route name="science" handler={ScienceTmp}>
-            <Route name="task" path='task/:taskId' handler={Task} />
-            <DefaultRoute handler={Intro}/>
-        </Route>
-        <Route name="communication" handler={CommunicationTeamApp}/>
+
         <Route name="leader" handler={MissionCommanderApp}/>
+        <Route name="team-root" path='/:teamId' handler={Intro} />
+        <Route name="team-intro" path='/:teamId/intro' handler={Intro} />
+        <Route name="team-task" path='/:teamId/task/:taskId' handler={Task} />
+
         <NotFoundRoute handler={NotFound}/>
         <DefaultRoute handler={IndexApp}/>
     </Route>

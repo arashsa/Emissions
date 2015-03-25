@@ -1,24 +1,17 @@
 /* A store that can be queried for the current path */
 
-const ReactRouter = require('react-router');
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
 const { ROUTE_CHANGED_EVENT } = require('../constants');
+const { cleanRootPath }= require('../utils');
 
 var routeState = {pathname: '<unset>'};
 
-function cleanRootPath(path) {
-    // convert '/science/step1' => 'science'
-    return path.replace(/\/?(\w+).*/, "$1");
-}
-
-
 var RouteStore = Object.assign(new BaseStore(), {
-
 
     handleRouteChanged(state) {
         routeState = state;
-        this.emit('change');
+        this.emitChange();
     },
 
     getPathname() {

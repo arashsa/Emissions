@@ -8,8 +8,7 @@ const IndexApp = React.createClass({
             <div>
                     <ul>
                         <li><Link to="leader">Operasjonsleder</Link></li>
-                        <li><Link to="science">Forskningsteamet</Link></li>
-                        <li><Link to="communication">Kommunikasjonsteamet</Link></li>
+                        <li><Link to="team-root" params={{ teamId : 'science'}}>Forskningsteamet</Link></li>
                     </ul>
 
             </div>

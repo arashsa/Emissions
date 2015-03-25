@@ -1,12 +1,6 @@
 const React = require('react');
 const RouteStore = require('../stores/route-store');
-const teamMap = {
-    //'leader': 'Operasjonsleder',
-    'science': 'forskningsteam',
-    'communication': 'kommunikasjonsteam',
-    'security': 'sikkerhetsteam',
-    'astronaut': 'astronautteam'
-};
+const teamNames = require('../team-name-map');
 
 const TeamWidget = React.createClass({
 
@@ -29,16 +23,11 @@ const TeamWidget = React.createClass({
     },
 
     teamName() {
-        return teamMap[(RouteStore.getTeamName())];
+        return teamNames.nameMap[(RouteStore.getTeamName())];
     },
 
     otherTeamNames() {
-        const pathname = RouteStore.getTeamName();
-
-        return Object.keys(teamMap)
-            .filter((n) => n !== pathname)
-            .map((n) => teamMap[n])
-            .join(', ')
+        return teamNames.otherTeamNames(RouteStore.getTeamName());
     },
 
     render() {

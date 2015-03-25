@@ -1,3 +1,4 @@
+const React = require('react');
 
 // skal jeg bruke denne?
 
@@ -7,8 +8,12 @@ var routerMixin = {
         router: React.PropTypes.func.isRequired
     },
 
-    transitionTo(...args) {
+    _transitionTo(...args) {
         this.context.router.transitionTo(...args);
+    },
+
+    _getCurrentParams(){
+        return this.context.router.getCurrentParams();
     }
 };
 
