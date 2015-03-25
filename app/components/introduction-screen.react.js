@@ -28,9 +28,9 @@ var IntroStore = require('../stores/introduction-store');
 
     render() {
         var teamId= RouteStore.getTeamId();
-        var introText = dialogs[teamId + '_intro'];
+        var introText = dialogs[teamId + '_intro'] || <p>Mangler oppdrag</p>;
 
-        return (<div className = 'jumbotron introscreen'>
+        return (<div className = 'row jumbotron introscreen'>
             <h2>Mål for oppdraget</h2>
 
             { introText }

@@ -4,22 +4,26 @@ const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
 
 const assignments = {
-    science : {
-        sample : 'Start klokken og ta fire målinger fordelt jevnt utover tidsintervallet'
+    science: {
+        sample: 'Start klokken og ta fire målinger fordelt jevnt utover tidsintervallet'
     }
 };
 
 var currentTask = {
-    science : 'sample'
+    science: 'sample'
 };
 
 var TaskStore = Object.assign(new BaseStore(), {
 
-    getCurrentTask(teamId){
-        return assignments[teamId][this.getCurrentTaskId(teamId)] || 'Ingen oppgave funnet';
+    getCurrentTask(teamId) {
+        var assignmentsForTeam = assignments[teamId];
+        var taskId = currentTask[teamId];
+
+        return (assignmentsForTeam && assignmentsForTeam[taskId])
+            || 'Ingen oppgave funnet';
     },
 
-    getCurrentTaskId(teamId){
+    getCurrentTaskId(teamId) {
         return currentTask[teamId];
     },
 

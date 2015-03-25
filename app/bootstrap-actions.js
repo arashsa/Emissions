@@ -31,7 +31,7 @@ function run() {
     // dummy until we have integration with websockets
     setTimeout(() => {
         actions.startMission({missionLength: 60 * 15});
-    }, 3000);
+    }, 300);
 
     //actions.addMessage({
     //    id: constants.NOT_READY_MSG,
