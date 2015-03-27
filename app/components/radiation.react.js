@@ -1,35 +1,56 @@
 const React = require('react');
 
+var chart = {
+    create() {
+    },
+
+    update() {
+    }
+};
+
 React.createClass({
 
     statics: {},
-    propTypes: {},
+    propTypes: {
+        data: React.PropTypes.array,
+        domain: React.PropTypes.object
+    },
     mixins: [],
 
-    // life cycle methods
-    getInitialState() {
-    },
-    getDefaultProps() {
+    componentWillMount() {
+        var el = React.findDOMNode(this);
+        chart.create(el, {
+            width: '100%',
+            height: '300px'
+        }, this.getChartState());
     },
 
-    componentWillMount() {
-    },
     componentWillReceiveProps() {
     },
     componentWillUnmount() {
+        var el = React.findDOMNode(this);
+        chart.destroy(el);
+    },
+
+    componentDidUpdate() {
+        var el = React.findDOMNode(this);
+        chart.update(el, this._getChartState());
     },
 
     // Private methods
-    _parseData() {
-    },
-    _onSelect() {
+
+    _getChartState() {
+        return {
+            data: this.props.data,
+            domain: this.props.domain
+        };
     },
 
-    render: function () {
+    render() {
         return (
             <div>
                 Stråling
-                <div id="radiationChart" style="width: 600px; height: 240px;"></div>
+                <div style="width: 600px; height: 240px;"></div>
             </div>
         );
     }

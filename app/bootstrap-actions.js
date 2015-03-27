@@ -27,10 +27,10 @@ function run() {
     }, 100 * 1000);
 
     // dummy until we have integration with websockets
-    setTimeout(() => {
+    //setTimeout(() => {
         actions.setMissionTime(60 * 15);
-        //actions.startMission();
-    }, 300);
+        actions.startMission();
+    //}, 300);
 }
 
 module.exports = {run};
