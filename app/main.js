@@ -14,6 +14,8 @@ const router = require('./router-container');
 const AppDispatcher = require('./appdispatcher');
 const constants = require('./constants');
 
+var rad = require('./components/radiation.react');
+
 // run startup actions
 require('./bootstrap-actions').run();
 

@@ -24,12 +24,15 @@ var dependencies = [
 ];
 
 var browserifyTask = function (options) {
+    process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
 
     // Our app bundler
     var appBundler = browserify({
         entries: [options.src], // Only need initial file, browserify finds the rest
         debug: options.development, // Gives us sourcemapping
-        cache: {}, packageCache: {}, fullPaths: options.development // Requirement of watchify
+        cache: {},
+        packageCache: {},
+        fullPaths: options.development // Requirement of watchify
     }).transform(
         // We want to convert JSX to normal javascript
         babelify.configure({

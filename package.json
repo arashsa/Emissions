@@ -15,14 +15,16 @@
     ]
   },
   "browser": {
-    "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js"
+    "bootstrap": "./node_modules/bootstrap/dist/js/bootstrap.js",
+    "amcharts": "./app/lib/amcharts.js"
   },
   "browserify-shim": {
     "bootstrap": {
       "depends": [
         "jquery:$"
       ]
-    }
+    },
+    "amcharts": "AmCharts"
   },
   "dependencies": {
     "bootstrap": "^3.3.2",
@@ -38,9 +40,10 @@
   "devDependencies": {
     "babel": "^4.7.3",
     "babel-runtime": "^4.7.3",
-    "flux": "^2.0.1",
     "babelify": "^5.0.3",
     "browserify": "^6.2.0",
+    "browserify-shim": "^3.8.3",
+    "flux": "^2.0.1",
     "glob": "^4.0.6",
     "global": "^4.3.0",
     "gulp": "^3.8.9",

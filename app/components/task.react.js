@@ -8,6 +8,7 @@ const React = require('react'),
     IntroductionScreen = require('./introduction-screen.react.js'),
     RadiationSampler = require('./radiation-sampler.react'),
     TimerPanel = require('./timer-panel.react'),
+    RadiationChart = require('./radiation.react'),
     dialogs = require('./dialogs.react'),
     actions = require('../actions'),
     constants = require('../constants');
@@ -50,7 +51,9 @@ const Task = React.createClass({
             <div className='jumbotron'>
                 <strong>Oppgave:</strong> {this.state.task}
             </div>
-            <img className='img-responsive' src='/images/radiation.png' />
+
+        { /* <img className='img-responsive' src='/images/radiation.png' /> */ }
+            <RadiationChart />
 
             <hr/>
 
