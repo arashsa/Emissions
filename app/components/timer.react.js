@@ -2,7 +2,6 @@
 
 
 const React = require('react'),
-    TimerStore = require('../stores/timer-store'),
     printf = require('printf');
 
 function pad(num) {
@@ -13,44 +12,32 @@ function pad(num) {
 const Timer = React.createClass({
 
     propTypes: {
-        timerId: React.PropTypes.string.isRequired
+        remainingTime: React.PropTypes.number.isRequired
     },
 
-    componentWillMount() {
-        TimerStore.addChangeListener(this._fetchAndSetRemainingTime);
+    componentDidUpdate() {
+        //console.log('Timer.componentDidUpdate');
     },
 
-    componentWillUnmount() {
-        TimerStore.removeChangeListener(this._fetchAndSetRemainingTime);
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.remainingTime !== this.props.remainingTime;
     },
 
-    _fetchAndSetRemainingTime() {
-        this.setState({seconds: this._fetchRemainingTime()});
+    _minutes() {
+        return pad(Math.max(0, this.props.remainingTime) / 60 >> 0);
     },
 
-    _fetchRemainingTime() {
-        return TimerStore.getRemainingTime(this.props.timerId);
+    _seconds() {
+        return pad(Math.max(0, this.props.remainingTime) % 60);
     },
 
-    getInitialState() {
-        return {seconds: this._fetchRemainingTime()};
-    },
-
-    minutes() {
-        return pad(Math.max(0, this.state.seconds) / 60 >> 0);
-    },
-
-    seconds() {
-        return pad(Math.max(0, this.state.seconds) % 60);
-    },
-
-    timeValue() {
-        return this.minutes() + ':' + this.seconds();
+    _timeValue() {
+        return this._minutes() + ':' + this._seconds();
     },
 
     render() {
         return (
-            <span className='mission-timer-value'> {this.timeValue()}</span>
+            <span className='mission-timer-value'> {this._timeValue()}</span>
         );
     }
 });

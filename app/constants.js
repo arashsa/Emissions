@@ -22,8 +22,7 @@ const constants = {
     NOT_READY_MSG: 'NOT_READY_MSG',
     // other
     MISSION_TIMER_ID: 'MISSION_TIMER',
-    SCIENCE_TIMER_1: 'SCIENCE_TIMER_1',
-    TIME_UNSET: 'TIME_UNSET',
+    SCIENCE_TIMER_1: 'SCIENCE_TIMER_1'
 };
 
 // prevent new properties from being added or removed

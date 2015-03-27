@@ -1,23 +1,47 @@
 var React = require('react'),
     actions = require('../actions'),
     Timer = require('./timer.react.js'),
-    TimerStore = require('../stores/timer-store'),
-    { SCIENCE_TIMER_1 } = require('../constants');
+    TimerStore = require('../stores/timer-store');
 
 module.exports = React.createClass({
 
+    propTypes: {
+        timerId: React.PropTypes.string.isRequired
+    },
+
     getInitialState() {
-        return {ready: false};
+        return this._getTimerState();
     },
 
     componentDidMount: function () {
-        TimerStore.addChangeListener(() => this.setState({
-            ready: TimerStore.isReady(SCIENCE_TIMER_1)
-        }));
+        TimerStore.addChangeListener(this._handleTimeStoreChange);
     },
 
-    handleClick() {
-        actions.startTimer(SCIENCE_TIMER_1);
+    componentWillUnmount: function () {
+        TimerStore.removeChangeListener(this._handleTimeStoreChange);
+    },
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextState.remainingTime !== this.state.remainingTime;
+    },
+
+    componentDidUpdate() {
+        console.log('TimerPanel.componentDidUpdate');
+    },
+
+    _handleTimeStoreChange() {
+        this.setState(this._getTimerState());
+    },
+
+    _handleClick() {
+        actions.startTimer(this.props.timerId);
+    },
+
+    _getTimerState() {
+        return {
+            ready: TimerStore.isReadyToStart(this.props.timerId),
+            remainingTime: TimerStore.getRemainingTime(this.props.timerId)
+        };
     },
 
     render() {
@@ -25,11 +49,11 @@ module.exports = React.createClass({
             <div className="timer row">
                 <div className='timer--button col-xs-6 '>
                     <button
-                        className={ 'btn btn-default ' + (this.state.ready? '' : 'disabled' ) }
-                        onClick={this.handleClick}>Start klokka</button>
+                        className={ 'btn btn-default ' + (this.state.ready ? '' : 'disabled' ) }
+                        onClick={this._handleClick}>Start klokka</button>
                 </div>
                 <div className='timer--value col-xs-6' >
-                    <Timer timerId={SCIENCE_TIMER_1} />
+                    <Timer remainingTime={this.state.remainingTime}  />
                 </div>
             </div>
         );

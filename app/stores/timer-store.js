@@ -1,5 +1,6 @@
 /* A singleton store that can be queried for remaining time */
 
+const check = require('check-types');
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
 const constants = require('../constants');
@@ -19,7 +20,7 @@ function start(timerId) {
     assertExists(timerId);
 
     intervalId[timerId] = setInterval(function fn() {
-        if (remainingTime[timerId] >= 0) {
+        if (remainingTime[timerId] > 0) {
             remainingTime[timerId]--;
             TimerStore.emitChange();
         } else {
@@ -50,29 +51,31 @@ function handleRemainingTimeChanged(data) {
 }
 
 function assertExists(timerId) {
-    if (remainingTime[timerId] === undefined) {
-        throw new TypeError('No time set for timer with id ' + timerId);
-    }
+    check.assert(timerId in remainingTime, 'No time set for timer with id ' + timerId);
 }
 
 const TimerStore = Object.assign(new BaseStore(), {
-
+    
     getRemainingTime(timerId) {
-        return remainingTime[timerId] || constants.TIME_UNSET;
+        check.number(timerId);
+        return remainingTime[timerId];
     },
 
     isRunning(timerId) {
+        check.number(timerId);
         return !!intervalId[timerId];
     },
 
     /**
      * The timer is set (or has been reset), but not started
      * @param timerId
-     * @returns true if ready, false if running or stopped (timed out)
+     * @returns true if ready, false if running or timed out
      */
-    isReady(timerId) {
-        if(this.isRunning()) return false;
-        return this.getRemainingTime(timerId) === initialTime[timerId];
+    isReadyToStart(timerId) {
+        check.number(timerId);
+        
+        if(this.isRunning(timerId)) return false;
+        return this.getRemainingTime(timerId) > 0;
     },
 
     dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -98,7 +101,7 @@ const TimerStore = Object.assign(new BaseStore(), {
                 break;
 
             case constants.RESET_TIMER:
-                reset(data.timerId)
+                reset(data.timerId);
                 break;
         }
 

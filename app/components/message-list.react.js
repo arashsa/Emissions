@@ -26,10 +26,11 @@ var ListMessageWrapper = React.createClass({
 var MessageList = React.createClass({
 
     render() {
-        var hidden = () => this.props.messages.length === 0 ? 'hide' : '';
+        var hidden = this.props.messages.length === 0 ? 'hide' : '';
+        var classes = (this.props.className || '') + ' messagebox ' + hidden;
 
         return (
-            <ul className = { this.props.className + ' messagebox ' + hidden()}>
+            <ul className = { classes }>
             {
                 this.props.messages.map((msg) => {
                     return (<ListMessageWrapper key={msg.id} {...msg} />);

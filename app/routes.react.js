@@ -12,8 +12,9 @@ const IndexApp = require('./components/index-app.react');
 const NotFound = require('./components/not-found.react');
 const IntroScreen = require('./components/introduction-screen.react');
 const Task = require('./components/task.react');
+const DummyRenderMixin = require('./components/dummy-render.mixin');
 
-const RootRedirect = React.createClass({
+const RedirectToIntro = React.createClass({
 
     statics: {
         willTransitionTo(transition) {
@@ -21,14 +22,14 @@ const RootRedirect = React.createClass({
         }
     },
 
-    mixins : [require('./components/dummy-render.mixin')]
+    mixins : [DummyRenderMixin]
 });
 
 const routes = (
     <Route name="app" path="/" handler={App}>
 
         <Route name="leader" handler={MissionCommanderApp}/>
-        <Route name="team-root" path='/:teamId' handler={RootRedirect} />
+        <Route name="team-root" path='/:teamId' handler={RedirectToIntro} />
         <Route name="team-intro" path='/:teamId/intro' handler={IntroScreen} />
         <Route name="team-task" path='/:teamId/task/:taskId' handler={Task} />
 

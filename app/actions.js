@@ -1,6 +1,7 @@
 const AppDispatcher = require('./appdispatcher'),
     { format } = require('util'),
     constants = require('./constants'),
+    TimerStore = require('./stores/timer-store'),
     router = require('./router-container');
 
 function addStub(name, stub) {
@@ -24,16 +25,32 @@ var actions = {
      * Or when already in /science
      * transitionTo('task') => /science/task
      */
-    transitionTo(to,param,query) {
-        router.transitionTo(to,param,query);
+    transitionTo(to, param, query) {
+        router.transitionTo(to, param, query);
     },
 
-    /** @param data.missionLength */
-    startMission(data) {
-        actions.setMissionTime(data.missionLength);
+    setMissionTime(remainingTime) {
+        actions.setTimer(constants.MISSION_TIMER_ID, remainingTime);
+    },
+
+    startMission() {
+        if (!TimerStore.isReadyToStart(constants.MISSION_TIMER_ID)) {
+            throw new Error('No mission time has been set');
+        }
         AppDispatcher.dispatch({action: constants.MISSION_STARTED_EVENT});
         actions.startTimer(constants.MISSION_TIMER_ID);
         actions.removeMessage(constants.NOT_READY_MSG);
+    },
+
+    stopMission() {
+        AppDispatcher.dispatch({action: constants.MISSION_STOPPED_EVENT});
+        actions.stopTimer(constants.MISSION_TIMER_ID);
+    },
+
+
+    endMission() {
+        actions.stopMission();
+        actions.setMissionTime(0);
     },
 
     startTimer(id) {
@@ -43,18 +60,8 @@ var actions = {
     resetTimer(id) {
         AppDispatcher.dispatch({action: 'RESET_TIMER', data: {timerId: id}});
     },
-
     stopTimer(id) {
         AppDispatcher.dispatch({action: 'STOP_TIMER', data: {timerId: id}});
-    },
-
-    endMission() {
-        AppDispatcher.dispatch({action: constants.MISSION_STOPPED_EVENT});
-        //actions.setMissionTime(0);
-    },
-
-    setMissionTime(remainingTime) {
-        actions.setTimer(constants.MISSION_TIMER_ID, remainingTime);
     },
 
     setTimer(timerId, time) {
@@ -83,8 +90,8 @@ var actions = {
         );
     },
 
-    introWasRead(teamId){
-        AppDispatcher.dispatch({ action : constants.INTRODUCTION_READ, teamName : teamId });
+    introWasRead(teamId) {
+        AppDispatcher.dispatch({action: constants.INTRODUCTION_READ, teamName: teamId});
     },
 
     takeRadiationSample() {

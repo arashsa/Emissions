@@ -23,11 +23,16 @@ const App = React.createClass({
     },
 
     componentWillMount() {
-        MissionStateStore.addChangeListener(() => {
-            this.setState({isMissionRunning: MissionStateStore.isMissionRunning()});
-        })
+        MissionStateStore.addChangeListener(this._handleMissionStateChange);
     },
 
+    componentWillUnmount() {
+        MissionStateStore.removeChangeListener(this._handleMissionStateChange);
+    },
+
+    _handleMissionStateChange() {
+        this.setState({isMissionRunning: MissionStateStore.isMissionRunning()});
+    },
 
     render: function () {
         var countDownBox, mainContent;
@@ -52,11 +57,11 @@ const App = React.createClass({
             </div>
         } else {
             let message = {
-                id : 'not_used',
-                text : 'Ikke klar. Venter på at oppdraget skal starte.',
-                level : 'info'
+                id: 'not_used',
+                text: 'Ikke klar. Venter på at oppdraget skal starte.',
+                level: 'info'
             };
-            mainContent =  <MessageList className='row' messages={[message]} />
+            mainContent = <MessageList className='row' messages={[message]} />
         }
 
         return (

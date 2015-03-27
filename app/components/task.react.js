@@ -18,6 +18,7 @@ const Task = React.createClass({
 
     componentDidMount: function () {
         console.log('componentDidMount');
+        console.log(React.findDOMNode(this));
     },
 
     componentWillMount: function () {
@@ -25,6 +26,16 @@ const Task = React.createClass({
     },
 
     componentWillUnmount: function () {
+        console.log('componentWillUnmount');
+    },
+
+    componentDidUnmount: function () {
+        console.log('componentDidUnmount');
+    },
+
+    componentDidUpdate(){
+        console.log('.componentDidUpdate');
+        console.log(React.findDOMNode(this));
     },
 
     getInitialState() {
@@ -43,7 +54,7 @@ const Task = React.createClass({
 
             <hr/>
 
-            <TimerPanel />
+            <TimerPanel timerId={constants.SCIENCE_TIMER_1} />
             <RadiationSampler />
             <hr/>
         </div>

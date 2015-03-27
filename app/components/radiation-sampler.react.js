@@ -7,16 +7,14 @@ const React = require('react'),
 var RadiationSampler = React.createClass({
 
     componentWillMount() {
-        RadiationStore.addChangeListener(()=> {
-            this.setState({samples: RadiationStore.getSamples()})
-        })
-        TimerStore.addChangeListener(()=> {
-            this.setState({timerActive: TimerStore.isRunning(constants.SCIENCE_TIMER_1)});
-        })
+        RadiationStore.addChangeListener(this._handleRadiationChange);
+        TimerStore.addChangeListener(this._handleTimerChange);
     },
 
-    _isDisabled() {
-        return !this.state.timerActive
+
+    componentWillUnmount(){
+        RadiationStore.removeChangeListener(this._handleRadiationChange);
+        TimerStore.removeChangeListener(this._handleTimerChange);
     },
 
     getInitialState() {
@@ -26,6 +24,17 @@ var RadiationSampler = React.createClass({
         }
     },
 
+    _isDisabled() {
+        return !this.state.timerActive
+    },
+
+    _handleRadiationChange(){
+        this.setState({samples: RadiationStore.getSamples()})
+    },
+
+    _handleTimerChange() {
+        this.setState({timerActive: TimerStore.isRunning(constants.SCIENCE_TIMER_1)});
+    },
 
     _handleClick() {
         if (this.state.samples.length >= 5) {

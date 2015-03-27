@@ -15,9 +15,7 @@ function run() {
     //    text: 'Faretruende høyt strålingsnivå',
     //    level: 'danger'
     //});
-    //
 
-    //actions.setTimer(constants.SCIENCE_TIMER_1, 30);
     actions.setTimer(constants.SCIENCE_TIMER_1, 5);
 
     setTimeout(()=> {
@@ -26,18 +24,13 @@ function run() {
             text: 'ikke glem tannbørste nå da',
             level: 'info'
         });
-    }, 10 * 1000);
+    }, 100 * 1000);
 
     // dummy until we have integration with websockets
     setTimeout(() => {
-        actions.startMission({missionLength: 60 * 15});
+        actions.setMissionTime(60 * 15);
+        //actions.startMission();
     }, 300);
-
-    //actions.addMessage({
-    //    id: constants.NOT_READY_MSG,
-    //    text: 'Ikke klar. Venter på at oppgaven skal starte.',
-    //    level: 'warning', dismissable: false
-    //});
 }
 
 module.exports = {run};

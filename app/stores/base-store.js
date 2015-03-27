@@ -11,16 +11,18 @@ class BaseStore extends EventEmitter {
 
     /**
      * @param {function} callback
+     * @returns emitter, so calls can be chained.
      */
     addChangeListener(callback) {
-        this.on(CHANGE_EVENT, callback);
+        return this.on(CHANGE_EVENT, callback);
     }
 
     /**
      * @param {function} callback
+     * @returns emitter, so calls can be chained.
      */
     removeChangeListener(callback) {
-        this.removeListener(CHANGE_EVENT, callback);
+        return this.removeListener(CHANGE_EVENT, callback);
     }
 
     dispatcherIndex:Number;
