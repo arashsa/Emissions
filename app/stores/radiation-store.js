@@ -4,7 +4,7 @@ const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
 const constants = require('../constants');
 const randomInt = require('../utils').randomInt;
-const radiationLevel = {
+const radiationRange = {
     min : 20,
     max : 40
 };
@@ -13,8 +13,8 @@ var samples = [];
 const RadiationStore = Object.assign(new BaseStore(), {
 
     _setRadiationLevel(min, max) {
-        radiationLevel.min = min;
-        radiationLevel.max = max;
+        radiationRange.min = min;
+        radiationRange.max = max;
         this.emitChange();
     },
 
@@ -31,7 +31,7 @@ const RadiationStore = Object.assign(new BaseStore(), {
     },
 
     getLevel() {
-        return randomInt(radiationLevel.min, radiationLevel.max);
+        return randomInt(radiationRange.min, radiationRange.max);
     },
 
     getSamples() {

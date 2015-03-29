@@ -8,59 +8,57 @@ const React = require('react');
 const AmCharts = require('amcharts');
 
 var chart;
-var radiationRange = [20, 90];
+var RadiationStore = require('../stores/radiation-store');
 var radiationSamples = [];
 
-var randomInt = function(min, max) {
+var randomInt = function (min, max) {
     return Math.floor(Math.random() * (max + 1 - min)) + min;
 }
 
 function initChart(domElement) {
 
-    AmCharts.ready(function () {
-        chart = new AmCharts.AmSerialChart();
+    chart = new AmCharts.AmSerialChart();
 
-        chart.marginTop = 20;
-        chart.marginRight = 10;
-        chart.autoMarginOffset = 5;
-        chart.dataProvider = radiationSamples;
-        chart.categoryField = "timestamp";
+    chart.marginTop = 20;
+    chart.marginRight = 10;
+    chart.autoMarginOffset = 5;
+    chart.dataProvider = radiationSamples;
+    chart.categoryField = "timestamp";
 
-        //X axis
-        var categoryAxis = chart.categoryAxis;
-        categoryAxis.dashLength = 1;
-        categoryAxis.gridAlpha = 0.15;
-        categoryAxis.axisColor = "#DADADA";
-        categoryAxis.title = "Seconds";
+    //X axis
+    var categoryAxis = chart.categoryAxis;
+    categoryAxis.dashLength = 1;
+    categoryAxis.gridAlpha = 0.15;
+    categoryAxis.axisColor = "#DADADA";
+    categoryAxis.title = "Seconds";
 
-        //Y axis
-        var valueAxis = new AmCharts.ValueAxis();
-        valueAxis.axisAlpha = 0.2;
-        valueAxis.dashLength = 1;
-        valueAxis.title = "μSv/h";
-        chart.addValueAxis(valueAxis);
+    //Y axis
+    var valueAxis = new AmCharts.ValueAxis();
+    valueAxis.axisAlpha = 0.2;
+    valueAxis.dashLength = 1;
+    valueAxis.title = "μSv/h";
+    chart.addValueAxis(valueAxis);
 
-        //Line
-        var graph = new AmCharts.AmGraph();
-        graph.valueField = "radiation";
-        graph.bullet = "round";
-        graph.bulletBorderColor = "#FFFFFF";
-        graph.bulletBorderThickness = 2;
-        graph.lineThickness = 2;
-        graph.lineColor = "#b5030d";
-        graph.negativeLineColor = "#228B22";
-        graph.negativeBase = 60;
-        graph.hideBulletsCount = 50;
-        chart.addGraph(graph);
+    //Line
+    var graph = new AmCharts.AmGraph();
+    graph.valueField = "radiation";
+    graph.bullet = "round";
+    graph.bulletBorderColor = "#FFFFFF";
+    graph.bulletBorderThickness = 2;
+    graph.lineThickness = 2;
+    graph.lineColor = "#b5030d";
+    graph.negativeLineColor = "#228B22";
+    graph.negativeBase = 60;
+    graph.hideBulletsCount = 50;
+    chart.addGraph(graph);
 
-        //Mouseover
-        const chartCursor = new AmCharts.ChartCursor();
-        chartCursor.cursorPosition = "mouse";
-        chart.addChartCursor(chartCursor);
-        chart.write(domElement);
+    //Mouseover
+    const chartCursor = new AmCharts.ChartCursor();
+    chartCursor.cursorPosition = "mouse";
+    chart.addChartCursor(chartCursor);
+    chart.write(domElement);
 
-        startEventLoop();
-    });
+    startEventLoop();
 }
 
 var chartUpdater;
@@ -71,17 +69,14 @@ function startEventLoop() {
     var startTime = Date.now();
     stopEventLoop();
 
-    chartUpdater = setInterval(function() {
+    chartUpdater = setInterval(function () {
         var secondsPassed = (Date.now() - startTime) / 1000;
 
-        var radiation = randomInt(radiationRange[0], radiationRange[1]);
-
-        var RadiationStore = require('../stores/radiation-store');
         var radiation = RadiationStore.getLevel();
         radiationSamples.push({timestamp: Math.floor(secondsPassed + 0.5), radiation: radiation});
 
         //When the chart grows to 30 seconds, start cutting off the oldest sample to give the chart a sliding effect
-        if (radiationSamples.length > (30*1000/updateFrequency)) {
+        if (radiationSamples.length > (30 * 1000 / updateFrequency)) {
             radiationSamples.shift();
         }
 
