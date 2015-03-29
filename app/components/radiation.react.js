@@ -67,7 +67,7 @@ var chartUpdater;
 
 //Adds a new radiation sample to the chart every few seconds
 function startEventLoop() {
-    var updateFrequency = 2000;
+    var updateFrequency = 500;
     var startTime = Date.now();
     stopEventLoop();
 
@@ -75,10 +75,13 @@ function startEventLoop() {
         var secondsPassed = (Date.now() - startTime) / 1000;
 
         var radiation = randomInt(radiationRange[0], radiationRange[1]);
+
+        var RadiationStore = require('../stores/radiation-store');
+        var radiation = RadiationStore.getLevel();
         radiationSamples.push({timestamp: Math.floor(secondsPassed + 0.5), radiation: radiation});
 
         //When the chart grows to 30 seconds, start cutting off the oldest sample to give the chart a sliding effect
-        if (radiationSamples.length > 15) {
+        if (radiationSamples.length > (30*1000/updateFrequency)) {
             radiationSamples.shift();
         }
 

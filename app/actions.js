@@ -98,6 +98,13 @@ var actions = {
         AppDispatcher.dispatch({
             action: constants.SCIENCE_TAKE_RADIATION_SAMPLE
         })
+    },
+
+    setRadiationLevel(min, max) {
+        AppDispatcher.dispatch({
+            action: constants.SCIENCE_SET_RADIATION_LEVEL,
+            data: {min, max}
+        })
     }
 };
 

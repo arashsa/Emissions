@@ -31,6 +31,12 @@ function run() {
         actions.setMissionTime(60 * 15);
         actions.startMission();
     //}, 300);
+
+    // play with radiation
+    setTimeout(() => actions.setRadiationLevel(40,60), 20);
+    setTimeout(() => actions.setRadiationLevel(20,30), 30);
+    setTimeout(() => actions.setRadiationLevel(50,70), 60);
+    setTimeout(() => actions.setRadiationLevel(70,90), 90);
 }
 
 module.exports = {run};

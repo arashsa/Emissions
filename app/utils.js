@@ -3,6 +3,10 @@ function cleanRootPath(path) {
     return path.replace(/\/?(\w+).*/, "$1");
 }
 
+function randomInt (min, max) {
+    return Math.floor(Math.random() * (max + 1 - min)) + min;
+}
+
 module.exports = {
-    cleanRootPath
+    cleanRootPath, randomInt
 };
