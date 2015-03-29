@@ -7,7 +7,19 @@
 </head>
 <body>
 <script>document.write('<script src="//' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
-<script src="/vendors.js"></script>
+<!--<script src="/vendors.js"></script>-->
+
+<!--
+    these scripts are only loaded locally during development.
+    this enables us to work offline, but for deployment we load versions from CDN
+-->
+<script src="/jslib/jquery.js"></script>
+<script src="/jslib/bootstrap.js"></script>
+<script src="/jslib/react.js"></script>
+<script src="/jslib/react-router.js"></script>
+<script src="/jslib/amcharts.js"></script>
+
 <script src="/main.js"></script>
+
 </body>
 </html>

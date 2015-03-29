@@ -9,7 +9,6 @@ var notify = require('gulp-notify');
 var concat = require('gulp-concat');
 var cssmin = require('gulp-cssmin');
 var gutil = require('gulp-util');
-var shell = require('gulp-shell');
 var glob = require('glob');
 var livereload = require('gulp-livereload');
 var jasminePhantomJs = require('gulp-jasmine2-phantomjs');
@@ -19,20 +18,26 @@ var babelify = require("babelify");
 // External dependencies you do not want to rebundle while developing,
 // but include in your application deployment
 var dependencies = [
-    'react',
-    'react-addons'
+    //'react',
+    //'react-router',
+    //'react-addons',
+    //'amcharts',
+    //'bootstrap',
+    //'jquery'
 ];
 
 var browserifyTask = function (options) {
-    process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
+    //process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
 
     // Our app bundler
     var appBundler = browserify({
         entries: [options.src], // Only need initial file, browserify finds the rest
-        debug: options.development, // Gives us sourcemapping
+        debug: true, // Gives us sourcemapping
+        //debug: options.development, // Gives us sourcemapping
         cache: {},
         packageCache: {},
-        fullPaths: options.development // Requirement of watchify
+        //fullPaths: options.development // Requirement of watchify
+        fullPaths: true
     }).transform(
         // We want to convert JSX to normal javascript
         babelify.configure({
@@ -105,12 +110,6 @@ var browserifyTask = function (options) {
         testBundler = watchify(testBundler);
         testBundler.on('update', rebundleTests);
         rebundleTests();
-
-        // Remove react-addons when deploying, as it is only for
-        // testing
-        if (!options.development) {
-            dependencies.splice(dependencies.indexOf('react-addons'), 1);
-        }
 
         var vendorsBundler = browserify({
             debug: true,
