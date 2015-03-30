@@ -9,6 +9,7 @@ const radiationRange = {
     max : 40
 };
 var samples = [];
+var totalRadiation = 0;
 
 const RadiationStore = Object.assign(new BaseStore(), {
 
@@ -34,8 +35,20 @@ const RadiationStore = Object.assign(new BaseStore(), {
         return randomInt(radiationRange.min, radiationRange.max);
     },
 
+    getTotalLevel() {
+        return totalRadiation;
+    },
+
     getSamples() {
         return samples.slice();
+    },
+
+    getState() {
+      return {
+          samples : samples.slice(0),
+          total:totalRadiation,
+          currentLevel : this.getLevel()
+      }
     },
 
     dispatcherIndex: AppDispatcher.register(function (payload) {

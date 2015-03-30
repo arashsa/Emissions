@@ -2,14 +2,9 @@ const React = require('react'),
     Router = require('react-router'),
     MessageStore = require('../stores/message-store'),
     TaskStore = require('../stores/task-store'),
-    MissionStateStore = require('../stores/mission-state-store'),
     RouteStore = require('../stores/route-store'),
     MessageList = require('./message-list.react'),
     IntroductionScreen = require('./introduction-screen.react.js'),
-    RadiationSampler = require('./radiation-sampler.react'),
-    TimerPanel = require('./timer-panel.react'),
-    RadiationChart = require('./radiation.react'),
-    dialogs = require('./dialogs.react'),
     actions = require('../actions'),
     constants = require('../constants');
 
@@ -23,18 +18,20 @@ const Task = React.createClass({
     },
 
     componentWillMount: function () {
+        MessageStore.addChangeListener(this._handleMessageStoreChange);
         console.log('componentWillMount');
     },
 
     componentWillUnmount: function () {
         console.log('componentWillUnmount');
+        MessageStore.removeChangeListener(this._handleMessageStoreChange);
     },
 
     componentDidUnmount: function () {
         console.log('componentDidUnmount');
     },
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         console.log('.componentDidUpdate');
         console.log(React.findDOMNode(this));
     },
@@ -42,26 +39,15 @@ const Task = React.createClass({
     getInitialState() {
         return {
             messages: MessageStore.getMessages(),
-            task: TaskStore.getCurrentTask(RouteStore.getTeamId())
+            task: TaskStore.getCurrentTask(RouteStore.getTeamId()),
         };
     },
 
     _createInstrumentUI() {
-        return (<div>
-            <div className='jumbotron'>
-                <strong>Oppgave:</strong> {this.state.task}
-            </div>
+        const RadiationStore = require('../stores/radiation-store');
+        const ScienceTask = require('./science-task.react');
 
-        { /* <img className='img-responsive' src='/images/radiation.png' /> */ }
-            <RadiationChart />
-
-            <hr/>
-
-            <TimerPanel timerId={constants.SCIENCE_TIMER_1} />
-            <RadiationSampler />
-            <hr/>
-        </div>
-        )
+        return  ( <ScienceTask appstate={this.state} />);
     },
 
     _handleMessageStoreChange() {
@@ -69,12 +55,15 @@ const Task = React.createClass({
     },
 
     render() {
-        var   content = this._createInstrumentUI();
+        var content = this._createInstrumentUI();
 
         return (
             <div className = 'row'>
                 <MessageList messages={this.state.messages} />
-            {content}
+                <div className='jumbotron'>
+                    <strong>Oppgave:</strong> {this.state.task}
+                </div>
+                {content}
             </div>
         );
     }

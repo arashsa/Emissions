@@ -1,4 +1,5 @@
-var React = require('react');
+const React = require('react');
+const actions = require('../actions');
 
 var ListMessageWrapper = React.createClass({
 
@@ -9,14 +10,23 @@ var ListMessageWrapper = React.createClass({
     },
 
     render() {
-        let button = (
-            <button type="button" className="close" data-dismiss="alert">
-                <span>×</span>
-            </button>);
+        let button;
+
+        if (this.props.dismissable) {
+            button = (
+                <button
+                    type="button"
+                    className="close"
+                    onClick={() => actions.removeMessage(this.props.id)}
+                >
+                    <span>×</span>
+                </button>
+            );
+        }
 
         return (
             <li className={ 'alert alert-dismissible alert-' + this.props.level} >
-            { this.props.dismissable ? button : ''}
+            { button }
             {this.props.text}
             </li>
         );
@@ -35,7 +45,7 @@ var MessageList = React.createClass({
                 this.props.messages.map((msg) => {
                     return (<ListMessageWrapper key={msg.id} {...msg} />);
                 })
-                }
+            }
             </ul>
         );
     }

@@ -10,11 +10,7 @@ AppDispatcher.register((payload)=>{
 
 function run() {
 
-    //actions.addMessage({
-    //    id: 'science_high_radiation_level',
-    //    text: 'Faretruende høyt strålingsnivå',
-    //    level: 'danger'
-    //});
+
 
     actions.setTimer(constants.SCIENCE_TIMER_1, 5);
 
@@ -33,10 +29,12 @@ function run() {
     //}, 300);
 
     // play with radiation
-    setTimeout(() => actions.setRadiationLevel(40,60), 20);
-    setTimeout(() => actions.setRadiationLevel(20,30), 30);
-    setTimeout(() => actions.setRadiationLevel(50,70), 60);
-    setTimeout(() => actions.setRadiationLevel(70,90), 90);
+    actions.setRadiationLevel(0,10);
+    setTimeout(() => actions.setRadiationLevel(40,60), 10E3);
+    setTimeout(() => actions.setRadiationLevel(20,30), 30E3);
+    setTimeout(() => actions.setRadiationLevel(190,250), 60E3);
+    setTimeout(() => actions.setRadiationLevel(40,50), 90E3);
+
 }
 
 module.exports = {run};
