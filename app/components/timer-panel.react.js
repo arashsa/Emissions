@@ -26,7 +26,7 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate() {
-        console.log('TimerPanel.componentDidUpdate');
+        //console.log('TimerPanel.componentDidUpdate');
     },
 
     _handleTimeStoreChange() {
@@ -46,13 +46,13 @@ module.exports = React.createClass({
 
     render() {
         return (
-            <div className="timer row">
-                <div className='timer--button col-xs-6 '>
+            <div className="timer ">
+                <div className='timer--button col-xs-6 col-sm-3 '>
                     <button
-                        className={ 'btn btn-default ' + (this.state.ready ? '' : 'disabled' ) }
+                        className={ 'btn btn-primary' + (this.state.ready ? '' : 'disabled' ) }
                         onClick={this._handleClick}>Start klokka</button>
                 </div>
-                <div className='timer--value col-xs-6' >
+                <div className='timer--value col-xs-6 col-sm-3'>
                     <Timer remainingTime={this.state.remainingTime}  />
                 </div>
             </div>

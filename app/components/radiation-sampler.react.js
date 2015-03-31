@@ -1,5 +1,6 @@
 const React = require('react'),
     TimerStore = require('../stores/timer-store'),
+    RadiationTable = require('./radiation-table.react'),
     actions = require('../actions'),
     constants = require('../constants');
 
@@ -15,10 +16,7 @@ var RadiationSampler = React.createClass({
     },
 
     getInitialState() {
-        return {
-            samples: [],
-            timerActive: false
-        }
+        return { timerActive: false }
     },
 
     _isDisabled() {
@@ -42,6 +40,7 @@ var RadiationSampler = React.createClass({
     _handleClick() {
         if (this.props.radiation.samples.length >= 4) {
             actions.stopTimer(constants.SCIENCE_TIMER_1);
+            actions.transitionTo('team-task', {teamId : 'science', taskId : 'average'})
         } else {
             actions.takeRadiationSample();
         }
@@ -50,29 +49,30 @@ var RadiationSampler = React.createClass({
     render() {
         var disabled, classes;
 
-        classes = 'btn btn-default ';
+        classes = 'btn btn-primary';
 
         if(this._isDisabled()) {
             classes += 'disabled';
         }
 
         return (
-            <div className="radiation-sampler row">
+            <div className="radiation-sampler ">
+
+                { /* Avoid floating into previous block */ }
+                <div className="radiation-sampler__padder clearfix visible-xs-block"/>
 
                 <audio ref="geigerSound" loop>
                     <source src="/sounds/AOS04595_Electric_Geiger_Counter_Fast.wav" type="audio/wav" />
-                    Your browser does not support the element.
                 </audio>
 
-                <div className="col-xs-6">
+                <div className="col-xs-6 col-sm-3">
                     <button
                         className={classes}
                         onClick={this._handleClick}
                     >Ta strålingsprøve</button>
                 </div>
-                <ul className="col-xs-6 radiation-sampler--samples">
-                {this.props.radiation.samples.map((val, i) => <li key={i} >{val}</li>)}
-                </ul>
+
+                <RadiationTable className="col-xs-6 col-sm-3" samples={this.props.radiation.samples} />
             </div>
         );
     }

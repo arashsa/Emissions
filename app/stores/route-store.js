@@ -20,7 +20,15 @@ var RouteStore = Object.assign(new BaseStore(), {
     },
 
     getTeamId() {
-        return cleanRootPath(this.getPathname());
+        return routeState.params.teamId;
+    },
+
+    getTaskId() {
+        return routeState.params.taskId;
+    },
+
+    getRouteState() {
+      return routeState;
     },
 
     dispatcherIndex: AppDispatcher.register(function (payload) {

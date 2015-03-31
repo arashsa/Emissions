@@ -2,36 +2,46 @@
 
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
+const RouteStore = require('./route-store');
+const constants = require('../constants');
+
 
 const assignments = {
     science: {
-        sample: 'Start klokken og ta fire målinger fordelt jevnt utover tidsintervallet'
+        sample: 'Start klokka og ta fire målinger fordelt jevnt utover tidsintervallet',
+        average: 'Regn ut gjennomsnittsverdien av strålingsverdiene dere fant. Skriv den inn i tekstfeltet.'
     }
 };
 
-var currentTask = {
-    science: 'sample'
-};
+//var currentTask = {
+//    science: 'sample'
+//};
 
 var TaskStore = Object.assign(new BaseStore(), {
 
-    getCurrentTask(teamId) {
+    getCurrentTask() {
+        var teamId = RouteStore.getTeamId();
+        var taskId = RouteStore.getTaskId();
         var assignmentsForTeam = assignments[teamId];
-        var taskId = currentTask[teamId];
 
         return (assignmentsForTeam && assignmentsForTeam[taskId])
             || 'Ingen oppgave funnet';
     },
 
-    getCurrentTaskId(teamId) {
-        return currentTask[teamId];
+    getCurrentTaskId() {
+        //var teamId = RouteStore.getTeamId();
+        return RouteStore.getTaskId();
+        //return currentTask[teamId];
+    },
+
+    getState() {
+      return {
+          currentTaskId: this.getCurrentTaskId(),
+          currentTask: this.getCurrentTask()
+      };
     },
 
     dispatcherIndex: AppDispatcher.register(function (payload) {
-        var action = payload.action;
-
-        switch (action) {
-        }
 
         return true; // No errors. Needed by promise in Dispatcher.
     })

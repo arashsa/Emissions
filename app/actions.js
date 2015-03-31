@@ -74,12 +74,32 @@ var actions = {
         });
     },
 
+    /**
+     * @param msg.text the message
+     * @param msg.id the message
+     * @param msg.level [info, warning, danger, success]
+     * @param [msg.duration] {Number} optional duration for transient messages
+     */
     addMessage(msg) {
         AppDispatcher.dispatch({
                 action: constants.MESSAGE_ADDED,
                 data: msg
             }
         );
+
+        if(msg.duration) {
+            setTimeout(() => actions.removeMessage(msg.id), msg.duration*1000)
+        }
+    },
+
+    /**
+     * msg with default duration of 5 seconds
+     * @param msg
+     * @param duration
+     * @see #addMessage()
+     */
+    addTransientMessage(msg, duration=5) {
+      actions.addMessage(Object.assign({duration}, msg))
     },
 
     removeMessage(id) {
@@ -98,6 +118,27 @@ var actions = {
         AppDispatcher.dispatch({
             action: constants.SCIENCE_TAKE_RADIATION_SAMPLE
         })
+    },
+
+    averageRadiationCalculated(average){
+        AppDispatcher.dispatch({
+            action: constants.SCIENCE_AVG_RADIATION_CALCULATED,
+            data : { average }
+        });
+
+        if(average > constants.SCIENCE_AVG_RAD_RED_THRESHOLD) {
+            actions.addTransientMessage({
+                text : 'Veldig høyt radioaktivt nivå detektert. Varsle sikkerhetsteamet umiddelbart!',
+                level : 'danger',
+                id : constants.SCIENCE_RADIATION_WARNING_MSG
+            }, 30);
+        } else if(average > constants.SCIENCE_AVG_RAD_ORANGE_THRESHOLD) {
+            actions.addTransientMessage({
+                text : 'Høye verdier av radioaktivitet. Følg med på om det går nedover igjen',
+                level : 'warning',
+                id : constants.SCIENCE_RADIATION_WARNING_MSG
+            }, 10);
+        }
     },
 
     /**

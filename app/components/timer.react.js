@@ -37,7 +37,7 @@ const Timer = React.createClass({
 
     render() {
         return (
-            <span className='mission-timer-value'> {this._timeValue()}</span>
+            <div className='mission-timer-value'> {this._timeValue()}</div>
         );
     }
 });

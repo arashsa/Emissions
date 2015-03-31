@@ -7110,3 +7110,48 @@ padding: 0 0 10px;
 .btn:focus {
     /*outline: none;*/
 }
+
+/**
+* Draw attention to text as new assignments arrive
+*/
+@keyframes blink {
+    0% { color: red; }
+    100% { color: black; }
+}
+@-webkit-keyframes blink {
+    0% { color: red; }
+    100% { color: black; }
+}
+.blink {
+    animation: blink 0.5s linear infinite;
+    -webkit-animation: blink 0.5s linear infinite;
+}
+
+.taskbox__header{
+    margin-top: 0;
+}
+
+
+/** SCIENCE TEAM */
+
+/** simply padding the content below */
+.radiation-sampler__padder{
+    padding-bottom:20px;
+}
+
+.radiation-sampler__samples {
+    display: inline-block;
+    margin-bottom:0;
+}
+.radiation-sampler__samples {
+    display: inline-block;
+    padding-right: 5px;
+    font-weight: 600;
+    font-family: monospace;
+}
+
+.mission-timer-value {
+    display: inline-block;
+    font-family: monospace;
+    font-size: x-large;
+}
