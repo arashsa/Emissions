@@ -13,9 +13,10 @@ module.exports = React.createClass({
         return (
             <div className={this.props.className} >
 
+                <h3>Prøveresultater</h3>
                 <table className=" table table-bordered">
                     <caption>
-                        Prøveverdier er oppgitt i mikrosievert per time (μSv/h):
+                        Mikrosievert per time (μSv/h):
                     </caption>
                     <thead>
                         <tr>
@@ -26,8 +27,8 @@ module.exports = React.createClass({
                     <tbody>
                         {
                             this.props.samples.map((val, i) => {
-                                return <tr>
-                                    <th scope="row">{i + 1}</th>
+                                return <tr key={i}>
+                                    <th scope="row"  >{i + 1}</th>
                                     <td>{val}</td>
                                 </tr>
                             })

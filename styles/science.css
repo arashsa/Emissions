@@ -1,0 +1,39 @@
+
+
+/** SCIENCE TEAM */
+
+/** simply padding the content below */
+.radiation-sampler__padder{
+    padding-bottom:20px;
+}
+
+.radiation-sampler__samples {
+    display: inline-block;
+    margin-bottom:0;
+}
+.radiation-sampler__samples {
+    display: inline-block;
+    padding-right: 5px;
+    font-weight: 600;
+    font-family: monospace;
+}
+
+.mission-timer-value {
+    display: inline-block;
+    font-family: monospace;
+    font-size: x-large;
+}
+
+.radiation-values{
+    padding-top: 10px;
+}
+
+.radiation-values dd {
+    padding-bottom: 10px;
+}
+
+.average-radiation-input button{
+    position: relative;
+    left: 10px;
+}
+

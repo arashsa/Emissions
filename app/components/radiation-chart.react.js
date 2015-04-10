@@ -18,8 +18,9 @@ function initChart(domElement) {
     chart = new AmCharts.AmSerialChart();
 
     chart.marginTop = 20;
-    chart.marginRight = 10;
-    chart.autoMarginOffset = 5;
+    chart.marginRight = 0;
+    chart.marginLeft = 0;
+    chart.autoMarginOffset = 0;
     chart.dataProvider = radiationSamples;
     chart.categoryField = "timestamp";
 
@@ -92,7 +93,9 @@ const RadiationChart = React.createClass({
     propTypes: {
         updateFrequencySeconds: React.PropTypes.number.isRequired,
         maxSecondsShown: React.PropTypes.number.isRequired,
-        getNewValue: React.PropTypes.func.isRequired
+        getNewValue: React.PropTypes.func.isRequired,
+        height: React.PropTypes.number.isRequired,
+        width: React.PropTypes.number
     },
 
     mixins: [],
@@ -113,7 +116,7 @@ const RadiationChart = React.createClass({
     },
 
     componentWillUnmount() {
-        chart.clear();
+        chart && chart.clear();
         stopEventLoop();
     },
 
@@ -133,8 +136,13 @@ const RadiationChart = React.createClass({
     // Private methods
 
     render() {
+
+        // if you don't specify width it will max out to 100% (which is ok)
         return (
-            <div style={{width: '600px', height: '240px'}}></div>
+            <div
+                style={{width: this.props.width + 'px', height : this.props.height+ 'px'}}
+                className={this.props.className}
+            />
         );
     }
 

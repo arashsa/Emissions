@@ -1,7 +1,7 @@
 const React = require('react');
 const dialogs = require('./dialogs.react');
 const actions = require('../actions');
-var { cleanRootPath } = require('../utils');
+const { cleanRootPath } = require('../utils');
 
 const RouteStore = require('../stores/route-store');
 var IntroStore = require('../stores/introduction-store');
@@ -15,7 +15,7 @@ var IntroStore = require('../stores/introduction-store');
             var teamId = cleanRootPath(transition.path);
 
             if (IntroStore.isIntroductionRead(teamId)) {
-                transition.redirect('team-task', {taskId: 1, teamId : teamId});
+                transition.redirect('team-task', {taskId: 'sample', teamId : teamId});
             }
         }
     },
@@ -23,7 +23,7 @@ var IntroStore = require('../stores/introduction-store');
     _handleClick() {
         var teamId = RouteStore.getTeamId();
         actions.introWasRead(teamId);
-        actions.transitionTo('team-task', {taskId : 1, teamId : teamId })
+        actions.transitionTo('team-task', {taskId : 'sample', teamId : teamId })
     },
 
     render() {

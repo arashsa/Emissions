@@ -56,7 +56,7 @@ var RadiationSampler = React.createClass({
         }
 
         return (
-            <div className="radiation-sampler ">
+            <section className={"radiation-sampler " + this.props.className} >
 
                 { /* Avoid floating into previous block */ }
                 <div className="radiation-sampler__padder clearfix visible-xs-block"/>
@@ -65,15 +65,13 @@ var RadiationSampler = React.createClass({
                     <source src="/sounds/AOS04595_Electric_Geiger_Counter_Fast.wav" type="audio/wav" />
                 </audio>
 
-                <div className="col-xs-6 col-sm-3">
+                <div>
                     <button
                         className={classes}
                         onClick={this._handleClick}
                     >Ta strålingsprøve</button>
                 </div>
-
-                <RadiationTable className="col-xs-6 col-sm-3" samples={this.props.radiation.samples} />
-            </div>
+            </section>
         );
     }
 

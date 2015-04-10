@@ -53,7 +53,7 @@ const App = React.createClass({
                 </section>
 
                 {/* this is the important part */}
-                <RouteHandler/>
+                <RouteHandler {...this.props}/>
             </div>
         } else {
             let message = {

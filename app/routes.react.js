@@ -3,8 +3,6 @@ const Router = require('react-router');
 const Route = Router.Route;
 const NotFoundRoute = Router.NotFoundRoute;
 const DefaultRoute = Router.DefaultRoute;
-const Link = Router.Link;
-const RouteHandler = Router.RouteHandler;
 
 const App = require('./components/app.react');
 const MissionCommanderApp = require('./components/commander-app.react');

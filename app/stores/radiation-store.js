@@ -55,7 +55,7 @@ const RadiationStore = Object.assign(new BaseStore(), {
         var { action, data} = payload;
 
         switch (action) {
-            case constants.SCIENCE_SET_RADIATION_LEVEL:
+            case constants.SCIENCE_RADIATION_LEVEL_CHANGED:
                 RadiationStore._setRadiationLevel(data.min, data.max);
                 break;
             case constants.SCIENCE_TAKE_RADIATION_SAMPLE:

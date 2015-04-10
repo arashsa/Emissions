@@ -12,6 +12,9 @@ require('./bootstrap-actions').run();
 
 router.run((Handler, state) => {
     AppDispatcher.dispatch({action: constants.ROUTE_CHANGED_EVENT, state});
-    React.render(<Handler/>, document.body);
+
+    // pass the state down into the RouteHandlers, as that will make
+    // the router related properties available on each RH. Taken from Upgrade tips for React Router
+    React.render(<Handler {...state}/>, document.body);
 });
 

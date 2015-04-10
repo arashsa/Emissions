@@ -46,16 +46,19 @@ module.exports = React.createClass({
 
     render() {
         return (
-            <div className="timer ">
-                <div className='timer--button col-xs-6 col-sm-3 '>
-                    <button
-                        className={ 'btn btn-primary' + (this.state.ready ? '' : 'disabled' ) }
-                        onClick={this._handleClick}>Start klokka</button>
+            <section className={"timer " + this.props.className }>
+                <div className="row">
+                    <div className='timer--button col-xs-5 '>
+                        <button
+                            className={ 'btn btn-primary' + (this.state.ready ? '' : 'disabled' ) }
+                            onClick={this._handleClick}>Start klokka
+                        </button>
+                    </div>
+                    <div className='timer--value col-xs-6 padding-xs-1'>
+                        <Timer remainingTime={this.state.remainingTime}/>
+                    </div>
                 </div>
-                <div className='timer--value col-xs-6 col-sm-3'>
-                    <Timer remainingTime={this.state.remainingTime}  />
-                </div>
-            </div>
+            </section>
         );
     }
 })

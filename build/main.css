@@ -7097,8 +7097,8 @@ padding: 0 0 10px;
 
 .messagebox  {
     list-style-type: none;
-    padding: 10px 0; /* remove start padding in lists */
 }
+
 .messagebox .alert {
     margin-bottom : 5px;
 }
@@ -7132,6 +7132,8 @@ padding: 0 0 10px;
 }
 
 
+
+
 /** SCIENCE TEAM */
 
 /** simply padding the content below */
@@ -7155,3 +7157,17 @@ padding: 0 0 10px;
     font-family: monospace;
     font-size: x-large;
 }
+
+.radiation-values{
+    padding-top: 10px;
+}
+
+.radiation-values dd {
+    padding-bottom: 10px;
+}
+
+.average-radiation-input button{
+    position: relative;
+    left: 10px;
+}
+

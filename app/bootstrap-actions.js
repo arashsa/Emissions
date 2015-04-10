@@ -12,7 +12,7 @@ function run() {
 
 
 
-    actions.setTimer(constants.SCIENCE_TIMER_1, 5);
+    actions.setTimer(constants.SCIENCE_TIMER_1, 30);
 
     setTimeout(()=> {
         actions.addMessage({
@@ -23,10 +23,10 @@ function run() {
     }, 100 * 1000);
 
     // dummy until we have integration with websockets
-    //setTimeout(() => {
+    setTimeout(() => {
         actions.setMissionTime(60 * 15);
         actions.startMission();
-    //}, 300);
+    }, 300);
 
     // play with radiation
     actions.setRadiationLevel(0,10);

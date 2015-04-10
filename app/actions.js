@@ -2,6 +2,7 @@ const AppDispatcher = require('./appdispatcher'),
     { format } = require('util'),
     constants = require('./constants'),
     TimerStore = require('./stores/timer-store'),
+    uuid = require('./uuid'),
     router = require('./router-container');
 
 function addStub(name, stub) {
@@ -76,11 +77,24 @@ var actions = {
 
     /**
      * @param msg.text the message
-     * @param msg.id the message
-     * @param msg.level [info, warning, danger, success]
+     * @param [msg.id] the message id. if not given, one will be created
+     * @param [msg.level] same as bootstrap's alert classes: [success, info, warning, danger]
      * @param [msg.duration] {Number} optional duration for transient messages
+     *
+     * @returns {string} the message id
      */
     addMessage(msg) {
+        var id = msg.id;
+
+        if(!id) {
+            id = uuid();
+            msg.id = id;
+        }
+
+        if(!msg.level) {
+            msg.level = 'success';
+        }
+
         AppDispatcher.dispatch({
                 action: constants.MESSAGE_ADDED,
                 data: msg
@@ -90,16 +104,20 @@ var actions = {
         if(msg.duration) {
             setTimeout(() => actions.removeMessage(msg.id), msg.duration*1000)
         }
+
+        return id;
     },
 
     /**
      * msg with default duration of 5 seconds
      * @param msg
-     * @param duration
-     * @see #addMessage()
+     * @param [duration] default of 5 seconds
+     *
+     * @see #addMessage() for more params
+     * @returns {string} the message id
      */
     addTransientMessage(msg, duration=5) {
-      actions.addMessage(Object.assign({duration}, msg))
+      return actions.addMessage(Object.assign({duration}, msg))
     },
 
     removeMessage(id) {
@@ -153,7 +171,7 @@ var actions = {
      */
     setRadiationLevel(min, max) {
         AppDispatcher.dispatch({
-            action: constants.SCIENCE_SET_RADIATION_LEVEL,
+            action: constants.SCIENCE_RADIATION_LEVEL_CHANGED,
             data: {min, max}
         });
     },
