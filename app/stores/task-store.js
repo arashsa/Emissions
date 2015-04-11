@@ -8,8 +8,14 @@ const constants = require('../constants');
 
 const assignments = {
     science: {
-        sample: 'Start klokka og ta fire målinger fordelt jevnt utover tidsintervallet',
-        average: 'Regn ut gjennomsnittsverdien av strålingsverdiene dere fant. Skriv den inn i tekstfeltet.'
+        sample: 'Start klokka og ta fire målinger jevnt fordelt utover de 30 sekundene',
+        average: 'Regn ut gjennomsnittsverdien av strålingsverdiene dere fant. Skriv den inn i tekstfeltet.',
+        addtotal : 'Basert på fargen som ble indikert ved evaluering av gjennomsnittsverdien '
+        +'skal vi nå legge til et tall til totalt funnet strålingsmengde.'
+        +' For grønn status man legge til 0, '
+        +' for oransj status man legge til 15, '
+        +' for rød status man legge til 50.'
+        +' Den totale strålingsverdien i kroppen skal helst ikke gå over 50, og aldri over 75!'
     }
 };
 

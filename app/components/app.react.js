@@ -70,6 +70,10 @@ const App = React.createClass({
                 <Header/>
 
                 {mainContent}
+
+                <div className="row">
+                <footer id='main-footer'></footer>
+                    </div>
             </div>
         );
     }

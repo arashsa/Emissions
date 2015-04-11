@@ -156,7 +156,7 @@ var cssTask = function (options) {
 }
 
 // Starts our development workflow
-gulp.taskStore('default', function () {
+gulp.task('default', function () {
 
     browserifyTask({
         development: true,
@@ -172,7 +172,7 @@ gulp.taskStore('default', function () {
 
 });
 
-gulp.taskStore('deploy', function () {
+gulp.task('deploy', function () {
 
     browserifyTask({
         development: false,
@@ -188,6 +188,6 @@ gulp.taskStore('deploy', function () {
 
 });
 
-gulp.taskStore('test', function () {
+gulp.task('test', function () {
     return gulp.src('./build/testrunner-phantomjs.html').pipe(jasminePhantomJs());
 });

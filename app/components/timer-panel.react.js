@@ -48,6 +48,7 @@ module.exports = React.createClass({
         return (
             <section className={"timer " + this.props.className }>
                 <div className="row">
+
                     <div className='timer--button col-xs-5 '>
                         <button
                             className={ 'btn btn-primary' + (this.state.ready ? '' : 'disabled' ) }

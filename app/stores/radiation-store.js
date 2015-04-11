@@ -5,11 +5,12 @@ const BaseStore = require('./base-store');
 const constants = require('../constants');
 const randomInt = require('../utils').randomInt;
 const radiationRange = {
-    min : 20,
-    max : 40
+    min: 20,
+    max: 40
 };
 var samples = [];
 var totalRadiation = 0;
+var lastCalculatedAverage = null;
 
 const RadiationStore = Object.assign(new BaseStore(), {
 
@@ -25,10 +26,8 @@ const RadiationStore = Object.assign(new BaseStore(), {
     },
 
     _takeSample() {
-        if (samples.length < 5) {
-            samples.push(this.getLevel());
-            this.emitChange();
-        }
+        samples.push(this.getLevel());
+        this.emitChange();
     },
 
     getLevel() {
@@ -44,11 +43,12 @@ const RadiationStore = Object.assign(new BaseStore(), {
     },
 
     getState() {
-      return {
-          samples : samples.slice(0),
-          total:totalRadiation,
-          currentLevel : this.getLevel()
-      }
+        return {
+            samples: samples.slice(0),
+            total: totalRadiation,
+            currentLevel: this.getLevel(),
+            lastCalculatedAverage: lastCalculatedAverage
+        }
     },
 
     dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -58,9 +58,18 @@ const RadiationStore = Object.assign(new BaseStore(), {
             case constants.SCIENCE_RADIATION_LEVEL_CHANGED:
                 RadiationStore._setRadiationLevel(data.min, data.max);
                 break;
+            case constants.SCIENCE_TOTAL_RADIATION_LEVEL_CHANGED:
+                totalRadiation = data.total;
+                RadiationStore.emitChange();
+                break;
+
             case constants.SCIENCE_TAKE_RADIATION_SAMPLE:
                 RadiationStore._takeSample();
                 break;
+            case constants.SCIENCE_AVG_RADIATION_CALCULATED:
+                lastCalculatedAverage = data.average;
+                RadiationStore.emitChange();
+
         }
 
         return true; // No errors. Needed by promise in Dispatcher.

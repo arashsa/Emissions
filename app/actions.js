@@ -1,8 +1,9 @@
 const AppDispatcher = require('./appdispatcher'),
     { format } = require('util'),
+    { uuid } = require('./utils'),
     constants = require('./constants'),
     TimerStore = require('./stores/timer-store'),
-    uuid = require('./uuid'),
+    RadiationStore = require('./stores/radiation-store'),
     router = require('./router-container');
 
 function addStub(name, stub) {
@@ -26,7 +27,7 @@ var actions = {
      * Or when already in /science
      * transitionTo('task') => /science/task
      */
-    transitionTo(to, param, query) {
+        transitionTo(to, param, query) {
         router.transitionTo(to, param, query);
     },
 
@@ -83,15 +84,15 @@ var actions = {
      *
      * @returns {string} the message id
      */
-    addMessage(msg) {
+        addMessage(msg) {
         var id = msg.id;
 
-        if(!id) {
+        if (!id) {
             id = uuid();
             msg.id = id;
         }
 
-        if(!msg.level) {
+        if (!msg.level) {
             msg.level = 'success';
         }
 
@@ -101,8 +102,8 @@ var actions = {
             }
         );
 
-        if(msg.duration) {
-            setTimeout(() => actions.removeMessage(msg.id), msg.duration*1000)
+        if (msg.duration) {
+            setTimeout(() => actions.removeMessage(msg.id), msg.duration * 1000)
         }
 
         return id;
@@ -116,8 +117,8 @@ var actions = {
      * @see #addMessage() for more params
      * @returns {string} the message id
      */
-    addTransientMessage(msg, duration=5) {
-      return actions.addMessage(Object.assign({duration}, msg))
+        addTransientMessage(msg, duration = 5) {
+        return actions.addMessage(Object.assign({duration}, msg))
     },
 
     removeMessage(id) {
@@ -139,22 +140,35 @@ var actions = {
     },
 
     averageRadiationCalculated(average){
+        let samples = RadiationStore.getSamples();
+
+        if (samples.length) {
+            let sum = samples.reduce((prev, current) => prev + current, 0),
+                trueCalculatedAverage = sum / samples.length,
+                diffInPercent = 100 * Math.abs((trueCalculatedAverage - average) / trueCalculatedAverage);
+
+            if (diffInPercent > 15) {
+                actions.addTransientMessage({text: 'Mulig det gjennomsnittet ble litt feil.'});
+            }
+        }
+
+
         AppDispatcher.dispatch({
             action: constants.SCIENCE_AVG_RADIATION_CALCULATED,
-            data : { average }
+            data: {average}
         });
 
-        if(average > constants.SCIENCE_AVG_RAD_RED_THRESHOLD) {
+        if (average > constants.SCIENCE_AVG_RAD_RED_THRESHOLD) {
             actions.addTransientMessage({
-                text : 'Veldig høyt radioaktivt nivå detektert. Varsle sikkerhetsteamet umiddelbart!',
-                level : 'danger',
-                id : constants.SCIENCE_RADIATION_WARNING_MSG
+                text: 'Veldig høyt radioaktivt nivå detektert. Varsle sikkerhetsteamet umiddelbart!',
+                level: 'danger',
+                id: constants.SCIENCE_RADIATION_WARNING_MSG
             }, 30);
-        } else if(average > constants.SCIENCE_AVG_RAD_ORANGE_THRESHOLD) {
+        } else if (average > constants.SCIENCE_AVG_RAD_ORANGE_THRESHOLD) {
             actions.addTransientMessage({
-                text : 'Høye verdier av radioaktivitet. Følg med på om det går nedover igjen',
-                level : 'warning',
-                id : constants.SCIENCE_RADIATION_WARNING_MSG
+                text: 'Høye verdier av radioaktivitet. Følg med på om det går nedover igjen',
+                level: 'warning',
+                id: constants.SCIENCE_RADIATION_WARNING_MSG
             }, 10);
         }
     },
@@ -169,7 +183,7 @@ var actions = {
      * @param min
      * @param max
      */
-    setRadiationLevel(min, max) {
+        setRadiationLevel(min, max) {
         AppDispatcher.dispatch({
             action: constants.SCIENCE_RADIATION_LEVEL_CHANGED,
             data: {min, max}
@@ -179,21 +193,26 @@ var actions = {
     addToTotalRadiationLevel(amount){
         const RadiationStore = require('./stores/radiation-store');
 
-        var total = RadiationStore.getTotalLevel();
+        var total = amount + RadiationStore.getTotalLevel();
 
-        /* Very unsure if this is the right place to call another action */
-        if( total + amount > constants.SCIENCE_TOTAL_RADIATION_THRESHOLD) {
-            actions.addMessage({
+        if (total > constants.SCIENCE_TOTAL_RADIATION_VERY_SERIOUS_THRESHOLD) {
+            actions.addTransientMessage({
                 id: 'science_high_radiation_level',
-                text: 'Faretruende høyt strålingsnivå',
+                text: 'Faretruende høyt strålingsnivå!',
                 level: 'danger'
-            });
-
-            AppDispatcher.dispatch({
-                action : constants.SCIENCE_TOTAL_RADIATION_LEVEL_CHANGED,
-                data : { total, added: amount}
-            })
+            }, 30);
+        } else if (total > constants.SCIENCE_TOTAL_RADIATION_SERIOUS_THRESHOLD) {
+            actions.addTransientMessage({
+                id: 'science_high_radiation_level',
+                text: 'Høyt strålingsnivå!',
+                level: 'warning'
+            }, 30);
         }
+
+        AppDispatcher.dispatch({
+            action: constants.SCIENCE_TOTAL_RADIATION_LEVEL_CHANGED,
+            data: {total, added: amount}
+        })
 
     }
 

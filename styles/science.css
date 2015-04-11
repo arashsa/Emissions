@@ -32,8 +32,18 @@
     padding-bottom: 10px;
 }
 
-.average-radiation-input button{
+.radiation-input button{
     position: relative;
     left: 10px;
 }
 
+.radiation-input__input {
+    width: 100px;
+}
+
+
+.radiation-indicator {
+    /* Centre the text in the circle */
+    padding-top: 5px;
+    padding-left: 7px;
+}

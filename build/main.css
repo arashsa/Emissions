@@ -7061,6 +7061,15 @@ button.close {
     color: black;
 }
 
+/* Just to get some space after the last elements */
+#main-footer {
+    position:absolute;
+    width:100%;
+    margin-top: 29px;
+    height:1px;
+    /*background-color: blue;*/
+}
+
 #team-name {
     /*background-color: #739fff;*/
 }
@@ -7131,6 +7140,42 @@ padding: 0 0 10px;
     margin-top: 0;
 }
 
+/* Used to signal disabled elements */
+/* The parent must be positioned; 'position:relative' or absolute */
+/* See http://stackoverflow.com/questions/3627283 */
+.overlay {
+    /* Expand to cover other layers */
+    position:absolute;
+    height:100%;
+    width:100%;
+
+    /* Position above the other layers */
+    z-index:1;
+
+
+    /* stripes */
+    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-size: 40px 40px;
+
+    background-color: black;
+    opacity: 0.4;
+
+    /* Same as Bootstraps corners */
+    border-radius: 6px;
+}
+.overlayable {
+    position: relative;
+}
+
+.instruments__section{
+    padding-bottom: 10px;
+}
+
+.circle {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+}
 
 
 
@@ -7171,3 +7216,13 @@ padding: 0 0 10px;
     left: 10px;
 }
 
+.average-radiation-input__input {
+    width: 100px;
+}
+
+
+.radiation-indicator {
+    /* Centre the text in the circle */
+    padding-top: 5px;
+    padding-left: 7px;
+}

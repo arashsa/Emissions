@@ -38,11 +38,11 @@ var RadiationSampler = React.createClass({
     },
 
     _handleClick() {
-        if (this.props.radiation.samples.length >= 4) {
+        if (this.props.radiation.samples.length < 4) {
+            actions.takeRadiationSample();
+        } else {
             actions.stopTimer(constants.SCIENCE_TIMER_1);
             actions.transitionTo('team-task', {teamId : 'science', taskId : 'average'})
-        } else {
-            actions.takeRadiationSample();
         }
     },
 
