@@ -65,11 +65,14 @@ module.exports = React.createClass({
     },
 
     _handleAddToTotalSubmit(e){
+        e.preventDefault();
+
         let el = React.findDOMNode(this.refs['add-to-total-input']);
         let val = el.value.trim();
+        if (!val.length) return;
+
         let number = utils.parseNumber(val);
 
-        e.preventDefault();
 
         el.value = '';
 
@@ -81,12 +84,13 @@ module.exports = React.createClass({
         }
     },
 
-    /**
+
+    /*
      * Helper
-     * @param {string} task name
+     * @param {string} taskName name
      * @returns {boolean} true if the current task id equals the name passed in
      */
-        _isCurrentTask(taskName){
+    _isCurrentTask(taskName){
         return this.props.appstate.taskStore.currentTaskId === taskName;
     },
 
