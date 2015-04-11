@@ -102,9 +102,9 @@ module.exports = React.createClass({
             return 'Ikke beregnet';
         }
 
-        if (num > 75) {
+        if (num > constants.SCIENCE_AVG_RAD_RED_VALUE) {
             color = 'red';
-        } else if (num > 40) {
+        } else if (num > constants.SCIENCE_AVG_RAD_ORANGE_VALUE) {
             color = 'orange';
         } else {
             color = 'green';
