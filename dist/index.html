@@ -28,11 +28,10 @@
             "/jslib/amcharts.js"
 
         ], function () {
-                $script([
-                    '//cdnjs.cloudflare.com/ajax/libs/react-router/0.13.2/ReactRouter.min.js',
-                    "/main.js"])
+            $script(['//cdnjs.cloudflare.com/ajax/libs/react-router/0.13.2/ReactRouter.min.js'], function () {
+                $script(["/main.js"]);
+            });
         });
-
     </script>
 
 </head>
