@@ -11,10 +11,13 @@
   "license": "ISC",
   "browserify-shim": "./shim-config.js",
   "browserify": {
-    "transform": ["browserify-shim"]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "dependencies": {
     "browserify-shim": "^3.8.3",
+    "compression": "^1.4.3",
     "express": "^4.10.1",
     "node-jsx": "^0.12.4",
     "node-static": "^0.7.6",

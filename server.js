@@ -8,6 +8,10 @@ var app = express();
 var port = process.env.PORT || 5000;
 var htmlCssDir;
 
+// enable gzip compression
+var compression = require('compression')
+app.use(compression());
+
 if ('production' === process.env.NODE_ENV) {
     htmlCssDir = __dirname + '/dist';
 } else {
