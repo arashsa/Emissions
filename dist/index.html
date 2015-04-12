@@ -19,17 +19,18 @@
             $script(["//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"])
         });
 
-//        react and amcharts needs to be loaded by the time the graph is loaded
+        //react and amcharts needs to be loaded by the time the graph is loaded
         $script([
             "//cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.min.js",
-            '//cdnjs.cloudflare.com/ajax/libs/react-router/0.13.2/ReactRouter.min.js',
 
             // using custom version of amcharts to remove "Graph by amchart"
             // this is against the license, but as this toy project not going public, it shouldn't be a problem
             "/jslib/amcharts.js"
 
         ], function () {
-                $script(["/main.js"])
+                $script([
+                    '//cdnjs.cloudflare.com/ajax/libs/react-router/0.13.2/ReactRouter.min.js',
+                    "/main.js"])
         });
 
     </script>
