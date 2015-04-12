@@ -166,7 +166,7 @@ gulp.task('default', function () {
 
     cssTask({
         development: true,
-        src: ['./styles/**/*.css', './nodule_modules/bootstrap'],
+        src: ['./styles/**/*.css', './node_modules/bootstrap'],
         dest: './build'
     });
 
