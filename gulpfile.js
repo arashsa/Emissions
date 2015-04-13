@@ -41,7 +41,12 @@ var browserifyTask = function (options) {
     }).transform(
         // We want to convert JSX to normal javascript
         babelify.configure({
+
+            // really only needed for Object.assign
             optional: ["runtime"]
+            
+            // can't get this working
+            //plugins: ["object-assign"] 
         })
     );
 

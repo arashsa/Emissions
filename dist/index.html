@@ -5,6 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script>
+        ////////////////
+        // PREFETCH JS
+        ////////////////
+
+        /* these variables are in the global scope, and so are available in the next script block */
+        var bootstrapUri = "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js";
+        var reactUri = "//cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.min.js";
+        var reactRouter = '//cdnjs.cloudflare.com/ajax/libs/react-router/0.13.2/ReactRouter.min.js';
+        var amcharts = "/jslib/amcharts.js";
+        var mainScript = "/main.js";
+
+        // do prefetch of dependencies - without evaluating
+        // this way the network response are already cached when needed
+        [ reactUri, reactRouter, mainScript, amcharts, bootstrapUri].forEach(function (uri) {
+            var l = document.createElement('link');
+            l.rel = 'prefetch';
+            l.href = uri;
+            document.head.insertBefore(l, document.head.firstChild)
+        });
+    </script>
+
+    <script>
+
+
         /* loadCSS: load a CSS file asynchronously.
          [c]2014 @scottjehl, Filament Group, Inc.
         */
@@ -25,27 +49,26 @@
         loadCSS("/main.css");
 
 
-
         ////////////////
         // LOAD JS ASYNC
         ////////////////
 
         // bootstrap needs jquery
-        $script(["//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"], function () {
-            $script(["//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"])
+        $script("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js", function () {
+            $script(bootstrapUri)
         });
 
         //react and amcharts needs to be loaded by the time the graph is loaded
         $script([
-            "//cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.min.js",
+            reactUri,
 
             // using custom version of amcharts to remove "Graph by amchart"
             // this is against the license, but as this toy project not going public, it shouldn't be a problem
-            "/jslib/amcharts.js"
+            amcharts
 
         ], function () {
-            $script(['//cdnjs.cloudflare.com/ajax/libs/react-router/0.13.2/ReactRouter.min.js'], function () {
-                $script(["/main.js"]);
+            $script(reactRouter, function () {
+                $script(mainScript);
             });
         });
     </script>
