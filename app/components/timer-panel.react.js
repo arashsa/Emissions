@@ -22,7 +22,7 @@ module.exports = React.createClass({
     },
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextState.remainingTime !== this.state.remainingTime;
+        return nextState.timeInSeconds !== this.state.timeInSeconds;
     },
 
     componentDidUpdate() {
@@ -40,7 +40,7 @@ module.exports = React.createClass({
     _getTimerState() {
         return {
             ready: TimerStore.isReadyToStart(this.props.timerId),
-            remainingTime: TimerStore.getRemainingTime(this.props.timerId)
+            timeInSeconds: TimerStore.getRemainingTime(this.props.timerId)
         };
     },
 
@@ -56,7 +56,7 @@ module.exports = React.createClass({
                         </button>
                     </div>
                     <div className='timer--value col-xs-6 padding-xs-1'>
-                        <Timer remainingTime={this.state.remainingTime}/>
+                        <Timer timeInSeconds={this.state.timeInSeconds}/>
                     </div>
                 </div>
             </section>

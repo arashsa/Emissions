@@ -31,28 +31,13 @@ var actions = {
         router.transitionTo(to, param, query);
     },
 
-    setMissionTime(remainingTime) {
-        actions.setTimer(constants.MISSION_TIMER_ID, remainingTime);
-    },
-
     startMission() {
-        if (!TimerStore.isReadyToStart(constants.MISSION_TIMER_ID)) {
-            throw new Error('No mission time has been set');
-        }
         AppDispatcher.dispatch({action: constants.MISSION_STARTED_EVENT});
-        actions.startTimer(constants.MISSION_TIMER_ID);
         actions.removeMessage(constants.NOT_READY_MSG);
     },
 
     stopMission() {
         AppDispatcher.dispatch({action: constants.MISSION_STOPPED_EVENT});
-        actions.stopTimer(constants.MISSION_TIMER_ID);
-    },
-
-
-    endMission() {
-        actions.stopMission();
-        actions.setMissionTime(0);
     },
 
     startTimer(id) {
@@ -62,6 +47,7 @@ var actions = {
     resetTimer(id) {
         AppDispatcher.dispatch({action: 'RESET_TIMER', data: {timerId: id}});
     },
+
     stopTimer(id) {
         AppDispatcher.dispatch({action: 'STOP_TIMER', data: {timerId: id}});
     },
@@ -213,6 +199,15 @@ var actions = {
             action: constants.SCIENCE_TOTAL_RADIATION_LEVEL_CHANGED,
             data: {total, added: amount}
         })
+
+    },
+
+    // sync mission time with signal from server
+    syncMissionTime(elapsedSeconds){
+        AppDispatcher.dispatch({
+            action: constants.MISSION_TIME_SYNC,
+            data: {elapsedMissionTime: elapsedSeconds}
+        });
 
     }
 

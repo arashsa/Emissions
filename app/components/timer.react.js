@@ -12,7 +12,7 @@ function pad(num) {
 const Timer = React.createClass({
 
     propTypes: {
-        remainingTime: React.PropTypes.number.isRequired
+        timeInSeconds: React.PropTypes.number.isRequired
     },
 
     componentDidUpdate() {
@@ -20,15 +20,15 @@ const Timer = React.createClass({
     },
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.remainingTime !== this.props.remainingTime;
+        return nextProps.timeInSeconds !== this.props.timeInSeconds;
     },
 
     _minutes() {
-        return pad(Math.max(0, this.props.remainingTime) / 60 >> 0);
+        return pad(Math.max(0, this.props.timeInSeconds) / 60 >> 0);
     },
 
     _seconds() {
-        return pad(Math.max(0, this.props.remainingTime) % 60);
+        return pad(Math.max(0, this.props.timeInSeconds) % 60);
     },
 
     _timeValue() {

@@ -8,7 +8,7 @@ const React = require('react'),
 const MissionTimer = React.createClass({
 
     getInitialState(){
-        return { remainingTime : TimerStore.getRemainingTime(ID) };
+        return { elapsed : TimerStore.getElapsedMissionTime() };
     },
     
     componentDidMount: function () {
@@ -21,15 +21,13 @@ const MissionTimer = React.createClass({
 
     _handleTimeChange() {
         this.setState({
-            ready: TimerStore.isReadyToStart(ID),
-            remainingTime : TimerStore.getRemainingTime(ID)
+            elapsed : TimerStore.getElapsedMissionTime()
         })
     },
 
     render() {
         return (<div className={this.props.className}>
-            <span>Gjenværende tid: </span>
-            <Timer timerId={ID} remainingTime={this.state.remainingTime} />
+            <Timer timerId={ID} timeInSeconds={this.state.elapsed } />
         </div>
         );
     }

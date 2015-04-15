@@ -5,30 +5,20 @@ const BaseStore = require('./base-store');
 const { ROUTE_CHANGED_EVENT } = require('../constants');
 const { cleanRootPath }= require('../utils');
 
-var routeState = {pathname: '<unset>'};
+var router = require('../router-container')
 
 var RouteStore = Object.assign(new BaseStore(), {
 
     handleRouteChanged(state) {
-        routeState = state;
         this.emitChange();
     },
 
-    getPathname() {
-        var pathname = routeState.pathname;
-        return pathname ? pathname.slice(1) : '';
-    },
-
     getTeamId() {
-        return routeState.params.teamId;
+        return router.getTeamId();
     },
 
     getTaskId() {
-        return routeState.params.taskId;
-    },
-
-    getRouteState() {
-      return routeState;
+        return router.getTaskId();
     },
 
     dispatcherIndex: AppDispatcher.register(function (payload) {

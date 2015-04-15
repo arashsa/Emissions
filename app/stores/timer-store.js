@@ -5,10 +5,13 @@ const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
 const constants = require('../constants');
 
+
 // keeping state hidden in the module
 var remainingTime = {},
     initialTime = {},
-    intervalId = {};
+    intervalId = {},
+    elapsedMissionTime = 0,
+    missionTimer = null;
 
 
 function reset(timerId) {
@@ -36,6 +39,19 @@ function stop(timerId) {
     delete intervalId[timerId];
     TimerStore.emitChange();
 }
+
+function startMissionTimer(){
+    stopMissionTimer();
+    missionTimer = setInterval(()=>{
+        elapsedMissionTime++;
+        TimerStore.emitChange();
+    },1000);
+}
+
+function stopMissionTimer(){
+    clearInterval(missionTimer);
+}
+
 
 /**
  * @param data.remainingTime {Number}
@@ -78,6 +94,10 @@ const TimerStore = Object.assign(new BaseStore(), {
         return this.getRemainingTime(timerId) > 0;
     },
 
+    getElapsedMissionTime() {
+        return elapsedMissionTime;
+    },
+
     dispatcherIndex: AppDispatcher.register(function (payload) {
         var { action, data} = payload;
 
@@ -102,6 +122,19 @@ const TimerStore = Object.assign(new BaseStore(), {
 
             case constants.RESET_TIMER:
                 reset(data.timerId);
+                break;
+
+            case constants.MISSION_STARTED_EVENT:
+                startMissionTimer();
+                break;
+
+            case constants.MISSION_STOPPED_EVENT:
+                stopMissionTimer();
+                break;
+
+            case constants.MISSION_TIME_SYNC:
+                elapsedMissionTime  = data.elapsedMissionTime;
+                TimerStore.emitChange();
                 break;
         }
 

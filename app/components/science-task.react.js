@@ -13,7 +13,7 @@ module.exports = React.createClass({
 
     statics: {},
     propTypes: {
-        appstate: React.PropTypes.element.isRequired
+        appstate: React.PropTypes.object.isRequired
     },
     mixins: [],
 

@@ -32,12 +32,12 @@ var browserifyTask = function (options) {
     // Our app bundler
     var appBundler = browserify({
         entries: [options.src], // Only need initial file, browserify finds the rest
-        debug: true, // Gives us sourcemapping
-        //debug: options.development, // Gives us sourcemapping
+        //debug: true, // Gives us sourcemapping
+        debug: options.development, // Gives us sourcemapping
         cache: {},
         packageCache: {},
-        //fullPaths: options.development // Requirement of watchify
-        fullPaths: true
+        fullPaths: options.development // Requirement of watchify
+        //fullPaths: true
     }).transform(
         // We want to convert JSX to normal javascript
         babelify.configure({

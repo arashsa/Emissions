@@ -6,6 +6,7 @@ const React = require('react'),
     MessageList = require('./message-list.react'),
     IntroductionScreen = require('./introduction-screen.react.js'),
     ScienceTask = require('./science-task.react'),
+    { format } = require('util'),
     actions = require('../actions'),
     constants = require('../constants');
 
@@ -13,8 +14,17 @@ const Task = React.createClass({
 
     mixins: [],
 
+    statics: {
+        willTransitionTo(transition) {
+            var currentTaskId = TaskStore.getCurrentTaskId();
+
+            if(currentTaskId !== RouteStore.getTaskId()) {
+                transition.redirect(format('/%s/task/%s' , RouteStore.getTeamId(), currentTaskId));
+            }
+        }
+    },
+
     componentDidMount: function () {
-        //console.log('componentDidMount');
     },
 
     componentWillMount: function () {
@@ -27,6 +37,8 @@ const Task = React.createClass({
         //console.log('componentWillUnmount');
         MessageStore.removeChangeListener(this._onChange);
         RouteStore.removeChangeListener(this._onChange);
+
+        clearTimeout(this._stateTimeout);
     },
 
     componentDidUnmount: function () {
@@ -49,7 +61,6 @@ const Task = React.createClass({
         return {
             messages: MessageStore.getMessages(),
             taskStore: TaskStore.getState(),
-            routeStore: RouteStore.getRouteState(),
             taskIsNew: true
         };
     },
@@ -57,16 +68,16 @@ const Task = React.createClass({
     _onChange() {
         this.setState({
             messages: MessageStore.getMessages(),
-            routeStore: RouteStore.getRouteState(),
             taskStore: TaskStore.getState(),
             taskIsNew: true
         });
 
-        setTimeout(()=> this.setState({taskIsNew: false}), 2000);
+        // a bit rudimentary - triggers on all changes, not just Task changes ...
+        this._stateTimeout = setTimeout(()=> this.setState({taskIsNew: false}), 2000);
     },
 
     _createSubTaskUI() {
-        return ( <ScienceTask appstate={this.state}/>);
+        return ( <ScienceTask appstate={this.state} />);
     },
 
     render() {

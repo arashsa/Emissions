@@ -24,7 +24,6 @@ function run() {
 
     // dummy until we have integration with websockets
     setTimeout(() => {
-        actions.setMissionTime(60 * 15);
         actions.startMission();
     }, 300);
 
