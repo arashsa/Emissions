@@ -11,6 +11,7 @@
     background-position-x: 0%;
     background-position-y: 50%;
 }
+
 #main-header h1 {
     padding: 20px 15px;
     /* Avoid coloring the link blue */
@@ -19,10 +20,10 @@
 
 /* Just to get some space after the last elements */
 #main-footer {
-    position:absolute;
-    width:100%;
+    position: absolute;
+    width: 100%;
     margin-top: 29px;
-    height:1px;
+    height: 1px;
     /*background-color: blue;*/
 }
 
@@ -30,15 +31,15 @@
     /*background-color: #739fff;*/
 }
 
-#narom-header{
+#narom-header {
     font-family: Orbitron, sans-serif;
     font-weight: 700;
     font-size: 15px;
 }
 
-#narom-header img{
+#narom-header img {
     height: 20px;
-    padding-right:8px;
+    padding-right: 8px;
 }
 
 .container {
@@ -50,26 +51,26 @@
     font-weight: 200;
     color: lightgray;
 }
+
 .teamwidget .active {
     text-transform: capitalize;
     color: black;
 }
 
 #mission-timer {
-padding: 0 0 10px;
+    padding: 0 0 10px;
 }
 
-
-.messagebox  {
+.messagebox {
     list-style-type: none;
     padding-left: 0;
 }
 
 .messagebox .alert {
-    margin-bottom : 5px;
+    margin-bottom: 5px;
 }
 
-.introscreen h2{
+.introscreen h2 {
     margin-top: 0;
 }
 
@@ -81,20 +82,36 @@ padding: 0 0 10px;
 * Draw attention to text as new assignments arrive
 */
 @keyframes blink {
-    0% { color: red; }
-    100% { color: black; }
+    0% {
+        color: red;
+    }
+    100% {
+        color: black;
+    }
 }
+
 @-webkit-keyframes blink {
-    0% { color: red; }
-    100% { color: black; }
+    0% {
+        color: red;
+    }
+    100% {
+        color: black;
+    }
 }
+
 .blink {
     animation: blink 0.5s linear infinite;
     -webkit-animation: blink 0.5s linear infinite;
 }
 
-.taskbox__header{
+.taskbox {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.taskbox__header {
     margin-top: 0;
+    font-size: 20px;
 }
 
 /* Used to signal disabled elements */
@@ -102,16 +119,15 @@ padding: 0 0 10px;
 /* See http://stackoverflow.com/questions/3627283 */
 .overlay {
     /* Expand to cover other layers */
-    position:absolute;
-    height:100%;
-    width:100%;
+    position: absolute;
+    height: 100%;
+    width: 100%;
 
     /* Position above the other layers */
-    z-index:1;
-
+    z-index: 1;
 
     /* stripes */
-    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
     background-size: 40px 40px;
 
     background-color: black;
@@ -120,11 +136,12 @@ padding: 0 0 10px;
     /* Same as Bootstraps corners */
     border-radius: 6px;
 }
+
 .overlayable {
     position: relative;
 }
 
-.instruments__section{
+.instruments__section {
     padding-bottom: 10px;
 }
 

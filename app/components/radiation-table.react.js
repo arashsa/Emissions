@@ -43,12 +43,12 @@ module.exports = React.createClass({
                 <h3>Prøveresultater</h3>
                 <table className=" table table-bordered">
                     <caption>
-                        Mikrosievert per time (μSv/h):
+                        Strålingspartikler per sekund (p/s)
                     </caption>
                     <thead>
                     <tr>
                         <th scope="col">Prøvenummer</th>
-                        <th scope="col">μSv/h</th>
+                        <th scope="col">p/s</th>
                     </tr>
                     </thead>
                     <tbody>

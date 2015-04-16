@@ -45,7 +45,6 @@ const Task = React.createClass({
 
     componentWillMount: function () {
         MessageStore.addChangeListener(this._onChange);
-        //RouteStore.addChangeListener(this._onChange);
         TaskStore.addChangeListener(this._onChange);
         //console.log('componentWillMount');
     },
@@ -53,7 +52,6 @@ const Task = React.createClass({
     componentWillUnmount: function () {
         //console.log('componentWillUnmount');
         MessageStore.removeChangeListener(this._onChange);
-        //RouteStore.removeChangeListener(this._onChange);
         TaskStore.removeChangeListener(this._onChange);
 
         clearTimeout(this._stateTimeout);
@@ -65,15 +63,10 @@ const Task = React.createClass({
 
     componentDidUpdate() {
         //console.log('.componentDidUpdate');
-        //console.log(React.findDOMNode(this));
     },
 
     getInitialState() {
 
-        /*
-         * Yes, changing our own state like this is probably not the right way to do it,
-         * but I could not think of a good, proper "FLUX" way that would work right now
-         */
         setTimeout(()=> this.setState({taskIsNew: false}), 2000);
 
         return {
@@ -111,6 +104,7 @@ const Task = React.createClass({
                     <MessageList className='col-xs-12' messages={this.state.messages}/>
                 </div>
 
+                { /* if you want this to be sticky: http://codepen.io/senff/pen/ayGvD */ }
                 <div className="row">
                     <div className="col-xs-12">
                         <div className='jumbotron taskbox'>

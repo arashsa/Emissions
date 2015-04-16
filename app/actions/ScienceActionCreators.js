@@ -1,10 +1,22 @@
 const AppDispatcher = require('../appdispatcher');
 const RadiationStore = require('./../stores/radiation-store');
 const constants = require('../constants/ScienceTeamConstants');
+const MissionConstants = require('../constants/MissionConstants');
 const MessageActionsCreators = require('./MessageActionCreators');
 const MissionActionCreators = require('../actions/MissionActionCreators');
+const TimerActionCreators = require('../actions/TimerActionCreators');
 
 const actions = {
+
+    startSampleTask(){
+        AppDispatcher.dispatch({action: constants.SCIENCE_CLEAR_RADIATION_SAMPLES});
+        AppDispatcher.dispatch({action: MissionConstants.START_TASK, teamId: 'science', taskId: 'sample'});
+        this.resetSamplingTimer();
+    },
+
+    resetSamplingTimer() {
+        TimerActionCreators.resetTimer(constants.SCIENCE_TIMER_1);
+    },
 
     takeRadiationSample() {
         AppDispatcher.dispatch({
@@ -59,7 +71,7 @@ const actions = {
      * @param min
      * @param max
      */
-     setRadiationLevel(min, max) {
+        setRadiationLevel(min, max) {
         AppDispatcher.dispatch({
             action: constants.SCIENCE_RADIATION_LEVEL_CHANGED,
             data: {min, max}
@@ -94,4 +106,5 @@ const actions = {
 
 };
 
+window.__ScienceActions = actions;
 module.exports = actions;

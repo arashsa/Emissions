@@ -61,22 +61,31 @@ var TaskStore = Object.assign(new BaseStore(), {
 
     dispatcherIndex: AppDispatcher.register(function (payload) {
         var taskId;
+        var teamId;
         var currentTask;
         var teamTasks;
 
         switch(payload.action) {
+
             case MissionConstants.START_TASK:
-                teamTasks = assignments[RouteStore.getTeamId()];
-                teamTasks.current = payload.taskId;
+                teamId = payload.teamId;
+                taskId = payload.taskId;
+
+                teamTasks = assignments[teamId];
+                teamTasks.current = taskId;
                 TaskStore.emitChange();
                 break;
+
             case MissionConstants.COMPLETED_TASK:
-                teamTasks = assignments[RouteStore.getTeamId()];
+                teamId = payload.teamId;
                 taskId = payload.taskId;
+
+                teamTasks = assignments[teamId];
                 currentTask = teamTasks[taskId];
                 teamTasks.current = currentTask.next;
                 TaskStore.emitChange();
                 break;
+
         }
 
         return true; // No errors. Needed by promise in Dispatcher.
