@@ -1,6 +1,6 @@
 const React = require('react');
 const dialogs = require('./dialogs.react');
-const actions = require('../actions');
+const actions = require('../actions/MissionActionCreators');
 const { cleanRootPath } = require('../utils');
 
 const RouteStore = require('../stores/route-store');

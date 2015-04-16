@@ -3,7 +3,7 @@
 const { Emitter } = require('events');
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const { MISSION_STARTED_EVENT,MISSION_STOPPED_EVENT, NOT_READY_MSG  } =  require('../constants');
+const { MISSION_STARTED_EVENT,MISSION_STOPPED_EVENT } =  require('../constants/MissionConstants');
 
 var missionRunning = false, missionHasBeenStopped = false;
 

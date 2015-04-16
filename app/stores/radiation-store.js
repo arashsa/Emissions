@@ -2,7 +2,7 @@
 
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const constants = require('../constants');
+const constants = require('../constants/ScienceTeamConstants');
 const randomInt = require('../utils').randomInt;
 const radiationRange = {
     min: 20,

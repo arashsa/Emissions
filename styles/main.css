@@ -62,6 +62,7 @@ padding: 0 0 10px;
 
 .messagebox  {
     list-style-type: none;
+    padding-left: 0;
 }
 
 .messagebox .alert {

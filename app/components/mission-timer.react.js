@@ -1,8 +1,6 @@
 const React = require('react'),
     TimerStore = require('../stores/timer-store'),
-    Timer = require('./timer.react'),
-    constants = require('../constants'),
-    ID = constants.MISSION_TIMER_ID;
+    Timer = require('./timer.react');
 
 
 const MissionTimer = React.createClass({
@@ -27,7 +25,7 @@ const MissionTimer = React.createClass({
 
     render() {
         return (<div className={this.props.className}>
-            <Timer timerId={ID} timeInSeconds={this.state.elapsed } />
+            <Timer timeInSeconds={this.state.elapsed } />
         </div>
         );
     }

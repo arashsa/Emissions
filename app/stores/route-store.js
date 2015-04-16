@@ -2,7 +2,7 @@
 
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const { ROUTE_CHANGED_EVENT } = require('../constants');
+const { ROUTE_CHANGED_EVENT } = require('../constants/RouterConstants');
 const { cleanRootPath }= require('../utils');
 
 var router = require('../router-container')

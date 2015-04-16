@@ -3,7 +3,6 @@
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
 const RouteStore = require('./route-store');
-const constants = require('../constants');
 
 var awaitingNewInstructions = {
     'text' : 'Venter på nye instrukser'

@@ -3,7 +3,8 @@
 const check = require('check-types');
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const constants = require('../constants');
+const TimerConstants = require('../constants/TimerConstants');
+const MissionConstants = require('../constants/MissionConstants');
 
 
 // keeping state hidden in the module
@@ -103,11 +104,11 @@ const TimerStore = Object.assign(new BaseStore(), {
 
         switch (action) {
 
-            case constants.SET_TIMER:
+            case TimerConstants.SET_TIMER:
                 handleRemainingTimeChanged(data);
                 break;
 
-            case constants.START_TIMER:
+            case TimerConstants.START_TIMER:
                 assertExists(data.timerId);
 
                 // avoid setting up more than one timer
@@ -116,23 +117,23 @@ const TimerStore = Object.assign(new BaseStore(), {
                 }
                 break;
 
-            case constants.STOP_TIMER:
+            case TimerConstants.STOP_TIMER:
                 stop(data.timerId);
                 break;
 
-            case constants.RESET_TIMER:
+            case TimerConstants.RESET_TIMER:
                 reset(data.timerId);
                 break;
 
-            case constants.MISSION_STARTED_EVENT:
+            case MissionConstants.MISSION_STARTED_EVENT:
                 startMissionTimer();
                 break;
 
-            case constants.MISSION_STOPPED_EVENT:
+            case MissionConstants.MISSION_STOPPED_EVENT:
                 stopMissionTimer();
                 break;
 
-            case constants.MISSION_TIME_SYNC:
+            case MissionConstants.MISSION_TIME_SYNC:
                 elapsedMissionTime  = data.elapsedMissionTime;
                 TimerStore.emitChange();
                 break;

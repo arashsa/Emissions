@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-const { CHANGE_EVENT } = require('../constants');
+const  CHANGE_EVENT= 'CHANGE_EVENT';
 
 var path = null;
 

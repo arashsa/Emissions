@@ -5,9 +5,9 @@ const RadiationSampleButton = require('./radiation-sampler.react');
 const Overlay = require('./overlay.react');
 const RadiationTable = require('./radiation-table.react');
 const RadiationStore = require('../stores/radiation-store');
-const constants = require('../constants');
-const actions = require('../actions');
+const actions = require('../actions/ScienceActionCreators');
 const utils = require('../utils');
+const ScienceTeamConstants = require('../constants/ScienceTeamConstants');
 
 module.exports = React.createClass({
 
@@ -102,9 +102,9 @@ module.exports = React.createClass({
             return 'Ikke beregnet';
         }
 
-        if (num > constants.SCIENCE_AVG_RAD_RED_VALUE) {
+        if (num > ScienceTeamConstants.SCIENCE_AVG_RAD_RED_VALUE) {
             color = 'red';
-        } else if (num > constants.SCIENCE_AVG_RAD_ORANGE_VALUE) {
+        } else if (num > ScienceTeamConstants.SCIENCE_AVG_RAD_ORANGE_VALUE) {
             color = 'orange';
         } else {
             color = 'green';
@@ -155,7 +155,7 @@ module.exports = React.createClass({
                         <Overlay active={ !showSampleInput }/>
 
                         <h3>Ta prøver</h3>
-                        <TimerPanel className='col-xs-12 col-sm-8' timerId={constants.SCIENCE_TIMER_1}/>
+                        <TimerPanel className='col-xs-12 col-sm-8' timerId={ScienceTeamConstants.SCIENCE_TIMER_1}/>
 
                         <RadiationSampleButton className='col-xs-5 col-sm-4' radiation={this.state.radiation}/>
                     </fieldset>

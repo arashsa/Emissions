@@ -2,7 +2,7 @@
 
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const constants = require('../constants');
+const constants = require('../constants/MissionConstants');
 const window = require('global/window');
 
 const IntroductionStore = Object.assign(new BaseStore(), {

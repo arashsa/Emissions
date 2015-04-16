@@ -8,11 +8,7 @@ const Header = require('./header.react');
 const TeamDisplayer = require('./team-displayer.react');
 const MessageList = require('./message-list.react');
 const MissionTimer = require('./mission-timer.react.js');
-
 const MissionStateStore = require('../stores/mission-state-store');
-
-const constants = require('../constants');
-const actions = require('../actions');
 
 const App = React.createClass({
 

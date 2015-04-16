@@ -1,6 +1,5 @@
 const TimerStore = require('../app/stores/timer-store'),
-    constants = require('../app/constants'),
-    actions = require('../app/actions'),
+    actions = require('../app/actions/TimerActionCreators'),
     AppDispatcher = require('../app/appdispatcher');
 
 describe('TimerStore', () => {

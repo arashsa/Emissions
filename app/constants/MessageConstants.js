@@ -1,0 +1,9 @@
+module.exports = Object.freeze({
+    // events
+    MESSAGE_ADDED: 'MESSAGE_ADDED',
+    REMOVE_MESSAGE: 'REMOVE_MESSAGE',
+
+    // message ids
+    NOT_READY_MSG: 'NOT_READY_MSG',
+    SCIENCE_RADIATION_WARNING_MSG : 'SCIENCE_RADIATION_WARNING_MSG'
+});

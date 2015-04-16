@@ -1,5 +1,5 @@
 const React = require('react');
-const actions = require('../actions');
+const actions = require('../actions/MessageActionCreators');
 
 var ListMessageWrapper = React.createClass({
 

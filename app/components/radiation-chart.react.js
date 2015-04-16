@@ -6,7 +6,7 @@
  */
 const React = require('react');
 const AmCharts = require('amcharts');
-const constants = require('../constants');
+const constants = require('../constants/ScienceTeamConstants');
 
 var chart, chartUpdater, getNewValue, updateFrequency, maxSeconds;
 var radiationSamples = [];

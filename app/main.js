@@ -5,7 +5,7 @@ const document = require('global/document');
 const router = require('./router-container');
 
 const AppDispatcher = require('./appdispatcher');
-const constants = require('./constants');
+const constants = require('./constants/RouterConstants');
 
 // run startup actions
 require('./bootstrap-actions').run();

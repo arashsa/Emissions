@@ -37,4 +37,3 @@ router = Router.create({
     // Use the HTML5 History API for clean URLs
     location: Router.HistoryLocation
 });
-console.log('SATTT', router);

@@ -1,8 +1,9 @@
 const React = require('react'),
     TimerStore = require('../stores/timer-store'),
-    RadiationTable = require('./radiation-table.react'),
-    actions = require('../actions'),
-    constants = require('../constants');
+    MissionActionCreators = require('../actions/MissionActionCreators'),
+    TimerActionCreators = require('../actions/TimerActionCreators'),
+    ScienceActionCreators = require('../actions/ScienceActionCreators'),
+    constants = require('../constants/ScienceTeamConstants');
 
 var RadiationSampler = React.createClass({
 
@@ -25,7 +26,7 @@ var RadiationSampler = React.createClass({
 
 
     _handleTimerChange() {
-        var  audio = React.findDOMNode(this.refs.geigerSound);
+        var  audio = React.findDOMNode(this.refs['geigerSound']);
         var timerActive = TimerStore.isRunning(constants.SCIENCE_TIMER_1);
 
         this.setState({timerActive: timerActive});
@@ -39,10 +40,10 @@ var RadiationSampler = React.createClass({
 
     _handleClick() {
         if (this.props.radiation.samples.length < 4) {
-            actions.takeRadiationSample();
+            ScienceActionCreators.takeRadiationSample();
         } else {
-            actions.stopTimer(constants.SCIENCE_TIMER_1);
-            actions.transitionTo('team-task', {teamId : 'science', taskId : 'average'})
+            TimerActionCreators.stopTimer(constants.SCIENCE_TIMER_1);
+            MissionActionCreators.transitionTo('team-task', {teamId : 'science', taskId : 'average'})
         }
     },
 

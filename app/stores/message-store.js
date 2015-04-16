@@ -3,7 +3,7 @@
 const { Emitter } = require('events');
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const { REMOVE_MESSAGE, MESSAGE_ADDED } = require('../constants');
+const { REMOVE_MESSAGE, MESSAGE_ADDED } = require('../constants/MessageConstants');
 var messages = {};
 
 

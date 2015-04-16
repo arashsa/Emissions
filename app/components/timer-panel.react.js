@@ -1,5 +1,5 @@
 var React = require('react'),
-    actions = require('../actions'),
+    actions = require('../actions/TimerActionCreators'),
     Timer = require('./timer.react.js'),
     TimerStore = require('../stores/timer-store');
 

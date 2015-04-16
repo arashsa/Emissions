@@ -1,38 +1,31 @@
 /* Script to bootstrap the application */
 
-var actions = require('./actions'),
-    constants = require('./constants'),
+var MissionActionCreators = require('./actions/MissionActionCreators'),
+    MessageActionCreators = require('./actions/MessageActionCreators'),
+    ScienceActionCreators = require('./actions/ScienceActionCreators'),
+    ScienceConstants = require('./constants/ScienceTeamConstants'),
+    TimerActionCreators = require('./actions/TimerActionCreators'),
     AppDispatcher = require('./appdispatcher');
 
-AppDispatcher.register((payload)=>{
+AppDispatcher.register((payload)=> {
     console.log('DEBUG AppDispatcher.dispatch', payload);
 });
 
 function run() {
 
-
-
-    actions.setTimer(constants.SCIENCE_TIMER_1, 30);
-
-    setTimeout(()=> {
-        actions.addMessage({
-            id: 'science_something',
-            text: 'ikke glem tannbørste nå da',
-            level: 'info'
-        });
-    }, 100 * 1000);
+    TimerActionCreators.setTimer(ScienceConstants.SCIENCE_TIMER_1, 30);
 
     // dummy until we have integration with websockets
-    setTimeout(() => {
-        actions.startMission();
-    }, 300);
+    //setTimeout(() => {
+        MissionActionCreators.startMission();
+    //}, 300);
 
     // play with radiation
-    actions.setRadiationLevel(0,10);
-    setTimeout(() => actions.setRadiationLevel(40,60), 10E3);
-    setTimeout(() => actions.setRadiationLevel(20,30), 30E3);
-    setTimeout(() => actions.setRadiationLevel(190,250), 60E3);
-    setTimeout(() => actions.setRadiationLevel(40,50), 90E3);
+    ScienceActionCreators.setRadiationLevel(0, 10);
+    setTimeout(() => ScienceActionCreators.setRadiationLevel(40, 60), 10E3);
+    setTimeout(() => ScienceActionCreators.setRadiationLevel(20, 30), 30E3);
+    setTimeout(() => ScienceActionCreators.setRadiationLevel(190, 250), 60E3);
+    setTimeout(() => ScienceActionCreators.setRadiationLevel(40, 50), 90E3);
 
 }
 

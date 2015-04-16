@@ -6,9 +6,7 @@ const React = require('react'),
     MessageList = require('./message-list.react'),
     IntroductionScreen = require('./introduction-screen.react.js'),
     ScienceTask = require('./science-task.react'),
-    { format } = require('util'),
-    actions = require('../actions'),
-    constants = require('../constants');
+    { format } = require('util');
 
 const Task = React.createClass({
 
