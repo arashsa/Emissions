@@ -29,11 +29,11 @@ app.get('/environment', function (req, res) {
 });
 
 // every path that is not matched by the existing files will get the index file served
+// at which point the client side routing takes over control
 app.get('*', function (req, res) {
     res.set('Content-Type', 'text/html');
     res.sendFile(htmlCssDir + '/index.html');
 });
-
 
 var events = [];
 var completedEvents = [];
@@ -41,18 +41,16 @@ var completedEvents = [];
 var eventData = JSON.parse(fs.readFileSync('events.json'));
 
 //Parses the events to objects and adds them to a single array
-Array.prototype.push.apply(events, parseEvents(eventData.respirationEvents, eventData.respirationLevels, "respiration"));
-Array.prototype.push.apply(events, parseEvents(eventData.oxygenUseEvents, eventData.oxygenUseLevels, "oxygenUse"));
-Array.prototype.push.apply(events, parseEvents(eventData.heartRateEvents, eventData.heartRateLevels, "heartRate"));
-Array.prototype.push.apply(events, parseEvents(eventData.radiationEvents, eventData.radiationLevels, "radiation"));
-Array.prototype.push.apply(events, parseEvents(eventData.satelite1Events, eventData.receptionLevels, "satelite1"));
-Array.prototype.push.apply(events, parseEvents(eventData.satelite2Events, eventData.receptionLevels, "satelite2"));
-Array.prototype.push.apply(events, parseEvents(eventData.satelite3Events, eventData.receptionLevels, "satelite3"));
+//Array.prototype.push.apply(events, parseEvents(eventData.respirationEvents, eventData.respirationLevels, "respiration"));
+//Array.prototype.push.apply(events, parseEvents(eventData.oxygenUseEvents, eventData.oxygenUseLevels, "oxygenUse"));
+//Array.prototype.push.apply(events, parseEvents(eventData.heartRateEvents, eventData.heartRateLevels, "heartRate"));
+//Array.prototype.push.apply(events, parseEvents(eventData.radiationEvents, eventData.radiationLevels, "radiation"));
+//Array.prototype.push.apply(events, parseEvents(eventData.satelite1Events, eventData.receptionLevels, "satelite1"));
+//Array.prototype.push.apply(events, parseEvents(eventData.satelite2Events, eventData.receptionLevels, "satelite2"));
+//Array.prototype.push.apply(events, parseEvents(eventData.satelite3Events, eventData.receptionLevels, "satelite3"));
 
 //Sorts the events by timestamp in descending order
-events.sort(function (e1, e2) {
-    return e2.timestamp - e1.timestamp;
-});
+events.sort((e1, e2) => e2.timestamp - e1.timestamp);
 
 var missionStarted = false;
 var missionLength = 0;
@@ -82,6 +80,13 @@ var levels = {
 var server = app.listen(port);
 var io = socketIo.listen(server);
 console.log("Server listening on port " + port);
+
+io.sockets.on('connection', function(socket) {
+    var socketId = socket.id;
+    var clientIp = socket.request.connection.remoteAddress;
+
+    console.log('A new client connected  on ',socketId,'from',clientIp);
+});
 
 io.sockets.on("connection", function (socket) {
     //Initiates an RTC call with another client

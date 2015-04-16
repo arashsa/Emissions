@@ -14,5 +14,6 @@
 module.exports = {
     'amcharts': {exports: 'global:AmCharts'},
     'react': {exports: 'global:React'},
-    'react-router': {exports: 'global:ReactRouter'}
+    'react-router': {exports: 'global:ReactRouter'},
+    'socket.io' : {exports: 'global:io'}
 };
