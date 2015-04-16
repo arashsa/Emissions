@@ -61,6 +61,6 @@ const actions = {
 };
 
 // prevent new properties from being added or removed
-Object.freeze(constants);
-
+Object.freeze(actions);
+window.__MessageActions = actions;
 module.exports = actions;

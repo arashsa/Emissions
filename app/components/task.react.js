@@ -10,7 +10,7 @@ const React = require('react'),
     { format } = require('util');
 
 
-function urlOfTask(taskId){
+function urlOfTask(taskId) {
     return format('/%s/task/%s', RouteStore.getTeamId(), taskId);
 }
 
@@ -19,7 +19,7 @@ function transitionToCurrentTask(transitionFunction) {
 
     // this logic is fragile - if you should suddenly decide to visit another team
     // _after_ you have started a task, the team+task combo is invalid -> 404
-    if(currentTaskId !== RouteStore.getTaskId()) {
+    if (currentTaskId !== RouteStore.getTaskId()) {
         var to = urlOfTask(currentTaskId);
         transitionFunction(to);
     }
@@ -91,12 +91,26 @@ const Task = React.createClass({
     },
 
     _createSubTaskUI() {
-        return ( <ScienceTask appstate={this.state} />);
+        return ( <ScienceTask appstate={this.state}/>);
     },
 
     render() {
         var content = this._createSubTaskUI(),
             blink = this.state.taskIsNew ? 'blink' : '';
+
+        if (!this.props.isMissionRunning) {
+            let message = {
+                id: 'not_used',
+                text: 'Ikke klar. Venter på at oppdraget skal starte.',
+                level: 'info'
+            };
+
+            return (
+                <div className="row">
+                    <MessageList className='col-xs-12'
+                                 messages={[message]}/>
+                </div>);
+        }
 
         return (
             <div className=''>

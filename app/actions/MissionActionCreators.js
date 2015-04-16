@@ -7,12 +7,12 @@ const MessageActionCreators = require('./MessageActionCreators'),
 
 const actions = {
 
-    startMission() {
+    missionStarted() {
         MessageActionCreators.removeMessage(MessageConstants.NOT_READY_MSG);
         AppDispatcher.dispatch({action: MissionConstants.MISSION_STARTED_EVENT});
     },
 
-    stopMission() {
+    missionStopped() {
         AppDispatcher.dispatch({action: MissionConstants.MISSION_STOPPED_EVENT});
     },
 

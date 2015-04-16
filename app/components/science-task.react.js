@@ -145,7 +145,7 @@ module.exports = React.createClass({
                     <fieldset disabled={!showSampleInput} className='instruments__section row overlayable'>
                         <Overlay active={ !showSampleInput }/>
 
-                        <h3>Ta prøver</h3>
+                        <h3 className='col-xs-12'>Ta prøver</h3>
                         <TimerPanel className='col-xs-12 col-sm-8' timerId={ScienceTeamConstants.SCIENCE_TIMER_1}/>
 
                         <RadiationSampleButton

@@ -1,7 +1,9 @@
 const AppDispatcher = require('./../appdispatcher'),
+    io = require('socket.io'),
+    socket = io(),
     { format } = require('util'),
     { uuid } = require('./../utils'),
-    window = require('globals/window'),
+    window = require('global/window'),
     TaskStore = require('./../stores/task-store'),
     Router = require('../router-container'),
     TimerStore = require('./../stores/timer-store'),
@@ -11,13 +13,14 @@ const AppDispatcher = require('./../appdispatcher'),
     constants = require('../constants/ServerConstants'),
     router = require('./../router-container');
 
-function fetchFromLS(key) => {
+function fetchFromLS(key) {
     let item = window.localStorage.getItem(key);
     if (item === undefined) return null;
+
     return JSON.parse(item);
 }
 
-function storeInLS(key, item) => {
+function storeInLS(key, item) {
     window.localStorage.setItem(key, JSON.stringify(item));
 }
 
@@ -78,12 +81,20 @@ const actions = {
         setTimeout(appStateReceived, 0);
     },
 
+    startMission(){
+        socket.emit('start mission');
+    },
+
     stopMission(){
         console.log('TODO: ServerActionCreators.stopMission');
         storeInLS('mission_running', false);
-    }
+        socket.emit('stop mission');
+    },
 
+    missionCompleted(){
+        socket.emit('mission completed');
+    }
 
 };
 
-module.exports = {actions, constants};
+module.exports = actions;

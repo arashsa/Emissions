@@ -31,45 +31,27 @@ const App = React.createClass({
     },
 
     render: function () {
-        var countDownBox, mainContent;
+        return (
+            <div className='container'>
 
-        if (MissionStateStore.isMissionRunning()) {
-            countDownBox = <MissionTimer />;
+                <Header/>
 
-            mainContent = <div>
-
-                <div id='team-name' className='' >
+                <div id='team-name' className=''>
                     <header className=''>
                         <TeamDisplayer className=''/>
                     </header>
                 </div>
 
                 <section id='mission-timer' className=''>
-                { countDownBox }
+                    <MissionTimer />
                 </section>
 
                 {/* this is the important part */}
-                <RouteHandler {...this.props}/>
-            </div>
-        } else {
-            let message = {
-                id: 'not_used',
-                text: 'Ikke klar. Venter på at oppdraget skal starte.',
-                level: 'info'
-            };
-            mainContent = <MessageList className='row' messages={[message]} />
-        }
-
-        return (
-            <div className='container'>
-
-                <Header/>
-
-                {mainContent}
+                <RouteHandler {...this.props} {...this.state} />
 
                 <div className="row">
-                <footer id='main-footer'></footer>
-                    </div>
+                    <footer id='main-footer'></footer>
+                </div>
             </div>
         );
     }
