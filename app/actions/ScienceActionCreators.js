@@ -1,6 +1,8 @@
 const AppDispatcher = require('../appdispatcher');
 const RadiationStore = require('./../stores/radiation-store');
 const constants = require('../constants/ScienceTeamConstants');
+const MessageActionsCreators = require('./MessageActionCreators');
+const MissionActionCreators = require('../actions/MissionActionCreators');
 
 const actions = {
 
@@ -19,7 +21,7 @@ const actions = {
                 diffInPercent = 100 * Math.abs((trueCalculatedAverage - average) / trueCalculatedAverage);
 
             if (diffInPercent > 15) {
-                actions.addTransientMessage({text: 'Mulig det gjennomsnittet ble litt feil.'});
+                MessageActionsCreators.addTransientMessage({text: 'Mulig det gjennomsnittet ble litt feil.'});
             }
         }
 
@@ -30,18 +32,20 @@ const actions = {
         });
 
         if (average > constants.SCIENCE_AVG_RAD_RED_THRESHOLD) {
-            actions.addTransientMessage({
+            MessageActionsCreators.addTransientMessage({
                 text: 'Veldig høyt radioaktivt nivå detektert. Varsle sikkerhetsteamet umiddelbart!',
                 level: 'danger',
                 id: constants.SCIENCE_RADIATION_WARNING_MSG
             }, 30);
         } else if (average > constants.SCIENCE_AVG_RAD_ORANGE_THRESHOLD) {
-            actions.addTransientMessage({
+            MessageActionsCreators.addTransientMessage({
                 text: 'Høye verdier av radioaktivitet. Følg med på om det går nedover igjen',
                 level: 'warning',
                 id: constants.SCIENCE_RADIATION_WARNING_MSG
             }, 10);
         }
+
+        MissionActionCreators.taskCompleted('average');
     },
 
 
@@ -67,13 +71,13 @@ const actions = {
         var total = amount + RadiationStore.getTotalLevel();
 
         if (total > constants.SCIENCE_TOTAL_RADIATION_VERY_SERIOUS_THRESHOLD) {
-            actions.addTransientMessage({
+            MessageActionsCreators.addTransientMessage({
                 id: 'science_high_radiation_level',
                 text: 'Faretruende høyt strålingsnivå!',
                 level: 'danger'
             }, 30);
         } else if (total > constants.SCIENCE_TOTAL_RADIATION_SERIOUS_THRESHOLD) {
-            actions.addTransientMessage({
+            MessageActionsCreators.addTransientMessage({
                 id: 'science_high_radiation_level',
                 text: 'Høyt strålingsnivå!',
                 level: 'warning'
@@ -83,8 +87,9 @@ const actions = {
         AppDispatcher.dispatch({
             action: constants.SCIENCE_TOTAL_RADIATION_LEVEL_CHANGED,
             data: {total, added: amount}
-        })
+        });
 
+        MissionActionCreators.taskCompleted('addtotal');
     }
 
 };

@@ -2,7 +2,8 @@
 
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const constants = require('../constants/ScienceTeamConstants');
+const ScienceTeamConstants= require('../constants/ScienceTeamConstants');
+const MissionConstants= require('../constants/MissionConstants');
 const randomInt = require('../utils').randomInt;
 const radiationRange = {
     min: 20,
@@ -55,21 +56,26 @@ const RadiationStore = Object.assign(new BaseStore(), {
         var { action, data} = payload;
 
         switch (action) {
-            case constants.SCIENCE_RADIATION_LEVEL_CHANGED:
+            case ScienceTeamConstants.SCIENCE_RADIATION_LEVEL_CHANGED:
                 RadiationStore._setRadiationLevel(data.min, data.max);
                 break;
-            case constants.SCIENCE_TOTAL_RADIATION_LEVEL_CHANGED:
+            case ScienceTeamConstants.SCIENCE_TOTAL_RADIATION_LEVEL_CHANGED:
                 totalRadiation = data.total;
                 RadiationStore.emitChange();
                 break;
 
-            case constants.SCIENCE_TAKE_RADIATION_SAMPLE:
+            case ScienceTeamConstants.SCIENCE_TAKE_RADIATION_SAMPLE:
                 RadiationStore._takeSample();
                 break;
-            case constants.SCIENCE_AVG_RADIATION_CALCULATED:
+            case ScienceTeamConstants.SCIENCE_AVG_RADIATION_CALCULATED:
                 lastCalculatedAverage = data.average;
                 RadiationStore.emitChange();
-
+                break;
+            case MissionConstants.START_TASK:
+                if(payload.taskId === 'sample') {
+                    samples = [];
+                    RadiationStore.emitChange();
+                }
         }
 
         return true; // No errors. Needed by promise in Dispatcher.

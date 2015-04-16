@@ -60,7 +60,6 @@ module.exports = React.createClass({
 
         if (average) {
             actions.averageRadiationCalculated(average);
-            actions.transitionTo('team-task', {teamId: 'science', taskId: 'addtotal'})
         }
     },
 
@@ -78,9 +77,6 @@ module.exports = React.createClass({
 
         if (number) {
             actions.addToTotalRadiationLevel(number);
-
-            // transition to awaiting state?
-            actions.transitionTo('team-task', {teamId: 'science', taskId: 'sample'})
         }
     },
 

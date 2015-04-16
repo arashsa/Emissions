@@ -29,14 +29,17 @@ const actions = {
      * Or when already in /science
      * transitionTo('task') => /science/task
      */
-    transitionTo(to, param, query) {
-        router.transitionTo(to, param, query);
-    },
+    //transitionTo(to, param, query) {
+    //    router.transitionTo(to, param, query);
+    //},
 
     introWasRead(teamId) {
         AppDispatcher.dispatch({action: MissionConstants.INTRODUCTION_READ, teamName: teamId});
     },
 
+    taskCompleted(taskId)   {
+        AppDispatcher.dispatch({action: MissionConstants.COMPLETED_TASK, taskId});
+    },
 
     // sync mission time with signal from server
     syncMissionTime(elapsedSeconds){

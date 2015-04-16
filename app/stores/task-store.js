@@ -3,6 +3,7 @@
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
 const RouteStore = require('./route-store');
+const MissionConstants = require('../constants/MissionConstants');
 
 var awaitingNewInstructions = {
     'text' : 'Venter på nye instrukser'
@@ -59,11 +60,23 @@ var TaskStore = Object.assign(new BaseStore(), {
 
 
     dispatcherIndex: AppDispatcher.register(function (payload) {
+        var taskId;
+        var currentTask;
+        var teamTasks;
 
         switch(payload.action) {
-            //case constants.START_TASK:
-            //    assignments[RouteStore.getTeamId()].current = payload.taskId;
-            //    TaskStore.emitChange();
+            case MissionConstants.START_TASK:
+                teamTasks = assignments[RouteStore.getTeamId()];
+                teamTasks.current = payload.taskId;
+                TaskStore.emitChange();
+                break;
+            case MissionConstants.COMPLETED_TASK:
+                teamTasks = assignments[RouteStore.getTeamId()];
+                taskId = payload.taskId;
+                currentTask = teamTasks[taskId];
+                teamTasks.current = currentTask.next;
+                TaskStore.emitChange();
+                break;
         }
 
         return true; // No errors. Needed by promise in Dispatcher.

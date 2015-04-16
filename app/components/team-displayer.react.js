@@ -15,11 +15,12 @@ const TeamWidget = React.createClass({
     },
 
     componentDidMount: function () {
-        RouteStore.addChangeListener(this._onChange);
+        //RouteStore.addChangeListener(this._onChange);
     },
 
     componentWillUnmount: function () {
-        RouteStore.removeChangeListener(this._onChange);
+        //RouteStore.removeChangeListener(this._onChange);
+
     },
 
     teamName() {
