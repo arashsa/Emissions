@@ -7,8 +7,20 @@ const React = require('react'),
 
 var RadiationSampler = React.createClass({
 
+    propTypes: {
+        requiredSamples: React.PropTypes.number.isRequired,
+        radiationStoreState: React.PropTypes.object.isRequired
+    },
+
     componentWillMount() {
         TimerStore.addChangeListener(this._handleTimerChange);
+    },
+
+    componentDidUpdate(){
+        if (this.state.timerActive) {
+            let el = React.findDOMNode(this.refs['sample-button']);
+            el.focus();
+        }
     },
 
 
@@ -17,7 +29,7 @@ var RadiationSampler = React.createClass({
     },
 
     getInitialState() {
-        return { timerActive: false }
+        return {timerActive: false}
     },
 
     _isDisabled() {
@@ -26,24 +38,24 @@ var RadiationSampler = React.createClass({
 
 
     _handleTimerChange() {
-        var  audio = React.findDOMNode(this.refs['geigerSound']);
+        var audio = React.findDOMNode(this.refs['geigerSound']);
         var timerActive = TimerStore.isRunning(constants.SCIENCE_TIMER_1);
 
         this.setState({timerActive: timerActive});
 
-        if(timerActive && audio.paused) {
+        if (timerActive && audio.paused) {
             audio.play();
-        } else if(!timerActive && !audio.paused) {
+        } else if (!timerActive && !audio.paused) {
             audio.pause();
         }
     },
 
     _handleClick() {
-        if (this.props.radiation.samples.length < 4) {
-            ScienceActionCreators.takeRadiationSample();
-        } else {
+        ScienceActionCreators.takeRadiationSample();
+
+        if (this.props.radiationStoreState.samples.length + 1 >= this.props.requiredSamples) {
             TimerActionCreators.stopTimer(constants.SCIENCE_TIMER_1);
-            MissionActionCreators.transitionTo('team-task', {teamId : 'science', taskId : 'average'})
+            MissionActionCreators.taskCompleted('sample');
         }
     },
 
@@ -52,25 +64,27 @@ var RadiationSampler = React.createClass({
 
         classes = 'btn btn-primary';
 
-        if(this._isDisabled()) {
-            classes += 'disabled';
+        if (this._isDisabled()) {
+            classes += ' disabled';
         }
 
         return (
-            <section className={"radiation-sampler " + this.props.className} >
+            <section className={"radiation-sampler " + this.props.className}>
 
                 { /* Avoid floating into previous block */ }
                 <div className="radiation-sampler__padder clearfix visible-xs-block"/>
 
                 <audio ref="geigerSound" loop>
-                    <source src="/sounds/AOS04595_Electric_Geiger_Counter_Fast.wav" type="audio/wav" />
+                    <source src="/sounds/AOS04595_Electric_Geiger_Counter_Fast.wav" type="audio/wav"/>
                 </audio>
 
                 <div>
                     <button
+                        ref='sample-button'
                         className={classes}
                         onClick={this._handleClick}
-                    >Ta strålingsprøve</button>
+                        >Ta strålingsprøve
+                    </button>
                 </div>
             </section>
         );

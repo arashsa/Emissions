@@ -125,14 +125,17 @@ module.exports = React.createClass({
             <div >
                 <div className='row'>
 
-                    <dl className='radiation-values col-xs-6 col-sm-3'>
+                    <dl className='radiation-values col-xs-6 '>
                         <dt>Totalt strålingsnivå</dt>
                         <dd>{this.state.radiation.total}</dd>
                         <dt>Sist innlest strålingsnivå</dt>
                         <dd>{ this._radiationStatus()} </dd>
                     </dl>
 
-                    <RadiationTable samples={this.state.radiation.samples} className='col-xs-6 col-sm-3 '/>
+                    <RadiationTable
+                        minimalRowsToShow={4}
+                        samples={this.state.radiation.samples}
+                        className='col-xs-6 ' />
                 </div>
 
                 <hr/>
@@ -145,7 +148,11 @@ module.exports = React.createClass({
                         <h3>Ta prøver</h3>
                         <TimerPanel className='col-xs-12 col-sm-8' timerId={ScienceTeamConstants.SCIENCE_TIMER_1}/>
 
-                        <RadiationSampleButton className='col-xs-5 col-sm-4' radiation={this.state.radiation}/>
+                        <RadiationSampleButton
+                            className='col-xs-5 col-sm-4'
+                            radiationStoreState={this.state.radiation}
+                            requiredSamples={4}
+                            />
                     </fieldset>
 
                     <hr />
