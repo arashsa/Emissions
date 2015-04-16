@@ -128,13 +128,6 @@ module.exports = React.createClass({
         return (
             <div >
                 <div className='row'>
-                    <RadiationChart
-                        className='col-xs-12 col-sm-6'
-                        getNewValue={RadiationStore.getLevel}
-                        updateFrequencySeconds={1}
-                        maxSecondsShown={30}
-                        height={240}
-                        />
 
                     <dl className='radiation-values col-xs-6 col-sm-3'>
                         <dt>Totalt strålingsnivå</dt>
@@ -142,7 +135,6 @@ module.exports = React.createClass({
                         <dt>Sist innlest strålingsnivå</dt>
                         <dd>{ this._radiationStatus()} </dd>
                     </dl>
-
 
                     <RadiationTable samples={this.state.radiation.samples} className='col-xs-6 col-sm-3 '/>
                 </div>
