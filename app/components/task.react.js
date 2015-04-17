@@ -3,9 +3,10 @@ const React = require('react'),
     MessageStore = require('../stores/message-store'),
     TaskStore = require('../stores/task-store'),
     RouteStore = require('../stores/route-store'),
-    MissionActions = require('../actions/MissionActionCreators'),
     MessageList = require('./message-list.react'),
     IntroductionScreen = require('./introduction-screen.react.js'),
+    TeamDisplayer = require('./team-displayer.react'),
+    MissionTimer = require('./mission-timer.react.js'),
     ScienceTask = require('./science-task.react'),
     { format } = require('util');
 
@@ -95,8 +96,22 @@ const Task = React.createClass({
     },
 
     render() {
-        var content = this._createSubTaskUI(),
-            blink = this.state.taskIsNew ? 'blink' : '';
+        let content = this._createSubTaskUI(),
+            blink = this.state.taskIsNew ? 'blink' : '',
+            teamNames, missionTimer;
+
+
+        teamNames = (
+            <div id='team-name' className=''>
+                <header className=''>
+                    <TeamDisplayer className=''/>
+                </header>
+            </div>);
+
+        missionTimer = (
+            <section id='mission-timer' className=''>
+                <MissionTimer />
+            </section> );
 
         if (!this.props.isMissionRunning) {
             let message = {
@@ -106,14 +121,19 @@ const Task = React.createClass({
             };
 
             return (
-                <div className="row">
-                    <MessageList className='col-xs-12'
-                                 messages={[message]}/>
+                <div>
+                    { teamNames }
+                    <div className="row">
+                        <MessageList className='col-xs-12'
+                                     messages={[message]}/>
+                    </div>
                 </div>);
         }
 
         return (
             <div className=''>
+                {teamNames}
+                {missionTimer}
                 <div className="row">
                     <MessageList className='col-xs-12' messages={this.state.messages}/>
                 </div>

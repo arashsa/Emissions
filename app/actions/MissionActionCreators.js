@@ -1,14 +1,30 @@
-const MessageActionCreators = require('./MessageActionCreators'),
-    AppDispatcher = require('../appdispatcher'),
+const AppDispatcher = require('../appdispatcher'),
     MissionConstants = require('../constants/MissionConstants'),
-    MessageConstants = require('../constants/MessageConstants'),
     router = require('./../router-container');
 
+// lazy load due to circular dependencies
+const serverAPI = (function() {
+    var api;
 
-const actions = {
+    return function() {
+        if(!api) {
+            api = require('../client-api');
+        }
+        return api;
+    }
+})();
+
+var tmp = {
+
+    startMission(){
+      serverAPI().startMission();
+    },
+
+    stopMission(){
+        serverAPI().stopMission();
+    },
 
     missionStarted() {
-        MessageActionCreators.removeMessage(MessageConstants.NOT_READY_MSG);
         AppDispatcher.dispatch({action: MissionConstants.MISSION_STARTED_EVENT});
     },
 
@@ -16,29 +32,17 @@ const actions = {
         AppDispatcher.dispatch({action: MissionConstants.MISSION_STOPPED_EVENT});
     },
 
-
-    /**
-     *
-     * @param to {String} absolute or relative path or path-name
-     * @param param params if given path-name
-     *
-     * @example
-     * transitionTo('/science/task')
-     * transitionTo('team-task',{teamId : 'science'})
-     *
-     * Or when already in /science
-     * transitionTo('task') => /science/task
-     */
-    //transitionTo(to, param, query) {
-    //    router.transitionTo(to, param, query);
-    //},
+    missionCompleted() {
+        AppDispatcher.dispatch({action: MissionConstants.MISSION_COMPLETED_EVENT});
+    },
 
     introWasRead(teamId) {
         AppDispatcher.dispatch({action: MissionConstants.INTRODUCTION_READ, teamName: teamId});
+        serverAPI().sendTeamStateChange(teamId);
     },
 
-    taskCompleted(taskId)   {
-        AppDispatcher.dispatch({action: MissionConstants.COMPLETED_TASK, taskId});
+    taskCompleted(teamId, taskId)   {
+        AppDispatcher.dispatch({action: MissionConstants.COMPLETED_TASK, taskId, teamId});
     },
 
     // sync mission time with signal from server
@@ -52,4 +56,5 @@ const actions = {
 
 };
 
-module.exports = actions;
+window.__MissionAC = tmp;
+module.exports = tmp;

@@ -3,7 +3,7 @@
 const { Emitter } = require('events');
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const { MISSION_STARTED_EVENT,MISSION_STOPPED_EVENT } =  require('../constants/MissionConstants');
+const { MISSION_STARTED_EVENT,MISSION_STOPPED_EVENT, RECEIVED_APP_STATE } =  require('../constants/MissionConstants');
 
 var missionRunning = false, missionHasBeenStopped = false;
 
@@ -11,16 +11,11 @@ var MissionStateStore = Object.assign(new BaseStore(), {
 
     handleMissionStarted() {
         missionRunning = true;
-        missionHasBeenStopped = false;
-
         this.emitChange();
     },
 
     handleMissionStopped() {
-        console.log('mission stopped')
         missionRunning = false;
-        missionHasBeenStopped = true;
-
         this.emitChange();
     },
 
@@ -41,6 +36,10 @@ var MissionStateStore = Object.assign(new BaseStore(), {
 
             case MISSION_STOPPED_EVENT:
                 return MissionStateStore.handleMissionStopped();
+
+            case RECEIVED_APP_STATE:
+                missionRunning = payload.appState.mission_running;
+                return MissionStateStore.emitChange();
         }
 
         return true; // No errors. Needed by promise in Dispatcher.

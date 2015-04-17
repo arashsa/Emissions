@@ -55,7 +55,7 @@ var RadiationSampler = React.createClass({
 
         if (this.props.radiationStoreState.samples.length + 1 >= this.props.requiredSamples) {
             TimerActionCreators.stopTimer(constants.SCIENCE_TIMER_1);
-            MissionActionCreators.taskCompleted('sample');
+            ScienceActionCreators.completeTask('sample');
         }
     },
 

@@ -33,20 +33,11 @@ const TeamWidget = React.createClass({
 
     render() {
 
-        if (this.teamName()) {
-
             return (
                 <div className = { this.props.className + ' teamwidget'} >
                     <span className = 'active' >{ this.teamName()  }</span>
                     <span className = ''>, { this.otherTeamNames() } </span>
                 </div> );
-        } else {
-            return (
-                <div className = { this.props.className } >
-                    <h2>Velg lag</h2>
-                </div> );
-
-        }
     }
 });
 

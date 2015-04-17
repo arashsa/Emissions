@@ -109,7 +109,7 @@ module.exports = React.createClass({
 
         return (<div
             className="radiation-indicator circle col-xs-2"
-            style={ { 'background-color' : color } }
+            style={ { 'backgroundColor' : color } }
             >
             {num }
         </div>);

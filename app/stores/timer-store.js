@@ -133,6 +133,20 @@ const TimerStore = Object.assign(new BaseStore(), {
                 stopMissionTimer();
                 break;
 
+            case MissionConstants.RECEIVED_APP_STATE:
+                var appState = payload.appState;
+
+                elapsedMissionTime = appState.elapsed_mission_time;
+
+                if(appState.mission_running) {
+                    startMissionTimer();
+                } else {
+                    stopMissionTimer();
+                }
+
+                TimerStore.emitChange();
+                break;
+
             case MissionConstants.MISSION_TIME_SYNC:
                 elapsedMissionTime  = data.elapsedMissionTime;
                 TimerStore.emitChange();

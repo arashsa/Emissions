@@ -1,6 +1,0 @@
-module.exports = Object.freeze({
-    ASK_FOR_APP_STATE: 'ASK_FOR_APP_STATE',
-    RECEIVED_APP_STATE: 'RECEIVED_APP_STATE',
-    SENDING_TEAM_STATE: 'SENDING_TEAM_STATE',
-});
-

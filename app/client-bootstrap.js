@@ -15,18 +15,12 @@ function run() {
 
 
     // dummy until we have integration with websockets
-    //setTimeout(() => {
-    //    MissionActionCreators.missionStarted();
-    //}, 300);
+    setTimeout(() => {
+        MissionActionCreators.startMission();
+    }, 300);
 
     // play with radiation
     TimerActionCreators.setTimer(ScienceConstants.SCIENCE_TIMER_1, 30);
-    ScienceActionCreators.setRadiationLevel(0, 10);
-    setTimeout(() => ScienceActionCreators.setRadiationLevel(40, 60), 10E3);
-    setTimeout(() => ScienceActionCreators.setRadiationLevel(20, 30), 30E3);
-    setTimeout(() => ScienceActionCreators.setRadiationLevel(190, 250), 60E3);
-    setTimeout(() => ScienceActionCreators.setRadiationLevel(40, 50), 90E3);
-
 }
 
 module.exports = {run};

@@ -1,6 +1,8 @@
 const React = require('react');
 const dialogs = require('./dialogs.react');
-const actions = require('../actions/MissionActionCreators');
+var tmp = require('../actions/ScienceActionCreators');
+var actions = require('../actions/MissionActionCreators');
+const MissionActionCreators = require('../actions/MissionActionCreators');
 const { cleanRootPath } = require('../utils');
 
 const RouteStore = require('../stores/route-store');
@@ -10,11 +12,16 @@ var IntroStore = require('../stores/introduction-store');
 
     mixins: [],
 
+     contextTypes: {
+         router: React.PropTypes.func
+     },
+
     statics: {
         willTransitionTo(transition) {
             var teamId = cleanRootPath(transition.path);
 
             if (IntroStore.isIntroductionRead(teamId)) {
+                console.log('Introduction read earlier');
                 transition.redirect('team-task', {taskId: 'sample', teamId : teamId});
             }
         }
@@ -22,8 +29,8 @@ var IntroStore = require('../stores/introduction-store');
 
     _handleClick() {
         var teamId = RouteStore.getTeamId();
-        actions.introWasRead(teamId);
-        actions.transitionTo('team-task', {taskId : 'sample', teamId : teamId })
+        MissionActionCreators.introWasRead(teamId);
+        this.context.router.transitionTo('team-task', {taskId : 'sample', teamId : teamId })
     },
 
     render() {

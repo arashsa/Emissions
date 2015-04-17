@@ -1,6 +1,6 @@
 const AppDispatcher = require('../appdispatcher');
 const RadiationStore = require('./../stores/radiation-store');
-const constants = require('../constants/ScienceTeamConstants');
+const ScienceTeamConstants = require('../constants/ScienceTeamConstants');
 const MissionConstants = require('../constants/MissionConstants');
 const MessageActionsCreators = require('./MessageActionCreators');
 const MissionActionCreators = require('../actions/MissionActionCreators');
@@ -9,18 +9,22 @@ const TimerActionCreators = require('../actions/TimerActionCreators');
 const actions = {
 
     startSampleTask(){
-        AppDispatcher.dispatch({action: constants.SCIENCE_CLEAR_RADIATION_SAMPLES});
+        AppDispatcher.dispatch({action: ScienceTeamConstants.SCIENCE_CLEAR_RADIATION_SAMPLES});
         AppDispatcher.dispatch({action: MissionConstants.START_TASK, teamId: 'science', taskId: 'sample'});
         this.resetSamplingTimer();
     },
 
+    completeTask(taskId){
+        MissionActionCreators.taskCompleted('science', taskId);
+    },
+
     resetSamplingTimer() {
-        TimerActionCreators.resetTimer(constants.SCIENCE_TIMER_1);
+        TimerActionCreators.resetTimer(ScienceTeamConstants.SCIENCE_TIMER_1);
     },
 
     takeRadiationSample() {
         AppDispatcher.dispatch({
-            action: constants.SCIENCE_TAKE_RADIATION_SAMPLE
+            action: ScienceTeamConstants.SCIENCE_TAKE_RADIATION_SAMPLE
         })
     },
 
@@ -39,25 +43,25 @@ const actions = {
 
 
         AppDispatcher.dispatch({
-            action: constants.SCIENCE_AVG_RADIATION_CALCULATED,
+            action: ScienceTeamConstants.SCIENCE_AVG_RADIATION_CALCULATED,
             data: {average}
         });
 
-        if (average > constants.SCIENCE_AVG_RAD_RED_THRESHOLD) {
+        if (average > ScienceTeamConstants.SCIENCE_AVG_RAD_RED_THRESHOLD) {
             MessageActionsCreators.addTransientMessage({
                 text: 'Veldig høyt radioaktivt nivå detektert. Varsle sikkerhetsteamet umiddelbart!',
                 level: 'danger',
-                id: constants.SCIENCE_RADIATION_WARNING_MSG
+                id: ScienceTeamConstants.SCIENCE_RADIATION_WARNING_MSG
             }, 30);
-        } else if (average > constants.SCIENCE_AVG_RAD_ORANGE_THRESHOLD) {
+        } else if (average > ScienceTeamConstants.SCIENCE_AVG_RAD_ORANGE_THRESHOLD) {
             MessageActionsCreators.addTransientMessage({
                 text: 'Høye verdier av radioaktivitet. Følg med på om det går nedover igjen',
                 level: 'warning',
-                id: constants.SCIENCE_RADIATION_WARNING_MSG
+                id: ScienceTeamConstants.SCIENCE_RADIATION_WARNING_MSG
             }, 10);
         }
 
-        MissionActionCreators.taskCompleted('average');
+        this.completeTask('average');
     },
 
 
@@ -73,7 +77,7 @@ const actions = {
      */
         setRadiationLevel(min, max) {
         AppDispatcher.dispatch({
-            action: constants.SCIENCE_RADIATION_LEVEL_CHANGED,
+            action: ScienceTeamConstants.SCIENCE_RADIATION_LEVEL_CHANGED,
             data: {min, max}
         });
     },
@@ -82,13 +86,13 @@ const actions = {
 
         var total = amount + RadiationStore.getTotalLevel();
 
-        if (total > constants.SCIENCE_TOTAL_RADIATION_VERY_SERIOUS_THRESHOLD) {
+        if (total > ScienceTeamConstants.SCIENCE_TOTAL_RADIATION_VERY_SERIOUS_THRESHOLD) {
             MessageActionsCreators.addTransientMessage({
                 id: 'science_high_radiation_level',
                 text: 'Faretruende høyt strålingsnivå!',
                 level: 'danger'
             }, 30);
-        } else if (total > constants.SCIENCE_TOTAL_RADIATION_SERIOUS_THRESHOLD) {
+        } else if (total > ScienceTeamConstants.SCIENCE_TOTAL_RADIATION_SERIOUS_THRESHOLD) {
             MessageActionsCreators.addTransientMessage({
                 id: 'science_high_radiation_level',
                 text: 'Høyt strålingsnivå!',
@@ -97,13 +101,17 @@ const actions = {
         }
 
         AppDispatcher.dispatch({
-            action: constants.SCIENCE_TOTAL_RADIATION_LEVEL_CHANGED,
+            action: ScienceTeamConstants.SCIENCE_TOTAL_RADIATION_LEVEL_CHANGED,
             data: {total, added: amount}
         });
 
-        MissionActionCreators.taskCompleted('addtotal');
-    }
+        this.completeTask('addtotal');
+    },
 
+    /* On receiving new state from the server */
+    teamStateReceived(state){
+
+    }
 };
 
 window.__ScienceActions = actions;
