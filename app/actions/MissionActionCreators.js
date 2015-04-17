@@ -36,6 +36,10 @@ var tmp = {
         AppDispatcher.dispatch({action: MissionConstants.MISSION_STOPPED_EVENT});
     },
 
+    missionWasReset(){
+        AppDispatcher.dispatch({action: MissionConstants.MISSION_WAS_RESET});
+    },
+
     missionCompleted() {
         AppDispatcher.dispatch({action: MissionConstants.MISSION_COMPLETED_EVENT});
     },
@@ -45,8 +49,14 @@ var tmp = {
         serverAPI().sendTeamStateChange(teamId);
     },
 
+    startTask(teamId, taskId){
+        AppDispatcher.dispatch({action: MissionConstants.START_TASK, teamId, taskId});
+        serverAPI().sendTeamStateChange(teamId);
+    },
+
     taskCompleted(teamId, taskId)   {
         AppDispatcher.dispatch({action: MissionConstants.COMPLETED_TASK, taskId, teamId});
+        serverAPI().sendTeamStateChange(teamId);
     },
 
     getMissionTime(){

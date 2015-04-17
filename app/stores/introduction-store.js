@@ -4,19 +4,19 @@ const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
 const constants = require('../constants/MissionConstants');
 const window = require('global/window');
+var introRead = {};
 
 const IntroductionStore = Object.assign(new BaseStore(), {
 
     setIntroductionRead(team) {
-        // sticky - even after reload
-        window.sessionStorage.setItem('intro_'+team, true)
-
+        introRead['intro_'+team] = true;
         this.emitChange();
     },
 
     isIntroductionRead(team) {
-        // sessionStorage can only store strings
-        return window.sessionStorage.getItem('intro_'+team) === 'true';
+        if(!team) { throw new Error('Missing argument "team"'); }
+
+        return introRead['intro_'+team];
     },
 
 

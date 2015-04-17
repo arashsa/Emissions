@@ -7,6 +7,7 @@ const ScienceTeamActionCreators = require('./actions/ScienceActionCreators');
 const RadiationStore = require('./stores/radiation-store');
 const TimerStore = require('./stores/timer-store');
 const IntroductionStore = require('./stores/introduction-store');
+const Router = require('./router-container');
 
 var api = {
 
@@ -18,9 +19,14 @@ var api = {
             api.askForAppState();
         });
 
+        socket.on('disconnect', function(){
+            alert('Mistet kontakt med serveren. Last siden på nytt');
+        });
+
         socket.on('mission started', () => MissionActionCreators.missionStarted());
         socket.on('mission stopped', () => MissionActionCreators.missionStopped());
         socket.on('mission completed', ()=> MissionActionCreators.missionCompleted());
+        socket.on('mission reset', ()=> MissionActionCreators.missionWasReset());
 
         socket.on('mission time', (time)=> MissionActionCreators.setMissionTime(time));
 
@@ -52,7 +58,8 @@ var api = {
         console.log('TODO: ServerActionCreators.sendTeamStateChange');
         let state = {};
 
-        state.introduction_read = IntroductionStore.isIntroductionRead();
+        state.team = teamId;
+        state.introduction_read = IntroductionStore.isIntroductionRead(teamId);
         state.current_task = Router.getTaskId();
 
         // TODO: factor out team specific state logic into unit of its own
@@ -60,7 +67,7 @@ var api = {
             state.radiation = RadiationStore.getState();
         }
 
-        socket.emit('science_state', state);
+        socket.emit('set team state', state);
         console.log('sending science state to server', state);
     },
 
@@ -78,7 +85,7 @@ var api = {
     _appStateReceived(appState) {
         AppDispatcher.dispatch({action: MissionConstants.RECEIVED_APP_STATE, appState});
         MissionActionCreators.setMissionTime(appState.elapsed_mission_time);
-        //ScienceTeamActionCreators.teamStateReceived(appState.science);
+        ScienceTeamActionCreators.teamStateReceived(appState.science);
     }
 
 };

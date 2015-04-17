@@ -1,6 +1,9 @@
 var timeKeeping = require('./time-keeping');
 
 var missionStarted = false;
+
+var teamState = {};
+
 //var missionLength = 0;
 //var originalMissionLength = 0;
 //var missionTime = 0;
@@ -50,20 +53,7 @@ function init(io) {
         });
 
         socket.on("get mission time", function () {
-            socket.emit("mission time", timeKeeping.usedTimeInMillis()/1000);
-        });
-
-        socket.on('get app state', function() {
-            var appState = {
-                mission_running: missionStarted,
-                elapsed_mission_time: timeKeeping.usedTimeInMillis()/1000
-//    science: fetchFromLS('science_state'),
-//    communication: null,
-//    security: null,
-//    astronaut: null,
-//    mc: null
-            };
-           socket.emit('app state', appState) ;
+            socket.emit("mission time", timeKeeping.usedTimeInMillis() / 1000);
         });
 
         socket.on("get oxygen remaining", function () {
@@ -101,13 +91,24 @@ function init(io) {
 
         socket.on("reset mission", resetMission);
 
+        socket.on('get app state', function () {
+            socket.emit('app state', appState());
+        });
+
+        socket.on('set team state', function (state) {
+            console.log('team state', state)
+            teamState[state.team] = state;
+
+            // broadcast the change to all other clients
+            socket.broadcast.emit('app state', appState());
+        });
     });
 
     function startMission() {
         //oxygenRemaining = 100;
         //co2Level = 0;
         //scrubFilterChanged = false;
-        if(missionStarted) return;
+        if (missionStarted) return;
 
         missionStarted = true;
         timeKeeping.start();
@@ -116,7 +117,7 @@ function init(io) {
     }
 
     function stopMission() {
-        if(!missionStarted) return;
+        if (!missionStarted) return;
 
         missionStarted = false;
         timeKeeping.stop();
@@ -124,10 +125,26 @@ function init(io) {
         io.emit("mission stopped");
     }
 
-    function resetMission(){
+    function resetMission() {
         stopMission();
 
         timeKeeping.reset();
+        teamState = {};
+        io.emit("mission reset");
+    }
+
+    function appState() {
+        var state= {
+            mission_running: missionStarted,
+            elapsed_mission_time: timeKeeping.usedTimeInMillis() / 1000,
+            science: teamState['science'],
+            communication: teamState['communication'],
+            security: teamState['security'],
+            astronaut: teamState['astronaut'],
+            mc: {}
+        };
+
+        return state;
     }
 }
 
