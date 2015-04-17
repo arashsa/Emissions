@@ -8,7 +8,7 @@ var port = process.env.PORT || 5000;
 var server = app.listen(port);
 var socketIo = require('socket.io');
 var io = socketIo.listen(server);
-var bootstrapScript = require('./server-bootstrap');
+var bootstrapScript = require('./server/server-bootstrap');
 var htmlCssDir;
 
 
@@ -43,7 +43,7 @@ app.get('*', function (req, res) {
 
 
 // set up server api using Socket.IO
-require('./server-api')(io);
+require('./server/server-api')(io);
 
 
 // convenience stuff to run at startup when developing
