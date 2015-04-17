@@ -22,7 +22,7 @@ var api = {
         socket.on('mission stopped', () => MissionActionCreators.missionStopped());
         socket.on('mission completed', ()=> MissionActionCreators.missionCompleted());
 
-        socket.on('mission time', (time)=> MissionActionCreators.syncMissionTime(time));
+        socket.on('mission time', (time)=> MissionActionCreators.setMissionTime(time));
 
         socket.on('app state', (state) => {
             this._appStateReceived(state);
@@ -77,7 +77,7 @@ var api = {
 
     _appStateReceived(appState) {
         AppDispatcher.dispatch({action: MissionConstants.RECEIVED_APP_STATE, appState});
-        MissionActionCreators.syncMissionTime(appState.elapsed_mission_time);
+        MissionActionCreators.setMissionTime(appState.elapsed_mission_time);
         //ScienceTeamActionCreators.teamStateReceived(appState.science);
     }
 

@@ -3,11 +3,11 @@ const AppDispatcher = require('../appdispatcher'),
     router = require('./../router-container');
 
 // lazy load due to circular dependencies
-const serverAPI = (function() {
+const serverAPI = (function () {
     var api;
 
-    return function() {
-        if(!api) {
+    return function () {
+        if (!api) {
             api = require('../client-api');
         }
         return api;
@@ -17,7 +17,7 @@ const serverAPI = (function() {
 var tmp = {
 
     startMission(){
-      serverAPI().startMission();
+        serverAPI().startMission();
     },
 
     stopMission(){
@@ -49,8 +49,11 @@ var tmp = {
         AppDispatcher.dispatch({action: MissionConstants.COMPLETED_TASK, taskId, teamId});
     },
 
-    // sync mission time with signal from server
-    syncMissionTime(elapsedSeconds){
+    getMissionTime(){
+        serverAPI().askForMissionTime();
+    },
+
+    setMissionTime(elapsedSeconds){
         AppDispatcher.dispatch({
             action: MissionConstants.MISSION_TIME_SYNC,
             data: {elapsedMissionTime: elapsedSeconds}
