@@ -1,8 +1,5 @@
 const React = require('react');
 const dialogs = require('./dialogs.react');
-var tmp = require('../actions/ScienceActionCreators');
-var actions = require('../actions/MissionActionCreators');
-const MissionActionCreators = require('../actions/MissionActionCreators');
 const { cleanRootPath } = require('../utils');
 
 const RouteStore = require('../stores/route-store');
@@ -28,6 +25,8 @@ var IntroStore = require('../stores/introduction-store');
     },
 
     _handleClick() {
+        const MissionActionCreators = require('../actions/MissionActionCreators');
+
         var teamId = RouteStore.getTeamId();
         MissionActionCreators.introWasRead(teamId);
         this.context.router.transitionTo('team-task', {taskId : 'sample', teamId : teamId })

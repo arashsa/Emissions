@@ -3,19 +3,29 @@ const RadiationStore = require('./../stores/radiation-store');
 const ScienceTeamConstants = require('../constants/ScienceTeamConstants');
 const MissionConstants = require('../constants/MissionConstants');
 const MessageActionsCreators = require('./MessageActionCreators');
-const MissionActionCreators = require('../actions/MissionActionCreators');
 const TimerActionCreators = require('../actions/TimerActionCreators');
+const api = require('../client-api');
+
+var missionActionCreators = (function() {
+    var tmp;
+
+    return function () {
+        if (!tmp) tmp = require('../actions/MissionActionCreators');
+        return tmp;
+    }
+})();
+
 
 const actions = {
 
     startSampleTask(){
         AppDispatcher.dispatch({action: ScienceTeamConstants.SCIENCE_CLEAR_RADIATION_SAMPLES});
-        AppDispatcher.dispatch({action: MissionConstants.START_TASK, teamId: 'science', taskId: 'sample'});
+        missionActionCreators().startTask('science', 'sample');
         this.resetSamplingTimer();
     },
 
     completeTask(taskId){
-        MissionActionCreators.taskCompleted('science', taskId);
+        missionActionCreators().taskCompleted('science', taskId);
     },
 
     resetSamplingTimer() {
@@ -110,7 +120,15 @@ const actions = {
 
     /* On receiving new state from the server */
     teamStateReceived(state){
+        if (!state) return;
 
+        var teamId = 'science';
+
+        if (state.introduction_read) {
+            AppDispatcher.dispatch({action: MissionConstants.INTRODUCTION_READ, teamName: teamId});
+        }
+
+        AppDispatcher.dispatch({action: MissionConstants.START_TASK, teamId, taskId: state.current_task});
     }
 };
 
