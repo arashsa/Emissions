@@ -99,6 +99,8 @@ function init(io) {
 
         socket.on("stop mission", stopMission);
 
+        socket.on("reset mission", resetMission);
+
     });
 
     function startMission() {
@@ -120,6 +122,12 @@ function init(io) {
         timeKeeping.stop();
 
         io.emit("mission stopped");
+    }
+
+    function resetMission(){
+        stopMission();
+
+        timeKeeping.reset();
     }
 }
 

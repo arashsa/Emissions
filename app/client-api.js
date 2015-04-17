@@ -38,6 +38,10 @@ var api = {
         socket.emit('stop mission');
     },
 
+    resetMission(){
+        socket.emit('reset mission');
+    },
+
     /*
      * Send full app held state (for the current team) to server on change
      * The most important bits are held on server, and is not transferred back,

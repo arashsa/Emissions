@@ -14,6 +14,7 @@ var App = React.createClass({
                 <div>
                     <button  onClick={MissionActionCreators.startMission} >Start oppdrag</button>
                     <button  onClick={MissionActionCreators.stopMission} >Stop</button>
+                    <button  onClick={MissionActionCreators.resetMission} >Begynn på nytt</button>
                 </div>
 
                 <button key="missionCompleted" className="disabled" >Oppdrag utført</button>

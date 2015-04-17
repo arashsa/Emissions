@@ -24,6 +24,10 @@ var tmp = {
         serverAPI().stopMission();
     },
 
+    resetMission(){
+        serverAPI().resetMission();
+    },
+
     missionStarted() {
         AppDispatcher.dispatch({action: MissionConstants.MISSION_STARTED_EVENT});
     },
