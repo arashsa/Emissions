@@ -1,5 +1,6 @@
-var timeKeeping = require('./time-keeping');
-var socketEvents = require('./EventConstants');
+const missionTime= require('./mission-time');
+const chapters = require('./chapters');
+const socketEvents = require('./EventConstants');
 
 var missionStarted = false;
 
@@ -23,7 +24,7 @@ var teamState = {};
 //};
 
 
-function init(io) {
+module.exports = function init(io) {
     io.sockets.on('connection', function (socket) {
         var socketId = socket.id;
         var clientIp = socket.request.connection.remoteAddress;
@@ -54,7 +55,7 @@ function init(io) {
         });
 
         socket.on("get mission time", function () {
-            socket.emit("mission time", timeKeeping.usedTimeInMillis() / 1000);
+            socket.emit("mission time", missionTime.usedTimeInMillis() / 1000);
         });
 
         socket.on("get oxygen remaining", function () {
@@ -112,7 +113,7 @@ function init(io) {
         if (missionStarted) return;
 
         missionStarted = true;
-        timeKeeping.start();
+        missionTime.start();
 
         io.emit(socketEvents.MISSION_STARTED);
     }
@@ -121,23 +122,32 @@ function init(io) {
         if (!missionStarted) return;
 
         missionStarted = false;
-        timeKeeping.stop();
+        missionTime.stop();
 
         io.emit(socketEvents.MISSION_STOPPED);
     }
 
+    /**
+     * Reset everything to initial values to make for a fresh start
+     */
     function resetMission() {
         stopMission();
 
-        timeKeeping.reset();
+        missionTime.reset();
+        chapters.reset();
         teamState = {};
+
+        // set up all the events
+        require('./mission-script').run();
+        chapters.setBroadcaster((eventName, value) => io.emit(eventName, value));
+
         io.emit(socketEvents.MISSION_RESET);
     }
 
     function appState() {
         var state= {
             mission_running: missionStarted,
-            elapsed_mission_time: timeKeeping.usedTimeInMillis() / 1000,
+            elapsed_mission_time: missionTime.usedTimeInMillis() / 1000,
             science: teamState['science'],
             communication: teamState['communication'],
             security: teamState['security'],
@@ -147,7 +157,9 @@ function init(io) {
 
         return state;
     }
-}
 
-module.exports = init;
+    // Clean start
+    resetMission();
+};
+
 

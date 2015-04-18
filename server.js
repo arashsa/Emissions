@@ -42,7 +42,3 @@ app.get('*', function (req, res) {
 
 // set up server api using Socket.IO
 require('./server/server-api')(io);
-
-// convenience stuff to run at startup when developing
-// run startup events - just when developing
-require('./server/server-bootstrap').run();
