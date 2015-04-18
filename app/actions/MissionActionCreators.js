@@ -38,6 +38,7 @@ var tmp = {
 
     missionWasReset(){
         AppDispatcher.dispatch({action: MissionConstants.MISSION_WAS_RESET});
+        serverAPI().askForAppState();
     },
 
     missionCompleted() {
@@ -57,10 +58,6 @@ var tmp = {
     taskCompleted(teamId, taskId)   {
         AppDispatcher.dispatch({action: MissionConstants.COMPLETED_TASK, taskId, teamId});
         serverAPI().sendTeamStateChange(teamId);
-    },
-
-    getMissionTime(){
-        serverAPI().askForMissionTime();
     },
 
     setMissionTime(elapsedSeconds){

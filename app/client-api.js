@@ -3,11 +3,13 @@ const io = require('socket.io');
 const socket = io();
 const MissionConstants = require('./constants/MissionConstants');
 const MissionActionCreators = require('./actions/MissionActionCreators');
+const MessageActionCreators = require('./actions/MessageActionCreators');
 const ScienceTeamActionCreators = require('./actions/ScienceActionCreators');
 const RadiationStore = require('./stores/radiation-store');
 const TimerStore = require('./stores/timer-store');
 const IntroductionStore = require('./stores/introduction-store');
 const Router = require('./router-container');
+const EventConstants = require('../server/EventConstants');
 
 var api = {
 
@@ -19,14 +21,17 @@ var api = {
             api.askForAppState();
         });
 
-        socket.on('disconnect', function(){
-            alert('Mistet kontakt med serveren. Last siden på nytt');
+        socket.on('disconnect', function () {
+            MessageActionCreators.addMessage({
+                text: 'Mistet kontakt med serveren. Last siden på nytt',
+                level: 'danger'
+            });
         });
 
-        socket.on('mission started', () => MissionActionCreators.missionStarted());
-        socket.on('mission stopped', () => MissionActionCreators.missionStopped());
-        socket.on('mission completed', ()=> MissionActionCreators.missionCompleted());
-        socket.on('mission reset', ()=> MissionActionCreators.missionWasReset());
+        socket.on(EventConstants.MISSION_STARTED, () => MissionActionCreators.missionStarted());
+        socket.on(EventConstants.MISSION_STOPPED, () => MissionActionCreators.missionStopped());
+        socket.on(EventConstants.MISSION_COMPLETED, ()=> MissionActionCreators.missionCompleted());
+        socket.on(EventConstants.MISSION_RESET, ()=> MissionActionCreators.missionWasReset());
 
         socket.on('mission time', (time)=> MissionActionCreators.setMissionTime(time));
 

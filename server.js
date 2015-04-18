@@ -40,7 +40,6 @@ app.get('*', function (req, res) {
     res.sendFile(htmlCssDir + '/index.html');
 });
 
-
 // set up server api using Socket.IO
 require('./server/server-api')(io);
 

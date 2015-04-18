@@ -1,4 +1,5 @@
 var timeKeeping = require('./time-keeping');
+var socketEvents = require('./EventConstants');
 
 var missionStarted = false;
 
@@ -113,7 +114,7 @@ function init(io) {
         missionStarted = true;
         timeKeeping.start();
 
-        io.emit("mission started");
+        io.emit(socketEvents.MISSION_STARTED);
     }
 
     function stopMission() {
@@ -122,7 +123,7 @@ function init(io) {
         missionStarted = false;
         timeKeeping.stop();
 
-        io.emit("mission stopped");
+        io.emit(socketEvents.MISSION_STOPPED);
     }
 
     function resetMission() {
@@ -130,7 +131,7 @@ function init(io) {
 
         timeKeeping.reset();
         teamState = {};
-        io.emit("mission reset");
+        io.emit(socketEvents.MISSION_RESET);
     }
 
     function appState() {
