@@ -17,14 +17,7 @@ var babelify = require("babelify");
 
 // External dependencies you do not want to rebundle while developing,
 // but include in your application deployment
-var dependencies = [
-    //'react',
-    //'react-router',
-    //'react-addons',
-    //'amcharts',
-    //'bootstrap',
-    //'jquery'
-];
+var dependencies = [ ];
 
 var browserifyTask = function (options) {
     //process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
@@ -64,7 +57,7 @@ var browserifyTask = function (options) {
             .pipe(source('main.js'))
             .pipe(gulpif(!options.development, streamify(uglify())))
             .pipe(gulp.dest(options.dest))
-            .pipe(gulpif(options.development, livereload()))
+            .pipe(gulpif(options.development, livereload({ start: true })))
             .pipe(notify(function () {
                 console.log('APP bundle built in ' + (Date.now() - start) + 'ms');
             }));
@@ -106,7 +99,7 @@ var browserifyTask = function (options) {
                 .on('error', gutil.log)
                 .pipe(source('specs.js'))
                 .pipe(gulp.dest(options.dest))
-                .pipe(livereload())
+                .pipe(livereload({ start: true }))
                 .pipe(notify(function () {
                     console.log('TEST bundle built in ' + (Date.now() - start) + 'ms');
                 }));
@@ -135,7 +128,7 @@ var browserifyTask = function (options) {
 
     }
 
-}
+};
 
 var cssTask = function (options) {
     if (options.development) {
@@ -158,7 +151,7 @@ var cssTask = function (options) {
             .pipe(cssmin())
             .pipe(gulp.dest(options.dest));
     }
-}
+};
 
 // Starts our development workflow
 gulp.task('default', function () {
