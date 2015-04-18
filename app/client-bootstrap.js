@@ -15,9 +15,9 @@ function run() {
 
 
     // dummy until we have integration with websockets
-    setTimeout(() => {
-        MissionActionCreators.startMission();
-    }, 300);
+    //setTimeout(() => {
+        //MissionActionCreators.startMission();
+    //}, 300);
 
     // play with radiation
     TimerActionCreators.setTimer(ScienceConstants.SCIENCE_TIMER_1, 30);

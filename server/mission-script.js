@@ -8,7 +8,9 @@ function run() {
     chapters.addChapterEvent({
         chapter: 0,
         eventName: EventConstants.ADD_MESSAGE,
-        value: {text: 'Starter oppdrag ... klargjør dere for å motta oppgaver.'}
+        value: {text: 'Starter oppdrag ... klargjør dere for å motta oppgaver.'},
+        triggerTime : 10E3,
+        autoTrigger: true
     });
 
     // CHAPTER 1
@@ -33,9 +35,11 @@ function run() {
             audience: 'security',
             text: 'Er alt klart for å starte prosedyren for flytting av satelitten? Innhent informasjon fra '
             + 'de andre gruppene og informer kommunikasjonsgruppa om status.'
-        }
+        },
+        triggerTime : 0
     });
 
+    chapters.setCurrentChapter(0);
 }
 
 module.exports = {run};

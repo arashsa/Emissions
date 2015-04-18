@@ -1,4 +1,4 @@
-const missionTime= require('./mission-time');
+const missionTime = require('./mission-time');
 const chapters = require('./chapters');
 const socketEvents = require('./EventConstants');
 
@@ -104,6 +104,14 @@ module.exports = function init(io) {
             // broadcast the change to all other clients
             socket.broadcast.emit('app state', appState());
         });
+
+        socket.on(socketEvents.GET_EVENTS, () => {
+            socket.emit(socketEvents.SET_EVENTS, {
+                remaining: chapters.remainingEvents(),
+                completed: chapters.completedEvents(),
+                overdue: chapters.overdueEvents()
+            });
+        })
     });
 
     function startMission() {
@@ -145,7 +153,7 @@ module.exports = function init(io) {
     }
 
     function appState() {
-        var state= {
+        var state = {
             mission_running: missionStarted,
             elapsed_mission_time: missionTime.usedTimeInMillis() / 1000,
             science: teamState['science'],
@@ -160,6 +168,9 @@ module.exports = function init(io) {
 
     // Clean start
     resetMission();
+
+    // set up a poller
+    setInterval(chapters.tick, 1000);
 };
 
 

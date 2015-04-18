@@ -45,6 +45,14 @@ var tmp = {
         AppDispatcher.dispatch({action: MissionConstants.MISSION_COMPLETED_EVENT});
     },
 
+    receivedEvents(eventsCollection){
+        AppDispatcher.dispatch(Object.assign({}, eventsCollection, {action: MissionConstants.RECEIVED_EVENTS}));
+    },
+
+    askForEvents(){
+        serverAPI().askForEvents();
+    },
+
     introWasRead(teamId) {
         AppDispatcher.dispatch({action: MissionConstants.INTRODUCTION_READ, teamName: teamId});
         serverAPI().sendTeamStateChange(teamId);

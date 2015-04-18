@@ -2,10 +2,12 @@ const uuid = require('uuid');
 const _ = require('lodash');
 const check = require('check-types');
 const EC = require('./EventConstants');
+const missionTime = require('./mission-time');
 
 var chapters = {}, completed = [];
-var currentChapter = 0;
+var currentChapterNumber = 0;
 var broadcaster = undefined;
+var chapterStart;
 
 function getChapter(chapterNumber) {
     if (!chapters[chapterNumber]) chapters[chapterNumber] = [];
@@ -40,7 +42,7 @@ function addChapterEvent(options) {
     check.assert.maybe.boolean(options.completable);
     check.assert.maybe.boolean(options.relativeTo);
 
-    let result = Object.freeze(Object.assign({
+    var result = Object.freeze(_.extend({
         id: uuid(),
         completable: false,
         autoTrigger: false,
@@ -58,7 +60,7 @@ function addChapterEvent(options) {
  */
 function remainingEvents(chapter) {
     if (chapter === undefined) {
-        chapter = currentChapter;
+        chapter = currentChapter();
     }
 
     check.number(chapter);
@@ -74,11 +76,11 @@ function remainingEvents(chapter) {
  * @param uuid {string} an id for that specific event
  */
 function triggerEvent(uuid) {
-    let chapterEvents = chapters[currentChapter];
-    let len = chapterEvents.length;
+    var chapterEvents = chapters[currentChapter()];
+    var len = chapterEvents.length;
 
     while (len-- > 0) {
-        let event = chapterEvents[len];
+        var event = chapterEvents[len];
         if (event.id === uuid) {
             broadcaster(event.eventName, event.value);
             // remove the event from the list
@@ -91,37 +93,63 @@ function triggerEvent(uuid) {
 
 }
 
+function currentChapter() {
+    if (currentChapterNumber === null) {
+        throw new Error('You have to set the current chapter');
+    }
+
+    return currentChapterNumber;
+}
+
+/**
+ * Traverse the list of events and trigger the events that can be triggered
+ * For events that are not auto-triggerable, broadcast a message
+ */
+function tick() {
+    var now = missionTime.usedTimeInMillis();
+
+    remainingEvents()
+        .filter((ev) => chapterStart + ev.triggerTime < now)
+        .filter((ev) => ev.autoTrigger)
+        .map((ev) => triggerEvent(ev.id));
+}
+
+function overdueEvents() {
+    var now = missionTime.usedTimeInMillis();
+
+    return remainingEvents()
+        .filter((ev) => chapterStart + ev.triggerTime < now)
+        .filter((ev) => !ev.autoTrigger);
+}
+
 module.exports = {
-    addChapterEvent, remainingEvents, triggerEvent,
+    addChapterEvent, remainingEvents, triggerEvent, currentChapter, tick,  overdueEvents,
 
     completedEvents() {
         return completed;
     },
 
-    currentChapter() {
-        return currentChapter;
-    },
-
     advanceChapter() {
-        currentChapter++;
+        this.setCurrentChapter(currentChapter() + 1);
     },
 
     /**
      * Set a function with which to broadcast events on
      * The function must have the signature fn(eventName, value)
      */
-    setBroadcaster(fn) {
+        setBroadcaster(fn) {
         broadcaster = fn;
     },
 
     setCurrentChapter(chap){
         check.number(chap);
-        currentChapter = chap;
+        chapterStart = missionTime.usedTimeInMillis();
+        currentChapterNumber = chap;
     },
 
-    // for testing
     reset()  {
         chapters = {};
-        currentChapter = 0;
+        completed = [];
+        currentChapterNumber = null;
     }
 };

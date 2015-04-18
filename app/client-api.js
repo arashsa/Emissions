@@ -19,10 +19,12 @@ var api = {
             console.log("Connected to server WebSocket");
             console.log("Asking server for app state");
             api.askForAppState();
+            MessageActionCreators.removeMessage('disconnect message');
         });
 
         socket.on('disconnect', function () {
             MessageActionCreators.addMessage({
+                id: 'disconnect message',
                 text: 'Mistet kontakt med serveren. Last siden på nytt',
                 level: 'danger'
             });
@@ -33,7 +35,14 @@ var api = {
         socket.on(EventConstants.MISSION_COMPLETED, ()=> MissionActionCreators.missionCompleted());
         socket.on(EventConstants.MISSION_RESET, ()=> MissionActionCreators.missionWasReset());
 
-        socket.on('mission time', (time)=> MissionActionCreators.setMissionTime(time));
+        socket.on(EventConstants.SET_EVENTS, MissionActionCreators.receivedEvents);
+        socket.on(EventConstants.ADD_MESSAGE, (serverMsg) => {
+            if(serverMsg.audience && serverMsg.audience !== Router.getTeamId()) return;
+
+            MessageActionCreators.addMessage(serverMsg);
+        });
+
+        socket.on('mission time', MissionActionCreators.setMissionTime);
 
         socket.on('app state', (state) => {
             this._appStateReceived(state);
@@ -91,6 +100,10 @@ var api = {
         AppDispatcher.dispatch({action: MissionConstants.RECEIVED_APP_STATE, appState});
         MissionActionCreators.setMissionTime(appState.elapsed_mission_time);
         ScienceTeamActionCreators.teamStateReceived(appState.science);
+    },
+
+    askForEvents(){
+        socket.emit(EventConstants.GET_EVENTS);
     }
 
 };

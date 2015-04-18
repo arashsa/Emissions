@@ -8,8 +8,12 @@ module.exports = keyMirror({
 
     ADD_MESSAGE : null,
 
+    //ACTIONS
+    GET_EVENTS : null,
+    SET_EVENTS : null,
+
     // SCIENCE TEAM EVENTS
-    "SCIENCE_CHECK_RADIATION" : null,
+    SCIENCE_CHECK_RADIATION : null,
 
     // ASTRONAUT TEAM EVENTS
     AST_CHECK_VITALS : null,

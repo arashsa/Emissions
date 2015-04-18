@@ -1,12 +1,16 @@
 const chapters = require('../../server/chapters');
-const { pick } = require('lodash');
+const missionTimer = require('../../server/mission-time');
+const sinon = require('sinon');
 
 describe('server.chapters', () => {
 
-    let broadcaster = (event, name)=> { return {event, name} },
+    let broadcaster,
         addDummyChapter;
 
     beforeEach(() => {
+        broadcaster = (event, name)=> {
+            return {event, name}
+        };
         chapters.setBroadcaster(broadcaster)
     });
 
@@ -18,9 +22,9 @@ describe('server.chapters', () => {
             triggerTime: 120
         }, tmpCount = 0;
 
-        addDummyChapter = (chapter, triggerTime)=> {
+        addDummyChapter = (chapter, triggerTime, autoTrigger=false)=> {
             return chapters.addChapterEvent(Object.assign({}, dummyChapter, {
-                chapter,
+                chapter, autoTrigger,
                 triggerTime: triggerTime || (130 + tmpCount++)
             }));
         };
@@ -104,6 +108,58 @@ describe('server.chapters', () => {
 
             expect(chapters.completedEvents().length).toBe(2);
         })
+
+    });
+
+    describe('reset', () => {
+
+        it('should set current chapter to `null`', () => {
+            chapters.setCurrentChapter(1234);
+            chapters.reset();
+            expect(chapters.currentChapter).toThrowError();
+        });
+    });
+
+    describe('advanceChapter', () => {
+
+        beforeEach(chapters.reset);
+
+        it('should fail with an error if no current chapter has been set', ()=> {
+            expect(chapters.advanceChapter).toThrowError();
+        });
+    });
+
+    describe('timer logic', () => {
+
+        let clock;
+
+        beforeEach(() => {
+            clock = sinon.useFakeTimers();
+            missionTimer.reset();
+            missionTimer.start();
+            chapters.reset();
+
+            addDummyChapter(1,1000,true);
+            addDummyChapter(1,2000);
+            addDummyChapter(1,3000);
+            addDummyChapter(1,8000,true);
+            addDummyChapter(1,18000);
+
+            chapters.setCurrentChapter(1);
+        });
+
+        afterEach(() => {
+            clock.restore();
+        });
+
+        it('tick should trigger all passed events', () => {
+            clock.tick(10000);
+
+            chapters.tick();
+            expect(chapters.completedEvents().length).toBe(2);
+            expect(chapters.remainingEvents().length).toBe(3);
+            expect(chapters.overdueEvents().length).toBe(2);
+        });
 
     });
 
