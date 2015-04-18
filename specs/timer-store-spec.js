@@ -2,7 +2,7 @@ const TimerStore = require('../app/stores/timer-store'),
     actions = require('../app/actions/TimerActionCreators'),
     AppDispatcher = require('../app/appdispatcher');
 
-describe('TimerStore', () => {
+describe('client.TimerStore', () => {
 
     beforeEach(() => {
     });

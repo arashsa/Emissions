@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "compression": "*",
+    "check-types": "^3.1.1",
     "express": "*",
     "lodash": "^3.7.0",
     "node-jsx": "*",
@@ -30,7 +31,6 @@
     "bootstrap": "^3.3.2",
     "browserify": "*",
     "browserify-shim": "*",
-    "check-types": "^3.1.1",
     "flux": "*",
     "glob": "*",
     "global": "*",

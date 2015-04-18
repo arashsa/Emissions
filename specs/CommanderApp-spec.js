@@ -2,7 +2,7 @@ var App = require('./../app/components/commander-app.react');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-describe("App", function () {
+describe("client.App", function () {
 
     it("should render some text!", function () {
         var app = TestUtils.renderIntoDocument(React.createElement(App));

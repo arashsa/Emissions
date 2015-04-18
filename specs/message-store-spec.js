@@ -2,7 +2,7 @@ var Store = require('../app/stores/message-store'),
     AppDispatcher = require('../app/appdispatcher'),
     actions = require('../app/actions/MessageActionCreators');
 
-describe('MessageStore', () => {
+describe('client.MessageStore', () => {
 
     beforeEach(() => {
         Store.reset();
