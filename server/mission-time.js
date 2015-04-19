@@ -21,6 +21,7 @@ module.exports = {
     },
 
     reset(){
+        this.stop();
         millisUsed = 0;
     },
 
@@ -32,5 +33,9 @@ module.exports = {
         }
 
         return total;
+    },
+
+    usedTimeInSeconds(){
+        return this.usedTimeInMillis() / 1000;
     }
 };

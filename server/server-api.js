@@ -1,9 +1,9 @@
 const missionTime = require('./mission-time');
 const chapters = require('./chapters');
 const socketEvents = require('./EventConstants');
+const _ = require('lodash');
 
 var missionStarted = false;
-
 var teamState = {};
 
 //var missionLength = 0;
@@ -23,8 +23,29 @@ var teamState = {};
 //    satelite3: [0, 0]
 //};
 
+function appState() {
+    return {
+        mission_running: missionStarted,
+        elapsed_mission_time: missionTime.usedTimeInSeconds(),
+        science: teamState['science'],
+        communication: teamState['communication'],
+        security: teamState['security'],
+        astronaut: teamState['astronaut'],
+        mc: {}
+    };
+}
 
-module.exports = function init(io) {
+
+var createEventLists = function () {
+    return {
+        remaining: chapters.remainingEvents(),
+        completed: chapters.completedEvents(),
+        overdue: chapters.overdueEvents()
+    };
+};
+
+var API = module.exports = function init(io) {
+
     io.sockets.on('connection', function (socket) {
         var socketId = socket.id;
         var clientIp = socket.request.connection.remoteAddress;
@@ -102,15 +123,11 @@ module.exports = function init(io) {
             teamState[state.team] = state;
 
             // broadcast the change to all other clients
-            socket.broadcast.emit('app state', appState());
+            socket.broadcast.emit(socketEvents.APP_STATE, appState());
         });
 
         socket.on(socketEvents.GET_EVENTS, () => {
-            socket.emit(socketEvents.SET_EVENTS, {
-                remaining: chapters.remainingEvents(),
-                completed: chapters.completedEvents(),
-                overdue: chapters.overdueEvents()
-            });
+            socket.emit(socketEvents.SET_EVENTS, createEventLists());
         })
     });
 
@@ -147,30 +164,24 @@ module.exports = function init(io) {
 
         // set up all the events
         require('./mission-script').run();
-        chapters.setBroadcaster((eventName, value) => io.emit(eventName, value));
+
+        chapters.addTriggerListener((event) => io.emit(event.eventName, event.value));
 
         io.emit(socketEvents.MISSION_RESET);
     }
 
-    function appState() {
-        var state = {
-            mission_running: missionStarted,
-            elapsed_mission_time: missionTime.usedTimeInMillis() / 1000,
-            science: teamState['science'],
-            communication: teamState['communication'],
-            security: teamState['security'],
-            astronaut: teamState['astronaut'],
-            mc: {}
-        };
-
-        return state;
-    }
 
     // Clean start
     resetMission();
 
-    // set up a poller
-    setInterval(chapters.tick, 1000);
-};
+    // add a listener for trigger events
+    // this listener is throttled, so that it will only be called at most once per second
+    chapters.addTriggerListener( _.throttle(() => io.emit(socketEvents.SET_EVENTS, createEventLists()), 1000))
 
+
+    // set up a poller
+    setInterval(() => {
+        chapters.tick();
+    }, 1000);
+};
 

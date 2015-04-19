@@ -5,6 +5,7 @@ module.exports = keyMirror({
     MISSION_STOPPED : null,
     MISSION_RESET : null,
     MISSION_COMPLETED : null,
+    APP_STATE : null,
 
     ADD_MESSAGE : null,
 

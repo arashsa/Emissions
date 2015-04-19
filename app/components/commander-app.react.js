@@ -60,6 +60,7 @@ var App = React.createClass({
                 <button key="missionCompleted" className="disabled">Oppdrag utført</button>
 
 
+                <h2>Chapter events</h2>
                 <h3>remaining</h3>
                 <ul>
                     {this.state.remainingEvents.map((ev) => {
@@ -70,6 +71,13 @@ var App = React.createClass({
                 <h3>overdue</h3>
                 <ul>
                     {this.state.overdueEvents.map((ev) => {
+                        return <li>{ev.triggerTime} {ev.short_description} {ev.value}</li>
+                    })}
+                </ul>
+
+                <h3>completed</h3>
+                <ul>
+                    {this.state.completedEvents.map((ev) => {
                         return <li>{ev.triggerTime} {ev.short_description} {ev.value}</li>
                     })}
                 </ul>

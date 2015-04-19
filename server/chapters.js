@@ -1,4 +1,5 @@
 const uuid = require('uuid');
+const EventEmitter = require('events');
 const _ = require('lodash');
 const check = require('check-types');
 const EC = require('./EventConstants');
@@ -6,7 +7,6 @@ const missionTime = require('./mission-time');
 
 var chapters = {}, completed = [];
 var currentChapterNumber = 0;
-var broadcaster = undefined;
 var chapterStart;
 
 function getChapter(chapterNumber) {
@@ -22,7 +22,7 @@ function getChapter(chapterNumber) {
  *
  * @param options.chapter {Number} which chapter the event takes place
  * @param options.eventName {string} a string identifying the event to send over the socket to the client. Should exist in EventConstants
- * @param options.triggerTime {Number} a relative time for when it normally would trigger. can result in the MC receiving a warning.
+ * @param options.triggerTime {Number} seconds after chapter start it would normally trigger.
  * @param [options.value] {*} some value to send to the client, for instance a string message
  * @param [options.short_description] {string} a textual description of less than 20 chars. Used to display to mission commander
  * @param [options.autoTrigger] {boolean} Trigger automatically on expectedTriggerTime. default false
@@ -82,11 +82,12 @@ function triggerEvent(uuid) {
     while (len-- > 0) {
         var event = chapterEvents[len];
         if (event.id === uuid) {
-            broadcaster(event.eventName, event.value);
+
             // remove the event from the list
             chapterEvents.splice(len, 1)
-
             completed.push(event);
+
+            Chapters.emitTrigger(event);
             break;
         }
     }
@@ -106,7 +107,7 @@ function currentChapter() {
  * For events that are not auto-triggerable, broadcast a message
  */
 function tick() {
-    var now = missionTime.usedTimeInMillis();
+    var now = missionTime.usedTimeInSeconds();
 
     remainingEvents()
         .filter((ev) => chapterStart + ev.triggerTime < now)
@@ -115,15 +116,15 @@ function tick() {
 }
 
 function overdueEvents() {
-    var now = missionTime.usedTimeInMillis();
+    var now = missionTime.usedTimeInSeconds();
 
     return remainingEvents()
         .filter((ev) => chapterStart + ev.triggerTime < now)
         .filter((ev) => !ev.autoTrigger);
 }
 
-module.exports = {
-    addChapterEvent, remainingEvents, triggerEvent, currentChapter, tick,  overdueEvents,
+var Chapters = module.exports = _.extend(new EventEmitter(), {
+    addChapterEvent, remainingEvents, triggerEvent, currentChapter, tick, overdueEvents,
 
     completedEvents() {
         return completed;
@@ -133,23 +134,40 @@ module.exports = {
         this.setCurrentChapter(currentChapter() + 1);
     },
 
-    /**
-     * Set a function with which to broadcast events on
-     * The function must have the signature fn(eventName, value)
-     */
-        setBroadcaster(fn) {
-        broadcaster = fn;
-    },
-
     setCurrentChapter(chap){
         check.number(chap);
         chapterStart = missionTime.usedTimeInMillis();
         currentChapterNumber = chap;
+
+        this.emitChange();
     },
 
+    /** Resets all internal state, including removing all listeners added */
     reset()  {
         chapters = {};
         completed = [];
         currentChapterNumber = null;
+        this.removeAllListeners('trigger');
+        this.removeAllListeners('change');
+    },
+
+    /**
+     * @param callback {function} will be called on a change - no parameters
+     */
+        addChangeListener(callback){
+        return this.on('change', callback);
+    },
+
+    addTriggerListener(callback){
+        return this.on('trigger', callback);
+    },
+
+    emitTrigger(event) {
+        this.emit('trigger', event);
+        this.emitChange();
+    },
+
+    emitChange() {
+        this.emit('change');
     }
-};
+});

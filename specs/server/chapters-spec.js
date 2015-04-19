@@ -4,15 +4,7 @@ const sinon = require('sinon');
 
 describe('server.chapters', () => {
 
-    let broadcaster,
-        addDummyChapter;
-
-    beforeEach(() => {
-        broadcaster = (event, name)=> {
-            return {event, name}
-        };
-        chapters.setBroadcaster(broadcaster)
-    });
+    let addDummyChapter;
 
     describe('addChapterEvent', () => {
         let dummyChapter = {
@@ -22,7 +14,7 @@ describe('server.chapters', () => {
             triggerTime: 120
         }, tmpCount = 0;
 
-        addDummyChapter = (chapter, triggerTime, autoTrigger=false)=> {
+        addDummyChapter = (chapter, triggerTime, autoTrigger = false)=> {
             return chapters.addChapterEvent(Object.assign({}, dummyChapter, {
                 chapter, autoTrigger,
                 triggerTime: triggerTime || (130 + tmpCount++)
@@ -139,11 +131,12 @@ describe('server.chapters', () => {
             missionTimer.start();
             chapters.reset();
 
-            addDummyChapter(1,1000,true);
-            addDummyChapter(1,2000);
-            addDummyChapter(1,3000);
-            addDummyChapter(1,8000,true);
-            addDummyChapter(1,18000);
+
+            addDummyChapter(1, 1000, true);
+            addDummyChapter(1, 2000);
+            addDummyChapter(1, 3000);
+            addDummyChapter(1, 8000, true);
+            addDummyChapter(1, 18000);
 
             chapters.setCurrentChapter(1);
         });
@@ -153,14 +146,30 @@ describe('server.chapters', () => {
         });
 
         it('tick should trigger all passed events', () => {
-            clock.tick(10000);
+            let triggerSpy = sinon.spy();
+            chapters.addTriggerListener(triggerSpy);
 
+            clock.tick(10000);
             chapters.tick();
+
+            expect(triggerSpy.callCount).toBe(2);
             expect(chapters.completedEvents().length).toBe(2);
             expect(chapters.remainingEvents().length).toBe(3);
             expect(chapters.overdueEvents().length).toBe(2);
         });
 
+        it('should call subscribers when events are triggered', () => {
+            let triggerSpy = sinon.spy();
+
+            chapters.addTriggerListener(triggerSpy);
+
+            clock.tick(1500);
+            chapters.tick();
+
+            expect(triggerSpy.callCount).toBe(1);
+        });
+
     });
+
 
 });

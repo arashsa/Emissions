@@ -9,7 +9,7 @@ function run() {
         chapter: 0,
         eventName: EventConstants.ADD_MESSAGE,
         value: {text: 'Starter oppdrag ... klargjør dere for å motta oppgaver.'},
-        triggerTime : 10E3,
+        triggerTime : 2,
         autoTrigger: true
     });
 
