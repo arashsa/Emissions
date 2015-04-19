@@ -66,16 +66,13 @@ module.exports = React.createClass({
     _handleAddToTotalSubmit(e){
         e.preventDefault();
 
-        let el = React.findDOMNode(this.refs['add-to-total-input']);
+        let el = React.findDOMNode(this.refs['add-to-total']);
         let val = el.value.trim();
         if (!val.length) return;
 
         let number = utils.parseNumber(val);
 
-
-        el.value = '';
-
-        if (number) {
+        if (!isNaN(number)) {
             actions.addToTotalRadiationLevel(number);
         }
     },
@@ -135,7 +132,7 @@ module.exports = React.createClass({
                     <RadiationTable
                         minimalRowsToShow={4}
                         samples={this.state.radiation.samples}
-                        className='col-xs-6 ' />
+                        className='col-xs-6 '/>
                 </div>
 
                 <hr/>
@@ -189,13 +186,11 @@ module.exports = React.createClass({
                             <h3>Legg verdi til total</h3>
 
                             <form onSubmit={this._handleAddToTotalSubmit}>
-                                <input ref='add-to-total-input'
-                                       type="number"
-                                       step="5"
-                                       min="0"
-                                       max="50"
-                                       className='radiation-input__input'
-                                    />
+                                <select ref='add-to-total' className='radiation-input__input'>
+                                    <option value='0'>0</option>
+                                    <option value='15'>15</option>
+                                    <option value='50'>50</option>
+                                </select>
                                 <button className='btn btn-primary'>Evaluer</button>
                             </form>
                         </fieldset>
