@@ -18,12 +18,6 @@
     font-family: monospace;
 }
 
-.mission-timer-value {
-    display: inline-block;
-    font-family: monospace;
-    font-size: x-large;
-}
-
 .radiation-values{
     padding-top: 10px;
 }

@@ -68,6 +68,14 @@ var tmp = {
         serverAPI().sendTeamStateChange(teamId);
     },
 
+    askToStartNextChapter(){
+        serverAPI().askToStartNextChapter();
+    },
+
+    askToTriggerEvent(uuid){
+        serverAPI().triggerEvent(uuid);
+    },
+
     setMissionTime(elapsedSeconds){
         AppDispatcher.dispatch({
             action: MissionConstants.MISSION_TIME_SYNC,

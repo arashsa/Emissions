@@ -12,6 +12,8 @@ module.exports = keyMirror({
     //ACTIONS
     GET_EVENTS : null,
     SET_EVENTS : null,
+    TRIGGER_EVENT : null,
+    ADVANCE_CHAPTER : null,
 
     // SCIENCE TEAM EVENTS
     SCIENCE_CHECK_RADIATION : null,
@@ -20,7 +22,7 @@ module.exports = keyMirror({
     AST_CHECK_VITALS : null,
 
     // COMMUNICATION TEAM EVENTS
-    COMM_INFORM_ASTRONAUT : null,
+    COMM_INFORM_ASTRONAUT : null
 
     // SECURITY TEAM EVENTS
 });

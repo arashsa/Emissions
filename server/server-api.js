@@ -25,6 +25,7 @@ var teamState = {};
 
 function appState() {
     return {
+        current_chapter : chapters.currentChapter(),
         mission_running: missionStarted,
         elapsed_mission_time: missionTime.usedTimeInSeconds(),
         science: teamState['science'],
@@ -115,11 +116,15 @@ var API = module.exports = function init(io) {
         socket.on("reset mission", resetMission);
 
         socket.on('get app state', function () {
-            socket.emit('app state', appState());
+            socket.emit(socketEvents.APP_STATE, appState());
+        });
+
+        socket.on(socketEvents.ADVANCE_CHAPTER, () => {
+            chapters.advanceChapter();
+            socket.emit(socketEvents.SET_EVENTS, createEventLists());
         });
 
         socket.on('set team state', function (state) {
-            console.log('team state', state)
             teamState[state.team] = state;
 
             // broadcast the change to all other clients
@@ -128,7 +133,9 @@ var API = module.exports = function init(io) {
 
         socket.on(socketEvents.GET_EVENTS, () => {
             socket.emit(socketEvents.SET_EVENTS, createEventLists());
-        })
+        });
+
+        socket.on(socketEvents.TRIGGER_EVENT, chapters.triggerEvent)
     });
 
     function startMission() {
@@ -140,7 +147,7 @@ var API = module.exports = function init(io) {
         missionStarted = true;
         missionTime.start();
 
-        io.emit(socketEvents.MISSION_STARTED);
+        io.emit(socketEvents.MISSION_STARTED, appState());
     }
 
     function stopMission() {
@@ -169,8 +176,11 @@ var API = module.exports = function init(io) {
 
         // add a listener for trigger events
         // this listener is throttled, so that it will only be called at most once per second
-        chapters.addTriggerListener(_.throttle(() => io.emit(socketEvents.SET_EVENTS, createEventLists()), 1000))
+        chapters.addTriggerListener(_.throttle(() => io.emit(socketEvents.SET_EVENTS, createEventLists()), 1000));
         chapters.addChapterListener(()=> io.emit(socketEvents.APP_STATE, appState()));
+
+        chapters.addTriggerListener(console.log.bind(console, 'triggerListener'));
+        chapters.addChapterListener(console.log.bind(console, 'chapterListener'));
 
         io.emit(socketEvents.MISSION_RESET);
     }

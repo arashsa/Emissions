@@ -11,6 +11,44 @@ const getMissionAC = (function () {
     }
 })();
 
+const EventTable = React.createClass({
+
+    propTypes: {
+        events: React.PropTypes.array.isRequired
+    },
+
+    render() {
+        return (
+            <table className='table'>
+                <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Description</th>
+                    <th>Value</th>
+                    <th>Trigger</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {  this.props.events.map((ev) => {
+                    return <tr key={ev.id}>
+                        <td>{ev.triggerTime}</td>
+                        <td>{ev.short_description}</td>
+                        <td>{JSON.stringify(ev.value || '')}</td>
+                        <td>
+                            <button className='btn btn-primary'
+                                    onClick={() => getMissionAC().askToTriggerEvent(ev.id)}
+                                >Trigger
+                            </button>
+                        </td>
+                    </tr>
+                })}
+                </tbody>
+            </table>
+        );
+    }
+});
+
 var App = React.createClass({
 
     componentWillMount(){
@@ -18,17 +56,21 @@ var App = React.createClass({
         ac.askForEvents();
 
         EventStore.addChangeListener(this._onChange);
+        MissionStore.addChangeListener(this._onChange)
     },
 
     componentWillUnmount(){
         EventStore.removeChangeListener(this._onChange);
+        MissionStore.removeChangeListener(this._onChange)
     },
 
     getInitialState() {
         return {
             completedEvents: [],
             overdueEvents: [],
-            remainingEvents: []
+            remainingEvents: [],
+            running: MissionStore.isMissionRunning(),
+            chapter: MissionStore.currentChapter()
         }
     },
 
@@ -36,51 +78,57 @@ var App = React.createClass({
         this.setState({
             completedEvents: EventStore.completed(),
             overdueEvents: EventStore.overdue(),
-            remainingEvents: EventStore.remaining()
+            remainingEvents: EventStore.remaining(),
+            running: MissionStore.isMissionRunning(),
+            chapter: MissionStore.currentChapter()
         });
-        console.log('_onChange', this.state)
     },
 
     render() {
 
-        // put it here due to circular dependencies
+        var status;
+
+        if (!this.state.running) {
+            status = <p id="missionTime">Oppdraget har ikke startet</p>;
+        }
 
         return (
             <div>
 
-                { MissionStore.isMissionRunning() ? <MissionTimer /> :
-                    <p id="missionTime">Oppdraget har ikke startet</p> }
-
                 <div>
-                    <button onClick={getMissionAC().startMission}>Start oppdrag</button>
-                    <button onClick={getMissionAC().stopMission}>Stop</button>
-                    <button onClick={getMissionAC().resetMission}>Begynn på nytt</button>
+                    <h3>Status</h3>
+                    {status}
+
+                    <dl>
+                        <dt>Nåværende kapittel:</dt>
+                        <dd>{this.state.chapter}</dd>
+                        <dt>Tid brukt i kapittel</dt>
+                        <dd><MissionTimer /></dd>
+                    </dl>
+
                 </div>
 
-                <button key="missionCompleted" className="disabled">Oppdrag utført</button>
+                <div>
+                    <button className='btn btn-primary' onClick={getMissionAC().startMission}>Start oppdrag</button>
+                    <button className='btn btn-primary' onClick={getMissionAC().stopMission}>Stop</button>
+                    <button className='btn btn-primary' onClick={getMissionAC().askToStartNextChapter}>Neste kapittel
+                    </button>
+                    <button className='btn btn-primary' onClick={getMissionAC().resetMission}>Begynn på nytt</button>
+                </div>
+
+                <button key="missionCompleted" className='btn btn-primary disabled'>Oppdrag utført</button>
 
 
                 <h2>Chapter events</h2>
+
                 <h3>remaining</h3>
-                <ul>
-                    {this.state.remainingEvents.map((ev) => {
-                        return <li>{ev.triggerTime} {ev.short_description} {ev.value}</li>
-                    })}
-                </ul>
+                <EventTable key="foo" events={this.state.remainingEvents}/>
 
                 <h3>overdue</h3>
-                <ul>
-                    {this.state.overdueEvents.map((ev) => {
-                        return <li>{ev.triggerTime} {ev.short_description} {ev.value}</li>
-                    })}
-                </ul>
+                <EventTable events={this.state.overdueEvents}/>
 
                 <h3>completed</h3>
-                <ul>
-                    {this.state.completedEvents.map((ev) => {
-                        return <li>{ev.triggerTime} {ev.short_description} {ev.value}</li>
-                    })}
-                </ul>
+                <EventTable events={this.state.completedEvents}/>
             </div>
         );
     }

@@ -30,21 +30,24 @@ var api = {
             });
         });
 
-        socket.on(EventConstants.MISSION_STARTED, () => MissionActionCreators.missionStarted());
+        socket.on(EventConstants.MISSION_STARTED, (appState) => {
+            MissionActionCreators.missionStarted();
+            this._appStateReceived(appState);
+        });
         socket.on(EventConstants.MISSION_STOPPED, () => MissionActionCreators.missionStopped());
         socket.on(EventConstants.MISSION_COMPLETED, ()=> MissionActionCreators.missionCompleted());
         socket.on(EventConstants.MISSION_RESET, ()=> MissionActionCreators.missionWasReset());
 
         socket.on(EventConstants.SET_EVENTS, MissionActionCreators.receivedEvents);
         socket.on(EventConstants.ADD_MESSAGE, (serverMsg) => {
-            if(serverMsg.audience && serverMsg.audience !== Router.getTeamId()) return;
+            if (serverMsg.audience && serverMsg.audience !== Router.getTeamId()) return;
 
             MessageActionCreators.addMessage(serverMsg);
         });
 
         socket.on('mission time', MissionActionCreators.setMissionTime);
 
-        socket.on('app state', (state) => {
+        socket.on(EventConstants.APP_STATE, (state) => {
             this._appStateReceived(state);
         });
 
@@ -60,6 +63,14 @@ var api = {
 
     resetMission(){
         socket.emit('reset mission');
+    },
+
+    askToStartNextChapter(){
+        socket.emit(EventConstants.ADVANCE_CHAPTER);
+    },
+
+    triggerEvent(uuid){
+        socket.emit(EventConstants.TRIGGER_EVENT, uuid);
     },
 
     /*

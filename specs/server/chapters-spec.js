@@ -17,7 +17,7 @@ describe('server.chapters', () => {
         addDummyChapter = (chapter, triggerTime, autoTrigger = false)=> {
             return chapters.addChapterEvent(Object.assign({}, dummyChapter, {
                 chapter, autoTrigger,
-                triggerTime: triggerTime || (130 + tmpCount++)
+                triggerTime: triggerTime === undefined?  (130 + tmpCount++) : triggerTime
             }));
         };
 
@@ -140,6 +140,8 @@ describe('server.chapters', () => {
             chapters.reset();
 
 
+            addDummyChapter(1, 0, true);
+            addDummyChapter(1, 0, true);
             addDummyChapter(1, 1, true);
             addDummyChapter(1, 2);
             addDummyChapter(1, 3);
@@ -160,8 +162,8 @@ describe('server.chapters', () => {
             clock.tick(10E3);
             chapters.tick();
 
-            expect(triggerSpy.callCount).toBe(2);
-            expect(chapters.completedEvents().length).toBe(2);
+            expect(triggerSpy.callCount).toBe(4);
+            expect(chapters.completedEvents().length).toBe(4);
             expect(chapters.remainingEvents().length).toBe(3);
             expect(chapters.overdueEvents().length).toBe(2);
         });
@@ -174,7 +176,7 @@ describe('server.chapters', () => {
             clock.tick(1500);
             chapters.tick();
 
-            expect(triggerSpy.callCount).toBe(1);
+            expect(triggerSpy.callCount).toBe(3);
         });
 
     });

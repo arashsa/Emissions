@@ -11,22 +11,31 @@ const NotFound = require('./components/not-found.react');
 const IntroScreen = require('./components/introduction-screen.react');
 const Task = require('./components/task.react');
 const DummyRenderMixin = require('./components/dummy-render.mixin');
+const { cleanRootPath } = require('./utils');
+const teamNameMap = require('./team-name-map');
 
 const RedirectToIntro = React.createClass({
 
     statics: {
         willTransitionTo(transition) {
+            var teamId = cleanRootPath(transition.path);
+
+            console.log(teamId)
+            if(teamId in Object.keys(teamNameMap.nameMap))
                 transition.redirect(transition.path + '/intro');
         }
     },
 
-    mixins : [DummyRenderMixin]
+    //mixins : [DummyRenderMixin]
+    render(){
+        return <NotFound />;
+    }
 });
 
 const routes = (
     <Route name="app" path="/" handler={App}>
 
-        <Route name="leader" handler={MissionCommanderApp}/>
+        <Route name="commander" handler={MissionCommanderApp}/>
         <Route name="team-root" path='/:teamId' handler={RedirectToIntro} />
         <Route name="team-intro" path='/:teamId/intro' handler={IntroScreen} />
         <Route name="team-task" path='/:teamId/task/:taskId' handler={Task} />

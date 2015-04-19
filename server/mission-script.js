@@ -17,14 +17,14 @@ function run() {
     chapters.addChapterEvent({
         chapter: 1,
         eventName: EventConstants.SCIENCE_CHECK_RADIATION,
-        triggerTime: 0,
+        triggerTime: 1,
         autoTrigger: true
     });
 
     chapters.addChapterEvent({
         chapter: 1,
         eventName: EventConstants.AST_CHECK_VITALS,
-        triggerTime: 0,
+        triggerTime: 2,
         autoTrigger: true
     });
 
@@ -36,7 +36,7 @@ function run() {
             text: 'Er alt klart for å starte prosedyren for flytting av satelitten? Innhent informasjon fra '
             + 'de andre gruppene og informer kommunikasjonsgruppa om status.'
         },
-        triggerTime : 0
+        triggerTime : 3
     });
 
     chapters.setCurrentChapter(0);

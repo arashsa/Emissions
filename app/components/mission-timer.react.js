@@ -24,10 +24,7 @@ const MissionTimer = React.createClass({
     },
 
     render() {
-        return (<div className={this.props.className}>
-            <Timer timeInSeconds={this.state.elapsed } />
-        </div>
-        );
+        return  <Timer className={this.props.className} timeInSeconds={this.state.elapsed } />
     }
 });
 

@@ -136,7 +136,7 @@ var Chapters = module.exports = _.extend(new EventEmitter(), {
 
     setCurrentChapter(chap){
         check.number(chap);
-        chapterStart = missionTime.usedTimeInMillis();
+        chapterStart = missionTime.usedTimeInSeconds();
         currentChapterNumber = chap;
 
         completed = [];

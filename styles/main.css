@@ -21,7 +21,8 @@
 /* Just to get some space after the last elements */
 #main-footer {
     position: absolute;
-    width: 100%;
+    /* Using 100% will increase the width. Does not matter how high it is */
+    width: 1%;
     margin-top: 29px;
     height: 1px;
     /*background-color: blue;*/
@@ -149,3 +150,10 @@
     width: 30px;
     border-radius: 15px;
 }
+
+.timer-value {
+    display: inline-block;
+    font-family: monospace;
+    font-size: x-large;
+}
+

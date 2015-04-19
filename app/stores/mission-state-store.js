@@ -6,6 +6,7 @@ const BaseStore = require('./base-store');
 const { MISSION_STARTED_EVENT,MISSION_STOPPED_EVENT, RECEIVED_APP_STATE } =  require('../constants/MissionConstants');
 
 var missionRunning = false, missionHasBeenStopped = false;
+var currentChapter = null;
 
 var MissionStateStore = Object.assign(new BaseStore(), {
 
@@ -27,6 +28,10 @@ var MissionStateStore = Object.assign(new BaseStore(), {
         return missionHasBeenStopped;
     },
 
+    currentChapter(){
+        return currentChapter;
+    },
+
     dispatcherIndex: AppDispatcher.register(function (payload) {
         var { action} = payload;
 
@@ -38,7 +43,9 @@ var MissionStateStore = Object.assign(new BaseStore(), {
                 return MissionStateStore.handleMissionStopped();
 
             case RECEIVED_APP_STATE:
-                missionRunning = payload.appState.mission_running;
+                let appState = payload.appState;
+                missionRunning = appState.mission_running;
+                currentChapter = appState.current_chapter;
                 return MissionStateStore.emitChange();
         }
 
