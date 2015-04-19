@@ -139,23 +139,25 @@ var Chapters = module.exports = _.extend(new EventEmitter(), {
         chapterStart = missionTime.usedTimeInMillis();
         currentChapterNumber = chap;
 
-        this.emitChange();
+        completed = [];
+
+        this.emitChapterChange();
     },
 
     /** Resets all internal state, including removing all listeners added */
-    reset()  {
+        reset()  {
         chapters = {};
         completed = [];
         currentChapterNumber = null;
         this.removeAllListeners('trigger');
-        this.removeAllListeners('change');
+        this.removeAllListeners('chapter_change');
     },
 
     /**
      * @param callback {function} will be called on a change - no parameters
      */
-        addChangeListener(callback){
-        return this.on('change', callback);
+        addChapterListener(callback){
+        return this.on('chapter_change', callback);
     },
 
     addTriggerListener(callback){
@@ -164,10 +166,9 @@ var Chapters = module.exports = _.extend(new EventEmitter(), {
 
     emitTrigger(event) {
         this.emit('trigger', event);
-        this.emitChange();
     },
 
-    emitChange() {
-        this.emit('change');
+    emitChapterChange() {
+        this.emit('chapter_change');
     }
 });

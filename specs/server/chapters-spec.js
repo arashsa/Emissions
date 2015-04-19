@@ -114,10 +114,18 @@ describe('server.chapters', () => {
 
     describe('advanceChapter', () => {
 
-        beforeEach(chapters.reset);
+        beforeEach(chapters.reset.bind(chapters));
 
         it('should fail with an error if no current chapter has been set', ()=> {
             expect(chapters.advanceChapter).toThrowError();
+        });
+
+        it('should trigger a chapter change event', ()=> {
+            var spy = sinon.spy();
+            chapters.setCurrentChapter(1);
+            chapters.addChapterListener(spy);
+            chapters.advanceChapter();
+            expect(spy.called).toBe(true);
         });
     });
 
@@ -132,11 +140,11 @@ describe('server.chapters', () => {
             chapters.reset();
 
 
-            addDummyChapter(1, 1000, true);
-            addDummyChapter(1, 2000);
-            addDummyChapter(1, 3000);
-            addDummyChapter(1, 8000, true);
-            addDummyChapter(1, 18000);
+            addDummyChapter(1, 1, true);
+            addDummyChapter(1, 2);
+            addDummyChapter(1, 3);
+            addDummyChapter(1, 8, true);
+            addDummyChapter(1, 18);
 
             chapters.setCurrentChapter(1);
         });
@@ -149,7 +157,7 @@ describe('server.chapters', () => {
             let triggerSpy = sinon.spy();
             chapters.addTriggerListener(triggerSpy);
 
-            clock.tick(10000);
+            clock.tick(10E3);
             chapters.tick();
 
             expect(triggerSpy.callCount).toBe(2);

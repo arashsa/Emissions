@@ -167,17 +167,17 @@ var API = module.exports = function init(io) {
 
         chapters.addTriggerListener((event) => io.emit(event.eventName, event.value));
 
+        // add a listener for trigger events
+        // this listener is throttled, so that it will only be called at most once per second
+        chapters.addTriggerListener(_.throttle(() => io.emit(socketEvents.SET_EVENTS, createEventLists()), 1000))
+        chapters.addChapterListener(()=> io.emit(socketEvents.APP_STATE, appState()));
+
         io.emit(socketEvents.MISSION_RESET);
     }
 
 
     // Clean start
     resetMission();
-
-    // add a listener for trigger events
-    // this listener is throttled, so that it will only be called at most once per second
-    chapters.addTriggerListener( _.throttle(() => io.emit(socketEvents.SET_EVENTS, createEventLists()), 1000))
-
 
     // set up a poller
     setInterval(() => {
