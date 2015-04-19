@@ -9,6 +9,7 @@ const MissionCommanderApp = require('./components/commander-app.react');
 const IndexApp = require('./components/index-app.react');
 const NotFound = require('./components/not-found.react');
 const IntroScreen = require('./components/introduction-screen.react');
+const SolarStorm = require('./components/solar-storm.react');
 const Task = require('./components/task.react');
 const DummyRenderMixin = require('./components/dummy-render.mixin');
 const { cleanRootPath } = require('./utils');
@@ -34,6 +35,8 @@ const RedirectToIntro = React.createClass({
 
 const routes = (
     <Route name="app" path="/" handler={App}>
+
+        <Route name="job-completed" path='/completed' handler={SolarStorm} />
 
         <Route name="commander" handler={MissionCommanderApp}/>
         <Route name="team-root" path='/:teamId' handler={RedirectToIntro} />
