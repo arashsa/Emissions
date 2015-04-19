@@ -10,13 +10,21 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-function onPlayerReady(event) {
-    //event.target.mute();
-    player.mute();
+function playVideo(){
+    player.seekTo(96);
     player.playVideo();
 
     // stop video after ten seconds
-    setTimeout(player.stopVideo.bind(player),10000);
+    setTimeout(() => {
+        player.stopVideo(player)
+        playVideo();
+    },10E3);
+}
+
+function onPlayerReady(event) {
+    //event.target.mute();
+    player.mute();
+    playVideo();
 }
 
 

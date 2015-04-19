@@ -1,4 +1,5 @@
 const React = require('react');
+const Link = require('react-router').Link;
 const MissionStore = require('../stores/mission-state-store');
 const MissionTimer = require('./mission-timer.react');
 const EventStore = require('../stores/event-store');
@@ -116,7 +117,7 @@ var App = React.createClass({
                     <button className='btn btn-primary' onClick={getMissionAC().resetMission}>Begynn på nytt</button>
                 </div>
 
-                <button key="missionCompleted" className='btn btn-primary disabled'>Oppdrag utført</button>
+                <Link to='/completed' className='btn btn-primary '>Oppdrag utført</Link>
 
 
                 <h2>Chapter events</h2>
