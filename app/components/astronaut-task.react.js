@@ -19,15 +19,8 @@ module.exports = React.createClass({
     getInitialState() {
         return this._getState();
     },
-
-    getDefaultProps() {
-        return {};
-    },
-
     componentWillMount() {
-    },
-
-    componentWillReceiveProps() {
+        OxygenStore.addChangeListener(() => this._updateState());
     },
 
     componentWillUnmount() {
@@ -37,9 +30,13 @@ module.exports = React.createClass({
         return this.state.oxygenStore.colorIndicator;
     },
 
+    _updateState() {
+        this.setState(this._getState())
+    },
+
     _getState(){
         return {
-            oxygenStore : OxygenStore.getState()
+            oxygenStore: OxygenStore.getState()
         };
     },
 
@@ -59,7 +56,7 @@ module.exports = React.createClass({
                         </div>
                     </li>
                     <li>Forbruk : { this.state.oxygenStore.consumptionPerMinute }</li>
-                    <li>Gjenstående oksygen: { this.state.oxygenStore.remaining} enheter </li>
+                    <li>Gjenstående oksygen: { this.state.oxygenStore.remaining} enheter</li>
                 </ul>
 
             </div>

@@ -17,7 +17,7 @@ window.__astActions = module.exports = {
      * @param level the level to set it to
      */
         setOxygenLevel(level){
-        Dispatcher.dispatch({action: AstConstants.SET_OXYGEN_LEVEL, rate})
+        Dispatcher.dispatch({action: AstConstants.SET_OXYGEN_LEVEL, level})
     },
 
     /* in units per minute */

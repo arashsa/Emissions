@@ -25,17 +25,28 @@ const OxygenStore = module.exports = Object.assign(new BaseStore, {
     },
 
     getState(){
-      return {
-          colorIndicator : this.statusAsColor(),
-          consumptionPerMinute : consumptionPerMinute,
-          remaining : remaining
-      }
+        return {
+            colorIndicator: this.statusAsColor(),
+            consumptionPerMinute: consumptionPerMinute,
+            remaining: remaining
+        }
     },
 
     dispatcherIndex: Dispatcher.register((payload) => {
 
         switch (payload.action) {
-
+            case AstConstants.SET_OXYGEN_CONSUMPTION:
+                if (payload.units) {
+                    consumptionPerMinute = payload.units;
+                    OxygenStore.emitChange();
+                }
+                break;
+            case AstConstants.SET_OXYGEN_LEVEL:
+                if (payload.level) {
+                    remaining = payload.level;
+                    OxygenStore.emitChange();
+                }
+                break;
         }
 
         return true;
