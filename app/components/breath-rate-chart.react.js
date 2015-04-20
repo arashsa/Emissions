@@ -8,6 +8,7 @@
  */
 const React = require('react');
 const AmCharts = require('amcharts');
+var BreathRateStore = require('../stores/breath-rate-store');
 const { randomInt } = require('../utils');
 
 //Lung volume in ml before and after inhalation
@@ -175,6 +176,7 @@ module.exports = React.createClass({
 
     componentWillMount() {
         this._updateChart();
+        BreathRateStore.addChangeListener(() => this._updateChart());
     },
 
     componentDidMount() {
@@ -202,13 +204,12 @@ module.exports = React.createClass({
 
     // Private methods
     _updateChart(){
-        createBreathRateSamples(this.state.minBreathRate, this.state.maxBreathRate);
+        this.setState(this._getChartState());
+        createBreathRateSamples(this.state.min, this.state.max);
     },
 
     _getChartState(){
-        // dummy at first
-        var breathState = {minBreathRate: 15, maxBreathRate: 20};
-        return breathState;
+        return BreathRateStore.getState();
     },
 
     _onChange(){

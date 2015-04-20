@@ -9,8 +9,8 @@ window.__astActions = module.exports = {
         Dispatcher.dispatch({action: AstConstants.SET_BREATH_RATE, rate})
     },
 
-    setHeartRate(rate){
-        Dispatcher.dispatch({action: AstConstants.SET_HEART_RATE, rate})
+    setHeartRate(min, max){
+        Dispatcher.dispatch({action: AstConstants.SET_HEART_RATE, rate : {min,max}})
     },
 
     /**

@@ -171,6 +171,7 @@ const HeartRateChart = React.createClass({
 
     componentWillMount() {
         this._updateChart();
+        HeartStore.addChangeListener(()=> this._updateChart());
     },
 
     componentDidMount() {
@@ -201,14 +202,12 @@ const HeartRateChart = React.createClass({
 
     // Private methods
     _updateChart(){
-        createHeartRateSamples(this.state.minHeartRate, this.state.maxHeartRate);
+        this.setState(this._getChartState());
+        createHeartRateSamples(this.state.min, this.state.max);
     },
 
     _getChartState(){
-        // dummy at first
-        var rate = HeartStore.getState();
-
-        return {minHeartRate: rate.low, maxHeartRate: rate.high};
+        return HeartStore.getState();
     },
 
     _onChange(){
