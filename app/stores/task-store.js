@@ -12,7 +12,6 @@ var awaitingNewInstructions = {
 var assignments = {
     science: {
         current : null,
-        default : 'sample',
         sample: {
             text: 'Start klokka og ta fire målinger jevnt fordelt utover de 30 sekundene',
             next: 'average'
@@ -30,6 +29,11 @@ var assignments = {
             + ' Den totale strålingsverdien i kroppen skal helst ikke gå over 50, og aldri over 75!',
             next : 'awaiting'
         },
+        awaiting : awaitingNewInstructions
+    },
+
+    astronaut : {
+        current : null,
         awaiting : awaitingNewInstructions
     }
 };

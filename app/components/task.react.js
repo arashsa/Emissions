@@ -8,6 +8,7 @@ const React = require('react'),
     TeamDisplayer = require('./team-displayer.react'),
     MissionTimer = require('./mission-timer.react.js'),
     ScienceTask = require('./science-task.react'),
+    AstronautTask = require('./astronaut-task.react'),
     { format } = require('util');
 
 
@@ -92,7 +93,11 @@ const Task = React.createClass({
     },
 
     _createSubTaskUI() {
-        return ( <ScienceTask appstate={this.state}/>);
+        switch(RouteStore.getTeamId()){
+            case 'science': return <ScienceTask appstate={this.state}/>
+            case 'astronaut': return <AstronautTask appstate={this.state}/>
+            default: return <div>Not yet created</div>
+        }
     },
 
     render() {

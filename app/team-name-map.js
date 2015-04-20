@@ -1,5 +1,4 @@
 const teamMap = Object.freeze({
-    'commander': 'operasjonsleder',
     'science': 'forskningsteam',
     'communication': 'kommunikasjonsteam',
     'security': 'sikkerhetsteam',

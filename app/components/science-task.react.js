@@ -8,6 +8,11 @@ const RadiationStore = require('../stores/radiation-store');
 const actions = require('../actions/ScienceActionCreators');
 const utils = require('../utils');
 const ScienceTeamConstants = require('../constants/ScienceTeamConstants');
+const TimerActionCreators = require('../actions/TimerActionCreators');
+
+
+// SETTINGS
+TimerActionCreators.setTimer(ScienceTeamConstants.SCIENCE_TIMER_1, 30);
 
 module.exports = React.createClass({
 

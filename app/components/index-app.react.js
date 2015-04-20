@@ -8,8 +8,8 @@ module.exports = React.createClass({
             <div>
                 <h3>Velg lag</h3>
                 <ul>
-                    <li><Link to="team-root" params={{ teamId : 'science'}}>Forskningsteamet</Link></li>
-                    <li> ... Lag 2, 3, 4 ..</li>
+                    <li><Link to="team-root" params={{ teamId : 'science'}}>Forskningsgruppa</Link></li>
+                    <li><Link to="team-root" params={{ teamId : 'astronaut'}}>Astronautgruppa</Link></li>
                 </ul>
 
             </div>
