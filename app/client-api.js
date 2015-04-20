@@ -5,6 +5,7 @@ const MissionConstants = require('./constants/MissionConstants');
 const MissionActionCreators = require('./actions/MissionActionCreators');
 const MessageActionCreators = require('./actions/MessageActionCreators');
 const ScienceTeamActionCreators = require('./actions/ScienceActionCreators');
+const AstroTeamTeamActionCreators = require('./actions/AstroTeamActionCreators');
 const RadiationStore = require('./stores/radiation-store');
 const TimerStore = require('./stores/timer-store');
 const IntroductionStore = require('./stores/introduction-store');
@@ -49,6 +50,14 @@ var api = {
 
         socket.on(EventConstants.APP_STATE, (state) => {
             this._appStateReceived(state);
+        });
+
+        socket.on(EventConstants.AST_SET_BREATH_RATE, (rate)=> {
+            AstroTeamTeamActionCreators.setBreathRate(rate);
+        });
+
+        socket.on(EventConstants.AST_SET_HEART_RATE, (rate)=> {
+            AstroTeamTeamActionCreators.set(rate);
         });
 
     },

@@ -9,6 +9,7 @@
 const React = require('react');
 const AmCharts = require('amcharts');
 const { randomInt } = require('../utils');
+const HeartStore = require('../stores/heart-rate-store');
 
 var chart;
 var heartRateSamples = [];
@@ -71,12 +72,12 @@ function initChart(domElement) {
 
 //Fills the heart rate buffer with samples from the specified range
 //The heart rate buffer contains twice as many samples as the heart rate chart and is used to animate the chart
-function createHeartRateSamples(min,max) {
+function createHeartRateSamples(min, max) {
     heartRateBuffer = [];
     heartRateBufferIndex = 0;
     msUntilNextHeartRateBufferFrame = 0;
 
-    var beatsPerMinute = randomInt(min,max);
+    var beatsPerMinute = randomInt(min, max);
     var msBetweenBeats = 60 * 1000 / beatsPerMinute;
     var msUntilNextBeat = msBetweenBeats;
 
@@ -205,8 +206,9 @@ const HeartRateChart = React.createClass({
 
     _getChartState(){
         // dummy at first
-        var heartState = {minHeartRate: 50, maxHeartRate: 65};
-        return heartState;
+        var rate = HeartStore.getState();
+
+        return {minHeartRate: rate.low, maxHeartRate: rate.high};
     },
 
     _onChange(){

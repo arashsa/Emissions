@@ -34,7 +34,14 @@ var assignments = {
 
     astronaut : {
         current : null,
-        awaiting : awaitingNewInstructions
+        awaiting : awaitingNewInstructions,
+        breathing_timer: {
+           text : 'Start klokken, og tell antall innpust (topper) på pustegrafen.',
+            next : 'breathing_calculate'
+        },
+        breathing_calculate : {
+            text : 'Regn ut og evaluer oksygenforbruket pr minutt i %. Gjennomsnittlig oksygenforbruk med 25 innpust er 0,5%. Hint:(antall innpust pr minutt / (25/0.5))'
+        }
     }
 };
 

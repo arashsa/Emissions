@@ -3,6 +3,7 @@ const HeartRateChart = require('./heart-rate-chart.react');
 const BreathRateChart = require('./breath-rate-chart.react');
 const TimerPanel = require('./timer-panel.react');
 const TimerActionCreators = require('../actions/TimerActionCreators');
+const OxygenStore = require('../stores/oxygen-store');
 
 TimerActionCreators.setTimer('breath-timer', 15);
 TimerActionCreators.setTimer('heart-timer', 10);
@@ -16,7 +17,7 @@ module.exports = React.createClass({
     mixins: [],
 
     getInitialState() {
-        return {}
+        return this._getState();
     },
 
     getDefaultProps() {
@@ -32,10 +33,36 @@ module.exports = React.createClass({
     componentWillUnmount() {
     },
 
+    _indicatorColor(){
+        return this.state.oxygenStore.colorIndicator;
+    },
+
+    _getState(){
+        return {
+            oxygenStore : OxygenStore.getState()
+        };
+    },
+
     render() {
 
         return ( <div >
 
+            <div className="row">
+
+                <ul>
+                    <li>
+                        Luftstatus:
+                        <div
+                            className="circle "
+                            style={ { display: 'inline-block', backgroundColor : this._indicatorColor() } }
+                            >
+                        </div>
+                    </li>
+                    <li>Forbruk : { this.state.oxygenStore.consumptionPerMinute }</li>
+                    <li>Gjenstående oksygen: { this.state.oxygenStore.remaining} enheter </li>
+                </ul>
+
+            </div>
             <div className="row">
 
 
