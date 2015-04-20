@@ -1,5 +1,7 @@
 /**
- * Implementation based on tips in the article by Nicolas Hery
+ * THIS DESIGN ONLY SUPPORTS ONE CHART AS THEY *SHARE* STATE
+ * For a non-stupid design, do something like the
+ * implementation in the article by Nicolas Hery:
  * http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app
  *
  * Chart code more or less copied from the prototype by Leo Martin Westby
@@ -142,7 +144,7 @@ const RadiationChart = React.createClass({
             <div
                 style={{width: this.props.width + 'px', height : this.props.height+ 'px'}}
                 className={this.props.className}
-            />
+                />
         );
     }
 

@@ -34,3 +34,10 @@ build the code before pushing it using Git. See Heroku's own docs for how to con
 * **styles/**: Where you put your css files
 * **specs/**: Where you put your test files
 * **gulpfile**: Gulp configuration
+
+
+# TODO
+There are lots of things to do, and of course, a lot more than what I write here. But these are some obvious ones
+
+- Merge the various chart code. Do it [the right way](http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app)
+- Less brittle routing. Routing and state logic is currently intertwined.

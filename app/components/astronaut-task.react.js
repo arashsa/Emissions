@@ -1,15 +1,17 @@
 const React = require('react');
+const HeartRateChart = require('./heart-rate-chart.react');
+const BreathRateChart = require('./breath-rate-chart.react');
 
 module.exports = React.createClass({
 
     statics: {},
 
-    propTypes: { },
+    propTypes: {},
 
     mixins: [],
 
     getInitialState() {
-        return { }
+        return {}
     },
 
     getDefaultProps() {
@@ -27,7 +29,23 @@ module.exports = React.createClass({
 
     render() {
 
-        return ( <div > </div> );
+        return ( <div >
+
+            <div className="row">
+
+                <div className='col-md-6'>
+                    <h2>Hjerterytme</h2>
+                    <HeartRateChart height={240}/>
+                </div>
+
+                <div className='col-md-6'>
+                    <h2>Pust</h2>
+                    <BreathRateChart height={240}/>
+                </div>
+
+            </div>
+
+        </div> );
     }
 
 });

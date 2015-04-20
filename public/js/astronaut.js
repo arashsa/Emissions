@@ -111,14 +111,14 @@ function createHeartRateSamples(range) {
 	heartRateBuffer = [];
 	heartRateBufferIndex = 0;
 	msUntilNextHeartRateBufferFrame = 0;
-	
+
 	var beatsPerMinute = Math.randomInt(range[0], range[1]);
 	var msBetweenBeats = 60 * 1000 / beatsPerMinute;
 	var msUntilNextBeat = msBetweenBeats;
-	
+
 	for (var i = 0; i <= 200; i++) {
 		var mV;
-		
+
 		if (msUntilNextBeat <= 0) {
 			mV = highMV;
 			msUntilNextBeat = msBetweenBeats;
@@ -126,7 +126,7 @@ function createHeartRateSamples(range) {
 		else {
 			mV = Math.random() * 0.2;
 		}
-		
+
 		//The resolution of the chart is ten samples per second
 		heartRateBuffer.push({timestamp: i / 10, mV: mV});
 		msUntilNextBeat -= 50;
