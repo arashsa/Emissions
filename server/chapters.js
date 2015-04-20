@@ -7,6 +7,7 @@ const missionTime = require('./mission-time');
 
 var chapters = {}, completed = [];
 var currentChapterNumber = 0;
+var overdueLenPrev = 0;
 var chapterStart;
 
 function getChapter(chapterNumber) {
@@ -58,7 +59,7 @@ function addChapterEvent(options) {
  * @returns {Array} a list of events for the chapter, sorted on `triggerTime`
  * @param [chapter] {Number} optional chapter number. If not given, uses the currentChapter
  */
-function remainingEvents(chapter) {
+function untriggeredEvents(chapter) {
     if (chapter === undefined) {
         chapter = currentChapter();
     }
@@ -70,6 +71,18 @@ function remainingEvents(chapter) {
         .sort((e1, e2) => e1.triggerTime - e2.triggerTime);
 }
 
+function remainingEvents() {
+    const overdue = overdueEvents();
+    return untriggeredEvents().filter((ev)=> overdue.indexOf(ev) === -1);
+}
+
+function overdueEvents() {
+    var now = missionTime.usedTimeInSeconds();
+
+    return untriggeredEvents()
+        .filter((ev) => chapterStart + ev.triggerTime < now)
+        .filter((ev) => !ev.autoTrigger);
+}
 
 /**
  * Trigger an event in the current chapter
@@ -109,19 +122,22 @@ function currentChapter() {
 function tick() {
     var now = missionTime.usedTimeInSeconds();
 
-    remainingEvents()
+    tellListenersOfNewOverdueEvents();
+
+    untriggeredEvents()
         .filter((ev) => chapterStart + ev.triggerTime < now)
         .filter((ev) => ev.autoTrigger)
         .map((ev) => triggerEvent(ev.id));
+
+    overdueLenPrev = overdueEvents().length;
 }
 
-function overdueEvents() {
-    var now = missionTime.usedTimeInSeconds();
-
-    return remainingEvents()
-        .filter((ev) => chapterStart + ev.triggerTime < now)
-        .filter((ev) => !ev.autoTrigger);
+function tellListenersOfNewOverdueEvents() {
+    if (overdueLenPrev !== overdueEvents().length) {
+        Chapters.emitOverdue();
+    }
 }
+
 
 var Chapters = module.exports = _.extend(new EventEmitter(), {
     addChapterEvent, remainingEvents, triggerEvent, currentChapter, tick, overdueEvents,
@@ -164,11 +180,19 @@ var Chapters = module.exports = _.extend(new EventEmitter(), {
         return this.on('trigger', callback);
     },
 
+    addOverdueListener(callback){
+        return this.on('overdue', callback);
+    },
+
     emitTrigger(event) {
         this.emit('trigger', event);
     },
 
     emitChapterChange() {
         this.emit('chapter_change');
+    },
+
+    emitOverdue(){
+        this.emit('overdue', overdueEvents())
     }
 });

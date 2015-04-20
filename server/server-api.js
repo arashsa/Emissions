@@ -39,6 +39,7 @@ function appState() {
 
 var createEventLists = function () {
     return {
+        currentChapter : chapters.currentChapter(),
         remaining: chapters.remainingEvents(),
         completed: chapters.completedEvents(),
         overdue: chapters.overdueEvents()
@@ -152,6 +153,7 @@ var API = module.exports = function init(io) {
         missionTime.start();
 
         io.emit(socketEvents.MISSION_STARTED, appState());
+        io.emit(socketEvents.SET_EVENTS, createEventLists());
     }
 
     function stopMission() {
@@ -167,6 +169,7 @@ var API = module.exports = function init(io) {
      * Reset everything to initial values to make for a fresh start
      */
     function resetMission() {
+        var sendNewEventLists= _.throttle(() => io.emit(socketEvents.SET_EVENTS, createEventLists()), 1000);
         stopMission();
 
         missionTime.reset();
@@ -180,8 +183,10 @@ var API = module.exports = function init(io) {
 
         // add a listener for trigger events
         // this listener is throttled, so that it will only be called at most once per second
-        chapters.addTriggerListener(_.throttle(() => io.emit(socketEvents.SET_EVENTS, createEventLists()), 1000));
+        chapters.addTriggerListener(sendNewEventLists);
         chapters.addChapterListener(()=> io.emit(socketEvents.APP_STATE, appState()));
+        chapters.addOverdueListener(()=> io.emit(socketEvents.SET_EVENTS, createEventLists()));
+
 
         chapters.addTriggerListener(console.log.bind(console, 'triggerListener'));
         chapters.addChapterListener(console.log.bind(console, 'chapterListener'));

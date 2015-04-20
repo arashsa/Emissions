@@ -59,22 +59,18 @@ describe('server.chapters', () => {
 
         beforeEach(() => {
             chapters.reset();
+            addDummyChapter(1, 10);
+            addDummyChapter(1, 9);
+            addDummyChapter(1, 11);
+            addDummyChapter(1, 7);
+            chapters.setCurrentChapter(1);
         });
 
         it('should return a list of events', () => {
             expect(chapters.remainingEvents(1).length).not.toBeUndefined();
         });
 
-        it('should return a list that contains the last added events', () => {
-            let ev = addDummyChapter(1);
-            expect(chapters.remainingEvents(1)).toContain(ev);
-        });
-
         it('should return a list sorted on triggertime', () => {
-            addDummyChapter(1, 10);
-            addDummyChapter(1, 9);
-            addDummyChapter(1, 11);
-            addDummyChapter(1, 7);
             expect(chapters.remainingEvents(1).map((ev) => ev.triggerTime)).toEqual([7, 9, 10, 11]);
         });
 
@@ -164,7 +160,7 @@ describe('server.chapters', () => {
 
             expect(triggerSpy.callCount).toBe(4);
             expect(chapters.completedEvents().length).toBe(4);
-            expect(chapters.remainingEvents().length).toBe(3);
+            expect(chapters.remainingEvents().length).toBe(1);
             expect(chapters.overdueEvents().length).toBe(2);
         });
 
@@ -177,6 +173,18 @@ describe('server.chapters', () => {
             chapters.tick();
 
             expect(triggerSpy.callCount).toBe(3);
+        });
+
+        it('should emit an overdue event following a tick, if a new event is overdue',()=>{
+            let spy = sinon.spy();
+
+            chapters.addOverdueListener(spy);
+            clock.tick(1500);
+            chapters.tick();
+            expect(spy.callCount).toBe(0);
+            clock.tick(1000);
+            chapters.tick();
+            expect(spy.callCount).toBe(1);
         });
 
     });
