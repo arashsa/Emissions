@@ -51,7 +51,7 @@ module.exports = React.createClass({
 
                     <div className='timer--button col-xs-5 '>
                         <button
-                            className={ 'btn btn-primary' + (this.state.ready ? '' : 'disabled' ) }
+                            className={ 'btn btn-primary ' + (this.state.ready ? '' : 'disabled' ) }
                             onClick={this._handleClick}>Start klokka
                         </button>
                     </div>
