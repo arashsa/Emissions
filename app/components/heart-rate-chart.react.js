@@ -39,7 +39,7 @@ function initChart(domElement) {
     categoryAxis.gridAlpha = 0.10;
     categoryAxis.axisColor = "#DADADA";
     categoryAxis.forceShowField = "forceShow";
-    categoryAxis.title = "Seconds";
+    //categoryAxis.title = "Seconds";
 
     //Hide every label that is not explicitly shown
     categoryAxis.labelFunction = function (valueText, object) {

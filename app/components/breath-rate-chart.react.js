@@ -39,7 +39,7 @@ function initChart(domElement) {
     categoryAxis.autoGridCount = false;
     categoryAxis.gridCount = 15;
     categoryAxis.forceShowField = "forceShow";
-    categoryAxis.title = "Seconds";
+    //categoryAxis.title = "Seconds";
 
     //Hide every label that is not explicitly shown
     categoryAxis.labelFunction = function(valueText, object) {
@@ -54,7 +54,7 @@ function initChart(domElement) {
     valueAxis.dashLength = 1;
     valueAxis.minimum = lowVolume;
     valueAxis.maximum = highVolume * 1.1;
-    valueAxis.title = "Lung volume (ml)";
+    valueAxis.title = "Lungevolum (ml)";
     chart.addValueAxis(valueAxis);
 
     //Line

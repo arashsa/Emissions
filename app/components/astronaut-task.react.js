@@ -44,12 +44,12 @@ module.exports = React.createClass({
                     <BreathRateChart height={240}/>
                 </div>
 
-                <TimerPanel timerId='breath-timer' className='col-md-6'/>
-
                 <div className='col-md-6'>
                     <h2>Hjerteslag</h2>
                     <HeartRateChart height={240}/>
                 </div>
+
+                <TimerPanel timerId='breath-timer' className='col-md-6'/>
                 <TimerPanel timerId='heart-timer' className='col-md-6'/>
 
             </div>
