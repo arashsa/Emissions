@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Orbitron|Tangerine">
     <link rel="stylesheet" href="/main.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -19,6 +18,12 @@
 <script src="/jslib/react-router.js"></script>
 <script src="/jslib/amcharts.js"></script>
 <script src="/jslib/socket.io.js"></script>
+<script src="/jslib/loadcss.min.js"></script>
+<script>
+    // to avoid blocking css loads when developing without internet
+    loadCSS("//fonts.googleapis.com/css?family=Orbitron|Tangerine");
+</script>
+
 
 <script src="/main.js"></script>
 
