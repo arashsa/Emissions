@@ -9,7 +9,7 @@ const MissionCommanderApp = require('./components/commander-app.react');
 const IndexApp = require('./components/index-app.react');
 const NotFound = require('./components/not-found.react');
 const IntroScreen = require('./components/introduction-screen.react');
-const SolarStorm = require('./components/solar-storm.react');
+const SolarStorm = require('./components/full-screen-video.js');
 const Task = require('./components/task.react');
 const DummyRenderMixin = require('./components/dummy-render.mixin');
 const { cleanRootPath } = require('./utils');
@@ -21,9 +21,9 @@ const RedirectToIntro = React.createClass({
         willTransitionTo(transition) {
             var teamId = cleanRootPath(transition.path);
 
-            console.log(teamId)
-            if(teamId in Object.keys(teamNameMap.nameMap))
+            if(teamId in teamNameMap.nameMap) {
                 transition.redirect(transition.path + '/intro');
+            }
         }
     },
 

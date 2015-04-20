@@ -17,7 +17,7 @@ var babelify = require("babelify");
 
 // External dependencies you do not want to rebundle while developing,
 // but include in your application deployment
-var dependencies = [ ];
+var dependencies = [];
 
 var browserifyTask = function (options) {
     //process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
@@ -37,7 +37,7 @@ var browserifyTask = function (options) {
 
             // really only needed for Object.assign
             optional: ["runtime"]
-            
+
             // can't get this working
             //plugins: ["object-assign"] 
         })
@@ -57,7 +57,7 @@ var browserifyTask = function (options) {
             .pipe(source('main.js'))
             .pipe(gulpif(!options.development, streamify(uglify())))
             .pipe(gulp.dest(options.dest))
-            .pipe(gulpif(options.development, livereload({ start: true })))
+            .pipe(gulpif(options.development, livereload({start: true})))
             .pipe(notify(function () {
                 console.log('APP bundle built in ' + (Date.now() - start) + 'ms');
             }));
@@ -99,7 +99,7 @@ var browserifyTask = function (options) {
                 .on('error', gutil.log)
                 .pipe(source('specs.js'))
                 .pipe(gulp.dest(options.dest))
-                .pipe(livereload({ start: true }))
+                .pipe(livereload({start: true}))
                 .pipe(notify(function () {
                     console.log('TEST bundle built in ' + (Date.now() - start) + 'ms');
                 }));
@@ -133,7 +133,6 @@ var browserifyTask = function (options) {
 var cssTask = function (options) {
     if (options.development) {
         var run = function () {
-            console.log(arguments);
             var start = new Date();
             console.log('Building CSS bundle');
             gulp.src(options.src)
@@ -146,10 +145,15 @@ var cssTask = function (options) {
         run();
         gulp.watch(options.src, run);
     } else {
+        var start = new Date();
+
         gulp.src(options.src)
             .pipe(concat('main.css'))
             .pipe(cssmin())
-            .pipe(gulp.dest(options.dest));
+            .pipe(gulp.dest(options.dest))
+            .pipe(notify(function () {
+                console.log('CSS production bundle built in ' + (Date.now() - start) + 'ms');
+            }));
     }
 };
 
@@ -184,8 +188,4 @@ gulp.task('deploy', function () {
         dest: './dist'
     });
 
-});
-
-gulp.task('test', function () {
-    return gulp.src('./build/testrunner-phantomjs.html').pipe(jasminePhantomJs());
 });

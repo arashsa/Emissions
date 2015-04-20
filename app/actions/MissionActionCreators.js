@@ -42,7 +42,12 @@ var tmp = {
     },
 
     missionCompleted() {
-        AppDispatcher.dispatch({action: MissionConstants.MISSION_COMPLETED_EVENT});
+        //AppDispatcher.dispatch({action: MissionConstants.MISSION_COMPLETED_EVENT});
+        router.transitionTo('/completed');
+    },
+
+    completeMission(){
+        serverAPI().completeMission();
     },
 
     receivedEvents(eventsCollection){

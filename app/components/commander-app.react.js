@@ -117,7 +117,7 @@ var App = React.createClass({
                     <button className='btn btn-primary' onClick={getMissionAC().resetMission}>Begynn på nytt</button>
                 </div>
 
-                <Link to='/completed' className='btn btn-primary '>Oppdrag utført</Link>
+                <button className='btn btn-primary' onClick={getMissionAC().completeMission}>Oppdrag utført</button>
 
 
                 <h2>Chapter events</h2>

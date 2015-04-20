@@ -25,7 +25,7 @@ var teamState = {};
 
 function appState() {
     return {
-        current_chapter : chapters.currentChapter(),
+        current_chapter: chapters.currentChapter(),
         mission_running: missionStarted,
         elapsed_mission_time: missionTime.usedTimeInSeconds(),
         science: teamState['science'],
@@ -136,6 +136,10 @@ var API = module.exports = function init(io) {
         });
 
         socket.on(socketEvents.TRIGGER_EVENT, chapters.triggerEvent)
+
+        socket.on(socketEvents.COMPLETE_MISSION, ()=> {
+            socket.broadcast.emit(socketEvents.MISSION_COMPLETED);
+        })
     });
 
     function startMission() {

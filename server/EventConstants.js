@@ -14,6 +14,7 @@ module.exports = keyMirror({
     SET_EVENTS : null,
     TRIGGER_EVENT : null,
     ADVANCE_CHAPTER : null,
+    COMPLETE_MISSION : null,
 
     // SCIENCE TEAM EVENTS
     SCIENCE_CHECK_RADIATION : null,

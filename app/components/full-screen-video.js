@@ -44,9 +44,7 @@ module.exports = React.createClass({
     render() {
         var rickRolled = 'http://www.youtube.com/embed/oHg5SJYRHA0?autoplay=1';
         var origin = location.protocol + '//' + location.host
-        //var solarStorm = 'http://www.youtube.com/embed/DU4hpsistDk?autoplay=1&start=96&enablejsapi=1&origin=' + origin;
         var solarStorm = 'http://www.youtube.com/embed/DU4hpsistDk?&start=96&enablejsapi=1&origin=' + origin;
-        console.log(origin, solarStorm)
         var video = solarStorm;
 
         //return <div />

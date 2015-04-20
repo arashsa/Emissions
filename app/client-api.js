@@ -96,6 +96,10 @@ var api = {
         console.log('sending science state to server', state);
     },
 
+    completeMission(){
+      socket.emit(EventConstants.COMPLETE_MISSION);
+    },
+
     /*
      * This is only stubbed out until server communication is up and running
      */
