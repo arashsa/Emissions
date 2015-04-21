@@ -18,13 +18,6 @@ var createRecurringTasks = function (chapter) {
         autoTrigger: true
     });
 
-    chapters.addChapterEvent({
-        chapter: chapter,
-        eventName: EventConstants.SCIENCE_CHECK_RADIATION,
-        triggerTime: 6 * 60,
-        autoTrigger: true
-    });
-
     // ast
     chapters.addChapterEvent({
         chapter: chapter,
@@ -33,30 +26,13 @@ var createRecurringTasks = function (chapter) {
         autoTrigger: true
     });
 
-    chapters.addChapterEvent({
-        chapter: chapter,
-        eventName: EventConstants.AST_CHECK_VITALS,
-        triggerTime: 5*60,
-        autoTrigger: true
-    });
-
-    // communiction
+    // communication
     chapters.addChapterEvent({
         chapter: chapter,
         eventName: EventConstants.COMM_CHECK_SAT_LINK,
-        triggerTime: 0,
+        triggerTime: 30,
         autoTrigger: true
     });
-
-    chapters.addChapterEvent({
-        chapter: chapter,
-        eventName: EventConstants.COMM_CHECK_SAT_LINK,
-        triggerTime: 10*60,
-        autoTrigger: true
-    });
-
-    // security
-    // no recurring events
 
 };
 
@@ -80,19 +56,8 @@ function run() {
 
     createRecurringTasks(1);
 
-    // sec
-    chapters.addChapterEvent({
-        chapter: chapter,
-        eventName: EventConstants.ADD_MESSAGE,
-        value: {
-            audience: 'security',
-            text: 'Er alt klart for å starte prosedyren for flytting av satelitten? Innhent informasjon fra '
-            + 'de andre gruppene og informer kommunikasjonsgruppa om status.',
-            duration : 20
-        },
-        triggerTime : 0,
-        autoTrigger : true
-    });
+    // security
+    // TODO: check the data arrival and quality
 
 
     // CHAPTER 2
@@ -103,7 +68,7 @@ function run() {
         chapter: chapter,
         eventName: EventConstants.SET_HIGH_C02,
         short_description: 'Increase the CO2 level to a high level',
-        triggerTime : 0,
+        triggerTime : 60,
         serverInternal : true,
         autoTrigger : true
     });
@@ -116,7 +81,7 @@ function run() {
             text: 'Farlig høyt CO2-nivå!',
             level : 'warning'
         },
-        triggerTime : 8,
+        triggerTime : 60+10,
         autoTrigger : true
     });
 
@@ -124,15 +89,64 @@ function run() {
 
     // CHAPTER 3
     chapter = 3;
-    createRecurringTasks(chapter);
 
     chapters.addChapterEvent({
         chapter: chapter,
         eventName: 'lower oxygen',
         serverInternal : true,
-        triggerTime : 0,
+        triggerTime : 5,
         autoTrigger: true
     });
+
+    // CHAPTER 4
+    chapter = 4
+
+    createRecurringTasks(chapter);
+
+    // ast
+    // TODO : heart rate => 100, orange
+
+    // TODO: new check after 5 minutes
+
+
+    // CHAPTER 5
+    chapter = 5
+
+    createRecurringTasks(chapter);
+
+    // TODO: set data transfer OK, quality NOT OK
+
+    // SeC
+    // TODO: check communication quality and transfer
+
+    // TODO: trigger radiation change to orange
+
+
+    // CHAPTER 6
+
+    chapter = 6;
+    createRecurringTasks(chapter);
+
+    // TODO: set breath (50) and heart rate 120 (RED)
+
+    // TODO: set radiation GREEN
+
+
+    // CHAPTER 7
+    chapter = 7;
+
+    // TODO: set radiation RED 90
+
+    createRecurringTasks(chapter);
+
+    // TODO: set up a trigger for Jose to press that will set DATA QUALITY OK
+
+
+
+
+
+
+
 
 }
 

@@ -14,6 +14,8 @@ var qualityTestShouldFail = true;
 var co2Level = 15;
 var scrubFilterChanged = false;
 
+var chosenSatellite = 2;
+
 function appState() {
     return {
         current_chapter: chapters.currentChapter(),
@@ -21,6 +23,7 @@ function appState() {
         elapsed_mission_time: missionTime.usedTimeInSeconds(),
         elapsed_chapter_time: Math.round(missionTime.usedTimeInSeconds()-chapters.chapterStart()),
         quality_test_should_fail : qualityTestShouldFail,
+        chosen_satellite : chosenSatellite,
         carbon_dioxide: co2Level,
         scrub_filter_changed  : scrubFilterChanged,
         oxygen: oxygenRemaining,
