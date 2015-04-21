@@ -24,14 +24,26 @@ module.exports = {
 
     astronaut_intro: <div>
         <p>
-            Deres jobb er å passe på at astronaut Steigen har nok luft
-            til å gjennomføre oppdraget. Her er det viktig å jevnlig
-            sjekke hvor fort hun puster og hvor fort hjertet slår.
+            Deres jobb er å sikre at det er nok oksygen for å gjennomføre oppdraget. Her er det viktig å jevnlig
+            sjekke hvor fort astronaut Steigen puster og hvor fort hjertet hennes slår.
         </p>
 
         <p>Finner dere ut at astronaut Steigen ikke vil ha nok luft til
             å gjennomføre oppdraget <em>må</em> dere si fra til
             oppdragslederen så vi kan avbryte i tide.
         </p>
+    </div>,
+
+    communication_intro: <div>
+        <p>Deres mål er å holde kommunikasjonen oppe, og kommunisere med oppdragskoordinator og astronauten.</p>
+    </div>,
+
+    security_intro: <div>
+        <p>
+            Deres mål er å sikre at kommunikasjonsstatusen og datakvaliteten er god. Dere må også holde et øye på
+            indikatoren som sier om det er nok luft til å gjennomføre oppdraget.
+        </p>
     </div>
-}
+
+
+};
