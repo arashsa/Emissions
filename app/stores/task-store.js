@@ -6,12 +6,12 @@ const RouteStore = require('./route-store');
 const MissionConstants = require('../constants/MissionConstants');
 
 var awaitingNewInstructions = {
-    'text' : 'Venter på nye instrukser'
+    'text': 'Venter på nye instrukser'
 };
 
 var assignments = {
     science: {
-        current : null,
+        current: null,
         sample: {
             text: 'Start klokka og ta fire målinger jevnt fordelt utover de 30 sekundene',
             next: 'average'
@@ -27,31 +27,31 @@ var assignments = {
             + ' for oransj status man legge til 15, '
             + ' for rød status man legge til 50.'
             + ' Den totale strålingsverdien i kroppen skal helst ikke gå over 50, og aldri over 75!',
-            next : 'awaiting'
+            next: 'awaiting'
         },
-        awaiting : awaitingNewInstructions
+        awaiting: awaitingNewInstructions
     },
 
-    astronaut : {
-        current : null,
-        awaiting : awaitingNewInstructions,
+    astronaut: {
+        current: null,
+        awaiting: awaitingNewInstructions,
         breathing_timer: {
-           text : 'Start klokken, og tell antall innpust (topper) på pustegrafen.',
-            next : 'breathing_calculate',
-            plain_info : true
+            text: 'Start klokken, og tell antall innpust (topper) på pustegrafen.',
+            next: 'breathing_calculate',
+            plain_info: true
         },
-        breathing_calculate : {
-            text : 'Hvor mange innpust blir det på ett minutt? Bruk tallet du finner til å regne ut oksygenforbruket pr minutt. Gjennomsnittlig oksygenforbruk med 25 innpust i minuttet er 1 oksygenenhet.',
+        breathing_calculate: {
+            text: 'Hvor mange innpust blir det på ett minutt? Bruk tallet du finner til å regne ut oksygenforbruket pr minutt. Gjennomsnittlig oksygenforbruk med 25 innpust i minuttet er 1 oksygenenhet.',
             next: 'heartrate_timer'
         },
-        heartrate_timer : {
-            text : 'Start klokka og tell antall hjerteslag på ti sekunder',
-            next : 'heartrate_calculate',
-            plain_info : true
+        heartrate_timer: {
+            text: 'Start klokka og tell antall hjerteslag på ti sekunder',
+            next: 'heartrate_calculate',
+            plain_info: true
         },
-        heartrate_calculate : {
-            text : 'Finn nå ut hvor mange slag det blir i minuttet. Evaluer resultatet ved å skrive det inn i tekstfeltet.',
-            next : 'awaiting'
+        heartrate_calculate: {
+            text: 'Finn nå ut hvor mange slag det blir i minuttet. Evaluer resultatet ved å skrive det inn i tekstfeltet.',
+            next: 'awaiting'
         }
     }
 };
@@ -66,7 +66,7 @@ var TaskStore = Object.assign(new BaseStore(), {
     },
 
     getCurrentTaskId(teamId = RouteStore.getTeamId()) {
-        if(!teamId.length) return null;
+        if (!teamId.length) return null;
 
         return assignments[teamId].current || 'awaiting';
     },
@@ -75,11 +75,10 @@ var TaskStore = Object.assign(new BaseStore(), {
         return {
             currentTaskId: this.getCurrentTaskId(),
             currentTask: this.getCurrentTask().text,
-            nextTaskId : this.getCurrentTask().next,
-            plainInfo : this.getCurrentTask().plain_info
+            nextTaskId: this.getCurrentTask().next,
+            plainInfo: this.getCurrentTask().plain_info
         };
     },
-
 
 
     dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -88,7 +87,7 @@ var TaskStore = Object.assign(new BaseStore(), {
         var currentTask;
         var teamTasks;
 
-        switch(payload.action) {
+        switch (payload.action) {
 
             case MissionConstants.START_TASK:
                 teamId = payload.teamId;
@@ -108,6 +107,18 @@ var TaskStore = Object.assign(new BaseStore(), {
                 teamTasks.current = currentTask.next;
                 TaskStore.emitChange();
                 break;
+
+            case MissionConstants.RECEIVED_APP_STATE:
+                teamId = RouteStore.getTeamId();
+
+                var teamState = payload.appState[teamId];
+
+                if (teamState && teamState.current_task) {
+                    currentTask = teamState.current_task;
+                    teamTasks = assignments[teamId];
+                    teamTasks.current = currentTask;
+                    TaskStore.emitChange();
+                }
 
         }
 
