@@ -20,24 +20,32 @@ var actions = module.exports = {
     },
 
     endDataQualityTest(goodOutcome){
-        if(!goodOutcome) {
+        if (!goodOutcome) {
             MessageActionCreators.addMessage({
-                text : 'Kvaliteten på kommunikasjonssignalet er for dårlig. Er reparasjonen fullført?',
-                level : 'warning',
-                duration : 10
+                text: 'Kvaliteten på kommunikasjonssignalet er for dårlig. Er reparasjonen fullført?',
+                level: 'warning',
+                duration: 10
+            });
+        } else {
+            MessageActionCreators.addMessage({
+                text: 'TEST OK', duration: 2, level: 'info'
             });
         }
-        getMissionAC().taskCompleted('security','signal_test')
+        getMissionAC().taskCompleted('security', 'signal_test')
     },
 
     endDataTransferTest(goodOutcome){
-        if(!goodOutcome) {
+        if (!goodOutcome) {
             MessageActionCreators.addMessage({
-                text : 'Overføringen av data var for ustabil. Testen feilet.',
-                level : 'warning',
-                duration : 10
+                text: 'Overføringen av data var for ustabil. Testen feilet.',
+                level: 'warning',
+                duration: 10
             });
-            getMissionAC().taskCompleted('security','signal_test')
+            getMissionAC().taskCompleted('security', 'signal_test')
+        }else {
+            MessageActionCreators.addMessage({
+                text: 'TEST OK', duration: 2, level: 'info'
+            });
         }
     }
 };

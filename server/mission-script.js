@@ -115,14 +115,25 @@ function run() {
 
 
     // CHAPTER 5
-    chapter = 5
+    chapter = 5;
 
     createRecurringTasks(chapter);
 
-    // TODO: set data transfer OK, quality NOT OK
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: 'set transfer ok',
+        triggerTime: 0,
+        autoTrigger: true,
+        serverInternal : true
+    });
 
     // SeC
-    // TODO: check communication quality and transfer
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SECURITY_CHECK_DATA_TRANSFER,
+        triggerTime : 0,
+        autoTrigger: true
+    });
 
     // TODO: trigger radiation change to orange
 
@@ -144,8 +155,14 @@ function run() {
 
     createRecurringTasks(chapter);
 
-    // TODO: set up a trigger for Jose to press that will set DATA QUALITY OK
-
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: 'set quality ok',
+        short_description : 'Set the quality of the transfer to be OK',
+        triggerTime: 20,
+        autoTrigger: false,
+        serverInternal : true
+    });
 
 
 

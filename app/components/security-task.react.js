@@ -91,13 +91,14 @@ module.exports = React.createClass({
 
     componentWillMount() {
         OxygenStore.addChangeListener(() => this._updateState());
+        CommunicationQualityStore.addChangeListener(() => this._updateState());
     },
 
     componentWillUnmount() {
     },
 
     _startQualityProgressBar(){
-        var ms = 300, totalDuration = 5 * 1000;
+        var ms = 500, totalDuration = 5 * 1000;
         this.setState({qualityProgress: 0})
 
         var tmp = setInterval(()=> {
@@ -107,6 +108,7 @@ module.exports = React.createClass({
             if (number > .99) {
                 clearInterval(tmp);
                 SecurityTeamAC.endDataQualityTest(!this.state.dataQualityFailing);
+                setTimeout(() => this.setState({qualityProgress : 0}),9000)
             }
 
             this.setState({qualityProgress: number})
@@ -115,7 +117,7 @@ module.exports = React.createClass({
 
 
     _startTransferProgressBar(){
-        var ms = 300, totalDuration = 5 * 1000;
+        var ms = 500, totalDuration = 5 * 1000;
         this.setState({commProgress: 0});
 
         var tmp = setInterval(()=> {
@@ -125,6 +127,7 @@ module.exports = React.createClass({
             if (number > .99) {
                 clearInterval(tmp);
                 SecurityTeamAC.endDataTransferTest(!this.state.dataTransferFailing);
+                setTimeout(() => this.setState({commProgress: 0}),9000)
             }
 
 
@@ -187,7 +190,7 @@ module.exports = React.createClass({
                     <ProgressBar
                         max={100}
                         active={this._commActive()}
-                        className={this.state.dataTransferFailing && (!this._commActive()? 'progress-bar-danger' : '')}
+                        className={this.state.dataTransferFailing ? (!this._commActive()? 'progress-bar-danger' : ''):''}
                         progress={this.state.commProgress}/>
 
                     <button onClick={this._startTransferProgressBar}
@@ -199,7 +202,7 @@ module.exports = React.createClass({
                     <ProgressBar
                         max={100}
                         active={this._qualityActive()}
-                        className={this.state.dataQualityFailing && (!this._qualityActive()? 'progress-bar-danger' : '')}
+                        className={this.state.dataQualityFailing ? (!this._qualityActive()? 'progress-bar-danger' : ''):''}
                         progress={this.state.qualityProgress}/>
                     <button className={ 'btn btn-primary ' + (this.state.dataTransferFailing? 'disabled' : '')}
                             onClick={this._startQualityProgressBar}
