@@ -100,9 +100,9 @@ module.exports = React.createClass({
             return 'Ikke beregnet';
         }
 
-        if (num > ScienceTeamConstants.SCIENCE_AVG_RAD_RED_VALUE) {
+        if (num > ScienceTeamConstants.SCIENCE_AVG_RAD_RED_THRESHOLD) {
             color = 'red';
-        } else if (num > ScienceTeamConstants.SCIENCE_AVG_RAD_ORANGE_VALUE) {
+        } else if (num > ScienceTeamConstants.SCIENCE_AVG_RAD_ORANGE_THRESHOLD) {
             color = 'orange';
         } else {
             color = 'green';
