@@ -148,6 +148,7 @@ var API = module.exports = function init(io) {
         socket.on(socketEvents.TRIGGER_EVENT, chapters.triggerEvent)
 
         socket.on(socketEvents.COMPLETE_MISSION, ()=> {
+            stopMission();
             socket.broadcast.emit(socketEvents.MISSION_COMPLETED);
         })
     });
