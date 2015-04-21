@@ -35,13 +35,26 @@ module.exports = {
     </div>,
 
     communication_intro: <div>
-        <p>Deres mål er å holde kommunikasjonen oppe, og kommunisere med oppdragskoordinator og astronauten.</p>
+        <p>Deres mål er å holde kommunikasjonen oppe, og kommunisere med oppdragskoordinator og astronauten. Om
+            nødvendig må dere kanskje bytte til en annen kommunikasjonssatelitt.
+        </p>
+        <p>Dere skal også informere astronauten om eventuelle beskjeder fra Andaøya Space Center.</p>
+
     </div>,
 
     security_intro: <div>
         <p>
-            Deres mål er å sikre at kommunikasjonsstatusen og datakvaliteten er god. Dere må også holde et øye på
-            indikatoren som sier om det er nok luft til å gjennomføre oppdraget.
+            Deres hovedoppgave er å innhente informasjon fra de forskjellige gruppene og bestemme dere for hva
+            som skal gjøres. Her må dere samarbeide godt med oppdragskoordinatoren (<em>mission commander</em>)!
+        </p>
+
+        <p>
+            Dere må også holde et øye på indikatoren som sier om det er nok luft til å gjennomføre oppdraget, samt
+            sjekke om karbondioksidskrubberen må skiftes slik at astronauten ikke kveles.
+        </p>
+
+        <p>
+            Deres må også sjekke at kommunikasjonsstatusen og datakvaliteten er god når reparasjonen er utført.
         </p>
     </div>
 
