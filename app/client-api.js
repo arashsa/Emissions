@@ -53,6 +53,8 @@ var api = {
             this._appStateReceived(state);
         });
 
+        // if the client misses the message/event it is lost ... and the current_event will be unchanged :-(
+        // TODO: store it server_side in the teamState before sending
         socket.on(EventConstants.AST_CHECK_VITALS, ()=> {
             AstroTeamTeamActionCreators.startMonitorTask();
         });

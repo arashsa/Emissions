@@ -38,7 +38,9 @@ module.exports = {
         <p>Deres mål er å holde kommunikasjonen oppe, og kommunisere med oppdragskoordinator og astronauten. Om
             nødvendig må dere kanskje bytte til en annen kommunikasjonssatelitt.
         </p>
-        <p>Dere skal også informere astronauten om eventuelle beskjeder fra Andaøya Space Center.</p>
+
+        <p>Dere skal også informere astronauten om eventuelle beskjeder fra Andaøya Space Center (ASC), og
+            likeledes informere ASC om hendelser eller beskjeder fra astronauten.</p>
 
     </div>,
 

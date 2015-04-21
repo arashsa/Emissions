@@ -57,12 +57,29 @@ var assignments = {
 
     security: {
         current : null,
-        awaiting : awaitingNewInstructions
+        awaiting : awaitingNewInstructions,
+
+        scrubber :{
+            text : 'NOT SURE ABOUT THIS ONE. I THINK IT WILL BE TRIGGERED WITHOUT ANY NEED FOR INSTRUCTIONS',
+            next : 'awaiting'
+        },
+
+        tyr_v_check : {
+            text : 'NOT SURE ABOUT THIS ONE. I THINK IT WILL BE TRIGGERED WITHOUT ANY NEED FOR INSTRUCTIONS',
+            next : 'awaiting'
+        }
     },
 
     communication : {
         current : null,
-        awaiting : awaitingNewInstructions
+        awaiting : awaitingNewInstructions,
+
+        comm_check : {
+            text : 'Sjekk status på kommunikasjonslinken. Om signalet er svakt bør en annen satelitt velges. '
+            +'Om dere velger en annen satelitt må dere også velge en frekvens fra frekvensbåndet. '
+            + 'Det beste valget av frekvens er vanligvis midt i frekvensbåndet. '
+        }
+
     }
 };
 
