@@ -63,6 +63,10 @@ var tmp = {
         serverAPI().sendTeamStateChange();
     },
 
+    changeScrubber(){
+        serverAPI().askToChangeScrubFilter();
+    },
+
     startTask(teamId, taskId){
         AppDispatcher.dispatch({action: MissionConstants.START_TASK, teamId, taskId});
         serverAPI().sendTeamStateChange();

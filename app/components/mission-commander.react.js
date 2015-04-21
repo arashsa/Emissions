@@ -131,6 +131,7 @@ var App = React.createClass({
                 </div>
 
                 <button className='btn btn-primary' onClick={getMissionAC().completeMission}>Oppdrag utført</button>
+                <button className='btn btn-primary' onClick={getMissionAC().changeScrubber}>Bytt scrubber</button>
 
 
                 <h2>Chapter events</h2>

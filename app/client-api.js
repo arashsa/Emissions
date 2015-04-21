@@ -128,6 +128,10 @@ var api = {
         socket.emit('get mission time');
     },
 
+    askToChangeScrubFilter(){
+      socket.emit('set scrub filter changed')
+    },
+
     _appStateReceived(appState) {
         AppDispatcher.dispatch({action: MissionConstants.RECEIVED_APP_STATE, appState});
     },

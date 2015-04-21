@@ -66,119 +66,94 @@ var API = module.exports = function init(io) {
             publishAppStateUpdate();
         };
         internalEvents['set quality ok'] = function () {
-            qualityTestShouldFail= false;
+            qualityTestShouldFail = false;
             publishAppStateUpdate();
         };
 
 
-            io.sockets.on('connection', function (socket) {
-                var socketId = socket.id;
-                var clientIp = socket.request.connection.remoteAddress;
+        io.sockets.on('connection', function (socket) {
 
-                console.log('A new client connected  on ', socketId, 'from', clientIp);
-
-                //Initiates an RTC call with another client
-                socket.on("call", function (from, to) {
-                    socket.broadcast.emit("call", from, to);
-                });
-
-                //Sends an RTC signal from one client to another
-                socket.on("signal", function (signal, from, to) {
-                    socket.broadcast.emit("signal", signal, from, to);
-                });
-
-                //Instructs all clients displaying the astronaut video feed to change the video url
-                socket.on("change video", function (videoUrl) {
-                    socket.broadcast.emit("change video", videoUrl);
-                });
-
-                socket.on("get ranges", function () {
-                    socket.emit("ranges", ranges);
-                });
-
-                socket.on("get levels", function () {
-                    socket.emit("levels", levels);
-                });
-
-                socket.on("get mission time", function () {
-                    socket.emit("mission time", missionTime.usedTimeInMillis() / 1000);
-                });
-
-                socket.on("get oxygen remaining", function () {
-                    socket.emit("oxygen remaining", oxygenRemaining);
-                });
-
-                // only for testing
-                socket.on("set oxygen remaining", setRemainingOxygen);
-
-                socket.on('set oxygen consumption', (units)=> {
-                    oxygenConsumption = units;
-                    publishAppStateUpdate();
-                });
-
-                socket.on("get co2 level", function () {
-                    socket.emit("co2 level", co2Level);
-                });
-
-                socket.on("set co2 level", function (co2) {
-                    co2Level = co2;
-                });
-
-                socket.on("is scrub filter changed", function () {
-                    socket.emit("scrub filter changed", scrubFilterChanged);
-                });
-
-                socket.on("set scrub filter changed", function () {
-                    scrubFilterChanged = true;
-                });
-
-                //Event fired by the mission commander when the astronaut has finished repairing the satelite
-                socket.on("job finished", function () {
-                    socket.broadcast.emit("job finished");
-                });
-
-                socket.on("start mission", startMission);
-
-                socket.on("stop mission", stopMission);
-
-                socket.on("reset mission", resetMission);
-
-                socket.on('get app state', function () {
-                    socket.emit(socketEvents.APP_STATE, appState());
-                });
-
-                socket.on(socketEvents.ADVANCE_CHAPTER, () => {
-                    chapters.advanceChapter();
-                    socket.emit(socketEvents.SET_EVENTS, createEventLists());
-                });
-
-                socket.on('set team state', function (state) {
-                    teamState[state.team] = state;
-
-                    // broadcast the change to all other clients
-                    socket.broadcast.emit(socketEvents.APP_STATE, appState());
-                });
-
-                socket.on(socketEvents.GET_EVENTS, () => {
-                    socket.emit(socketEvents.SET_EVENTS, createEventLists());
-                });
-
-                socket.on(socketEvents.TRIGGER_EVENT, chapters.triggerEvent)
-
-                socket.on(socketEvents.COMPLETE_MISSION, ()=> {
-                    stopMission();
-                    socket.broadcast.emit(socketEvents.MISSION_COMPLETED);
-                })
+            //Initiates an RTC call with another client
+            socket.on("call", function (from, to) {
+                socket.broadcast.emit("call", from, to);
             });
+
+            //Sends an RTC signal from one client to another
+            socket.on("signal", function (signal, from, to) {
+                socket.broadcast.emit("signal", signal, from, to);
+            });
+
+            //Instructs all clients displaying the astronaut video feed to change the video url
+            socket.on("change video", function (videoUrl) {
+                socket.broadcast.emit("change video", videoUrl);
+            });
+
+            socket.on("get mission time", function () {
+                socket.emit("mission time", missionTime.usedTimeInMillis() / 1000);
+            });
+
+            socket.on("get oxygen remaining", function () {
+                socket.emit("oxygen remaining", oxygenRemaining);
+            });
+
+            // only for testing
+            socket.on("set oxygen remaining", setRemainingOxygen);
+
+            socket.on('set oxygen consumption', (units)=> {
+                oxygenConsumption = units;
+                publishAppStateUpdate();
+            });
+
+            socket.on("set scrub filter changed", function () {
+                scrubFilterChanged = true;
+                co2Level = 5;
+                publishAppStateUpdate();
+            });
+
+            //Event fired by the mission commander when the astronaut has finished repairing the satelite
+            socket.on("job finished", function () {
+                socket.broadcast.emit("job finished");
+            });
+
+            socket.on("start mission", startMission);
+
+            socket.on("stop mission", stopMission);
+
+            socket.on("reset mission", resetMission);
+
+            socket.on('get app state', function () {
+                socket.emit(socketEvents.APP_STATE, appState());
+            });
+
+            socket.on(socketEvents.ADVANCE_CHAPTER, () => {
+                chapters.advanceChapter();
+                socket.emit(socketEvents.SET_EVENTS, createEventLists());
+            });
+
+            socket.on('set team state', function (state) {
+                teamState[state.team] = state;
+
+                // broadcast the change to all other clients
+                socket.broadcast.emit(socketEvents.APP_STATE, appState());
+            });
+
+            socket.on(socketEvents.GET_EVENTS, () => {
+                socket.emit(socketEvents.SET_EVENTS, createEventLists());
+            });
+
+            socket.on(socketEvents.TRIGGER_EVENT, chapters.triggerEvent)
+
+            socket.on(socketEvents.COMPLETE_MISSION, ()=> {
+                stopMission();
+                socket.broadcast.emit(socketEvents.MISSION_COMPLETED);
+            })
+        });
 
         function publishAppStateUpdate() {
             io.emit(socketEvents.APP_STATE, appState())
         }
 
         function startMission() {
-            //oxygenRemaining = 100;
-            //co2Level = 0;
-            //scrubFilterChanged = false;
             if (missionStarted) return;
 
             missionStarted = true;
