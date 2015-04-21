@@ -7,6 +7,7 @@ const { MISSION_STARTED_EVENT,MISSION_STOPPED_EVENT, RECEIVED_APP_STATE } =  req
 
 var missionRunning = false, missionHasBeenStopped = false;
 var currentChapter = null;
+var chapterTime = 0;
 
 var MissionStateStore = Object.assign(new BaseStore(), {
 
@@ -32,6 +33,10 @@ var MissionStateStore = Object.assign(new BaseStore(), {
         return currentChapter;
     },
 
+    chapterTime(){
+        return chapterTime;
+    },
+
     dispatcherIndex: AppDispatcher.register(function (payload) {
         var { action} = payload;
 
@@ -46,6 +51,7 @@ var MissionStateStore = Object.assign(new BaseStore(), {
                 let appState = payload.appState;
                 missionRunning = appState.mission_running;
                 currentChapter = appState.current_chapter;
+                chapterTime = appState.elapsed_chapter_time;
                 return MissionStateStore.emitChange();
         }
 

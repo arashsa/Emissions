@@ -16,7 +16,7 @@ const EventTable = React.createClass({
 
     propTypes: {
         events: React.PropTypes.array.isRequired,
-        triggerDisabled : React.PropTypes.bool
+        triggerDisabled: React.PropTypes.bool
     },
 
     render() {
@@ -59,9 +59,17 @@ var App = React.createClass({
 
         EventStore.addChangeListener(this._onChange);
         MissionStore.addChangeListener(this._onChange)
+
+    },
+
+    componentDidMount(){
+        this._interval = setInterval(() => {
+            this.setState({chapterTime: this.state.chapterTime + 1})
+        },1000);
     },
 
     componentWillUnmount(){
+        clearInterval(this._interval);
         EventStore.removeChangeListener(this._onChange);
         MissionStore.removeChangeListener(this._onChange)
     },
@@ -72,7 +80,8 @@ var App = React.createClass({
             overdueEvents: [],
             remainingEvents: [],
             running: MissionStore.isMissionRunning(),
-            chapter: MissionStore.currentChapter()
+            chapter: MissionStore.currentChapter(),
+            chapterTime: MissionStore.chapterTime()
         }
     },
 
@@ -82,7 +91,8 @@ var App = React.createClass({
             overdueEvents: EventStore.overdue(),
             remainingEvents: EventStore.remaining(),
             running: MissionStore.isMissionRunning(),
-            chapter: MissionStore.currentChapter()
+            chapter: MissionStore.currentChapter(),
+            chapterTime: MissionStore.chapterTime()
         });
     },
 
@@ -105,6 +115,8 @@ var App = React.createClass({
                         <dt>Nåværende kapittel:</dt>
                         <dd>{this.state.chapter}</dd>
                         <dt>Tid brukt i kapittel</dt>
+                        <dd>{this.state.chapterTime}</dd>
+                        <dt>Total tid</dt>
                         <dd><MissionTimer /></dd>
                     </dl>
 

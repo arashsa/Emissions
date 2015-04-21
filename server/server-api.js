@@ -19,7 +19,7 @@ function appState() {
         current_chapter: chapters.currentChapter(),
         mission_running: missionStarted,
         elapsed_mission_time: missionTime.usedTimeInSeconds(),
-        elapsed_chapter_time: missionTime.usedTimeInSeconds()-chapters.chapterStart(),
+        elapsed_chapter_time: Math.round(missionTime.usedTimeInSeconds()-chapters.chapterStart()),
         quality_test_should_fail : qualityTestShouldFail,
         carbon_dioxide: co2Level,
         scrub_filter_changed  : scrubFilterChanged,
