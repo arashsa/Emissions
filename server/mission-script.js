@@ -57,7 +57,12 @@ function run() {
     createRecurringTasks(1);
 
     // security
-    // TODO: check the data arrival and quality
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SECURITY_CHECK_DATA_TRANSFER,
+        triggerTime : 0,
+        autoTrigger: true
+    });
 
 
     // CHAPTER 2

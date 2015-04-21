@@ -28,5 +28,6 @@ module.exports = keyMirror({
 
 
     // SECURITY TEAM EVENTS
-    SET_HIGH_C02 : null
+    SET_HIGH_C02 : null,
+    SECURITY_CHECK_DATA_TRANSFER : null
 });

@@ -63,6 +63,10 @@ var api = {
             ScienceTeamActionCreators.startSampleTask();
         });
 
+        socket.on(EventConstants.SECURITY_CHECK_DATA_TRANSFER, ()=> {
+            require('./actions/SecurityTeamAcrtionCreators').startDataTransferCheck();
+        });
+
 
     },
 
