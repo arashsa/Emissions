@@ -40,6 +40,14 @@ const OxygenStore = module.exports = Object.assign(new BaseStore, {
 
                 if (appState.oxygen_consumption) {
                     consumptionPerMinute = appState.oxygen_consumption;
+
+                    if (consumptionPerMinute > 1
+                        && _status !== AstConstants.CRITICAL_OXYGEN) {
+                        _status = AstConstants.WARN_OXYGEN
+                    } else if (consumptionPerMinute < 2){
+                        _status = AstConstants.GOOD_OXYGEN;
+                    }
+
                     OxygenStore.emitChange();
                 }
 
