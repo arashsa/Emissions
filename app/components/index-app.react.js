@@ -10,6 +10,8 @@ module.exports = React.createClass({
                 <ul>
                     <li><Link to="team-root" params={{ teamId : 'science'}}>Forskningsgruppa</Link></li>
                     <li><Link to="team-root" params={{ teamId : 'astronaut'}}>Astronautgruppa</Link></li>
+                    <li><Link to="team-root" params={{ teamId : 'security'}}>Sikkerhetsgruppa</Link></li>
+                    <li><Link to="team-root" params={{ teamId : 'communication'}}>Kommunikasjonsgruppa</Link></li>
                 </ul>
 
             </div>

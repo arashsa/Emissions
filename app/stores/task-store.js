@@ -6,7 +6,7 @@ const RouteStore = require('./route-store');
 const MissionConstants = require('../constants/MissionConstants');
 
 var awaitingNewInstructions = {
-    'text': 'Venter på nye instrukser'
+    'text': 'Venter på nye instruksjoner ...'
 };
 
 var assignments = {
@@ -36,7 +36,7 @@ var assignments = {
         current: null,
         awaiting: awaitingNewInstructions,
         breathing_timer: {
-            text: 'Start klokken, og tell antall innpust (topper) på pustegrafen.',
+            text: 'Start klokka, og tell antall innpust (topper) på pustegrafen.',
             next: 'breathing_calculate',
             plain_info: true
         },
@@ -53,6 +53,16 @@ var assignments = {
             text: 'Finn nå ut hvor mange slag det blir i minuttet. Evaluer resultatet ved å skrive det inn i tekstfeltet.',
             next: 'awaiting'
         }
+    },
+
+    security: {
+        current : null,
+        awaiting : awaitingNewInstructions
+    },
+
+    communication : {
+        current : null,
+        awaiting : awaitingNewInstructions
     }
 };
 

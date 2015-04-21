@@ -1,4 +1,4 @@
-var App = require('./../app/components/commander-app.react');
+var App = require('./../app/components/mission-commander.react.js');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 

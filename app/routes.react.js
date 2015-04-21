@@ -5,7 +5,7 @@ const NotFoundRoute = Router.NotFoundRoute;
 const DefaultRoute = Router.DefaultRoute;
 
 const App = require('./components/app.react');
-const MissionCommanderApp = require('./components/commander-app.react');
+const MissionCommanderApp = require('./components/mission-commander.react.js');
 const IndexApp = require('./components/index-app.react');
 const NotFound = require('./components/not-found.react');
 const IntroScreen = require('./components/introduction-screen.react');

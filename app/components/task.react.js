@@ -9,18 +9,20 @@ const React = require('react'),
     MissionTimer = require('./mission-timer.react.js'),
     ScienceTask = require('./science-task.react'),
     AstronautTask = require('./astronaut-task.react'),
+    CommunicationTask = require('./communication-task.react.js'),
+    SecurityTask = require('./security-task.react.js'),
     { format } = require('util');
 
 // lazyrequire
-if (false) {
-    require('../actions/MissionActionCreators');
-}
 function lazyRequire(path) {
     let tmp = null;
     return ()=> {
         if (!tmp) tmp = require(path);
         return tmp;
     }
+}
+if (false) {
+    require('../actions/MissionActionCreators');
 }
 const getMissionAC = lazyRequire('../actions/MissionActionCreators');
 
@@ -107,11 +109,13 @@ const Task = React.createClass({
     _createSubTaskUI() {
         switch (RouteStore.getTeamId()) {
             case 'science':
-                return <ScienceTask appstate={this.state}/>
+                return <ScienceTask appstate={this.state}/>;
             case 'astronaut':
-                return <AstronautTask appstate={this.state}/>
-            default:
-                return <div>Not yet created</div>
+                return <AstronautTask appstate={this.state}/>;
+            case 'communication':
+                return <CommunicationTask appstate={this.state}/>;
+            case 'security':
+                return <SecurityTask appstate={this.state}/>;
         }
     },
 
