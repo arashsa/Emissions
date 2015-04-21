@@ -49,6 +49,12 @@ module.exports = React.createClass({
         AstronautActionCreators.setOxygenConsumption(parseNumber(el.value))
     },
 
+    _handleHeartRate(e){
+        e.preventDefault();
+        var el = React.findDOMNode(this.refs['heart-rate-input']);
+        AstronautActionCreators.heartRateRead(parseNumber(el.value));
+    },
+
     render() {
 
         return ( <div >
@@ -89,16 +95,29 @@ module.exports = React.createClass({
 
             <div className="row">
 
-                <fieldset className="col-xs-6" disabled={ false }>
-                    <h3>Beregnet luftforbruk</h3>
-                    <form onSubmit={this._handleBreathRate}>
-                        <select ref='breath-rate'>
-                            <option value={1}>1 enhet per minutt</option>
-                            <option value={2}>2 enheter per minutt</option>
-                        </select>
-                        <button className='btn btn-primary'>Evaluer</button>
-                    </form>
-                </fieldset>
+                <div className="col-xs-6">
+                    <fieldset disabled={ false }>
+                        <h3>Beregnet luftforbruk</h3>
+
+                        <form onSubmit={this._handleBreathRate}>
+                            <select ref='breath-rate'>
+                                <option value={1}>1 enhet per minutt</option>
+                                <option value={2}>2 enheter per minutt</option>
+                            </select>
+                            <button className='btn btn-primary'>Evaluer</button>
+                        </form>
+                    </fieldset>
+                </div>
+
+                <div className="col-xs-6">
+                    <fieldset  disabled={ false }>
+                        <h3>Beregnet hjerterytme</h3>
+                        <form onSubmit={this._handleHeartRate}>
+                            <input ref='heart-rate-input' type="number" min="50" max="200" />
+                            <button className='btn btn-primary'>Evaluer</button>
+                        </form>
+                    </fieldset>
+                </div>
 
             </div>
 
