@@ -99,7 +99,7 @@ function run() {
     });
 
     // CHAPTER 4
-    chapter = 4
+    chapter = 4;
 
     createRecurringTasks(chapter);
 

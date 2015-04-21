@@ -10,6 +10,7 @@ var oxygenRemaining = 100;
 var oxygenConsumption = 1;
 var heartRate = {min: 70, max: 80};
 var qualityTestShouldFail = true;
+var transferTestShouldFail = true;
 
 var co2Level = 15;
 var scrubFilterChanged = false;
@@ -23,6 +24,7 @@ function appState() {
         elapsed_mission_time: missionTime.usedTimeInSeconds(),
         elapsed_chapter_time: Math.round(missionTime.usedTimeInSeconds()-chapters.chapterStart()),
         quality_test_should_fail : qualityTestShouldFail,
+        transfer_test_should_fail : transferTestShouldFail,
         chosen_satellite : chosenSatellite,
         carbon_dioxide: co2Level,
         scrub_filter_changed  : scrubFilterChanged,

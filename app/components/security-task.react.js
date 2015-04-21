@@ -85,7 +85,7 @@ module.exports = React.createClass({
         var state = this._getState();
         state.commProgress = 0;
         state.qualityProgress = 0;
-        state.shouldFail = true;
+        state.dataQualityFailing = true;
         return state;
     },
 
@@ -106,7 +106,7 @@ module.exports = React.createClass({
 
             if (number > .99) {
                 clearInterval(tmp);
-                if(this.state.shouldFail) {
+                if(this.state.dataQualityFailing) {
                     MessageActionCreators.addMessage({
                         text : 'Kvaliteten på kommunikasjonssignalet er for dårlig. Er reparasjonen fullført?',
                         level : 'warning',
@@ -121,7 +121,7 @@ module.exports = React.createClass({
 
     _startCommProgressBar(){
         var ms = 300, totalDuration = 5 * 1000;
-        this.setState({commProgress: 0})
+        this.setState({commProgress: 0});
 
         var tmp = setInterval(()=> {
             var number = this.state.commProgress;
@@ -129,6 +129,13 @@ module.exports = React.createClass({
 
             if (number > .99) {
                 clearInterval(tmp);
+                if(this.state.dataTransferFailing) {
+                    MessageActionCreators.addMessage({
+                        text : 'Overføringen av data var for ustabil. Testen feilet.',
+                        level : 'warning',
+                        duration : 10
+                    })
+                }
             }
             this.setState({commProgress: number})
         }, ms)
@@ -153,7 +160,8 @@ module.exports = React.createClass({
     _getState(){
         return {
             oxygenStore: OxygenStore.getState(),
-            shouldFail: CommunicationQualityStore.qualityTestShouldFail()
+            dataQualityFailing: CommunicationQualityStore.qualityTestShouldFail(),
+            dataTransferFailing: CommunicationQualityStore.transferTestShould()
         };
     },
 
@@ -188,6 +196,7 @@ module.exports = React.createClass({
                     <ProgressBar
                         max={100}
                         active={this._commActive()}
+                        className={this.state.dataTransferFailing && (!this._commActive()? 'progress-bar-danger' : '')}
                         progress={this.state.commProgress}/>
 
                     <button onClick={this._startCommProgressBar}
@@ -198,7 +207,7 @@ module.exports = React.createClass({
                     <ProgressBar
                         max={100}
                         active={this._qualityActive()}
-                        className={this.state.shouldFail && (!this._qualityActive()? 'progress-bar-danger' : '')}
+                        className={this.state.dataQualityFailing && (!this._qualityActive()? 'progress-bar-danger' : '')}
                         progress={this.state.qualityProgress}/>
                     <button className="btn btn-primary"
                             onClick={this._startQualityProgressBar}

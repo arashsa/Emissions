@@ -21,9 +21,7 @@ function lazyRequire(path) {
 }
 const getMissionAC = lazyRequire('../actions/MissionActionCreators');
 // for browserify to work it needs to find these magic strings
-if (false) {
-    require('../actions/MissionActionCreators');
-}
+require('../actions/MissionActionCreators');
 
 module.exports = React.createClass({
 
@@ -38,9 +36,6 @@ module.exports = React.createClass({
     },
     componentWillMount() {
         OxygenStore.addChangeListener(() => this._updateState());
-    },
-
-    componentWillUnmount() {
     },
 
     _indicatorColor(){
