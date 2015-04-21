@@ -60,17 +60,17 @@ var tmp = {
 
     introWasRead(teamId) {
         AppDispatcher.dispatch({action: MissionConstants.INTRODUCTION_READ, teamName: teamId});
-        serverAPI().sendTeamStateChange(teamId);
+        serverAPI().sendTeamStateChange();
     },
 
     startTask(teamId, taskId){
         AppDispatcher.dispatch({action: MissionConstants.START_TASK, teamId, taskId});
-        serverAPI().sendTeamStateChange(teamId);
+        serverAPI().sendTeamStateChange();
     },
 
     taskCompleted(teamId, taskId)   {
         AppDispatcher.dispatch({action: MissionConstants.COMPLETED_TASK, taskId, teamId});
-        serverAPI().sendTeamStateChange(teamId);
+        serverAPI().sendTeamStateChange();
 
         // also publish this to server as separate event? - maybe to trigger something at certain point?
     },

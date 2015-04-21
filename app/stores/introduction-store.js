@@ -2,8 +2,9 @@
 
 const AppDispatcher = require('../appdispatcher');
 const BaseStore = require('./base-store');
-const constants = require('../constants/MissionConstants');
-const window = require('global/window');
+const MissionConstants= require('../constants/MissionConstants');
+const RouteStore = require('./route-store');
+
 var introRead = {};
 
 const IntroductionStore = Object.assign(new BaseStore(), {
@@ -24,9 +25,18 @@ const IntroductionStore = Object.assign(new BaseStore(), {
         var action = payload.action;
 
         switch (action) {
-            case constants.INTRODUCTION_READ:
+            case MissionConstants.INTRODUCTION_READ:
                 IntroductionStore.setIntroductionRead(payload.teamName);
                 break;
+
+            case MissionConstants.RECEIVED_APP_STATE:
+                var teamId = RouteStore.getTeamId();
+
+                var teamState = payload.appState[teamId];
+
+                if (teamState && teamState.introduction_read ) {
+                    IntroductionStore.setIntroductionRead(teamState.team);
+                }
         }
 
         return true; // No errors. Needed by promise in Dispatcher.

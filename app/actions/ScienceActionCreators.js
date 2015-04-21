@@ -116,20 +116,8 @@ const actions = {
         });
 
         this.completeTask('addtotal');
-    },
-
-    /* On receiving new state from the server */
-    teamStateReceived(state){
-        if (!state) return;
-
-        var teamId = 'science';
-
-        if (state.introduction_read) {
-            AppDispatcher.dispatch({action: MissionConstants.INTRODUCTION_READ, teamName: teamId});
-        }
-
-        AppDispatcher.dispatch({action: MissionConstants.START_TASK, teamId, taskId: state.current_task});
     }
+
 };
 
 window.__ScienceActions = actions;

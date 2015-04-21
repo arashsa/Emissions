@@ -8,6 +8,7 @@ const ScienceTeamActionCreators = require('./actions/ScienceActionCreators');
 const AstroTeamTeamActionCreators = require('./actions/AstroTeamActionCreators');
 const RadiationStore = require('./stores/radiation-store');
 const TimerStore = require('./stores/timer-store');
+const TaskStore = require('./stores/task-store');
 const IntroductionStore = require('./stores/introduction-store');
 const Router = require('./router-container');
 const EventConstants = require('../server/EventConstants');
@@ -90,18 +91,16 @@ var api = {
      *
      * This is important to store on the server in case we drop the connection and reconnect in other session
      */
-    sendTeamStateChange(teamId) {
+    sendTeamStateChange(teamId = Router.getTeamId()) {
         let state = {};
 
         state.team = teamId;
         state.introduction_read = IntroductionStore.isIntroductionRead(teamId);
-        state.current_task = Router.getTaskId();
+        state.current_task = TaskStore.getCurrentTaskId(teamId);
 
-        // TODO: factor out team specific state logic into unit of its own
         if (teamId === 'science') {
             state.radiation = RadiationStore.getState();
         } else if(teamId === 'astronaut') {
-
         }
 
         socket.emit('set team state', state);
@@ -124,8 +123,6 @@ var api = {
 
     _appStateReceived(appState) {
         AppDispatcher.dispatch({action: MissionConstants.RECEIVED_APP_STATE, appState});
-        MissionActionCreators.setMissionTime(appState.elapsed_mission_time);
-        ScienceTeamActionCreators.teamStateReceived(appState.science);
     },
 
     askForEvents(){
