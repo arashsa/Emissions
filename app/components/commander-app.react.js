@@ -15,7 +15,8 @@ const getMissionAC = (function () {
 const EventTable = React.createClass({
 
     propTypes: {
-        events: React.PropTypes.array.isRequired
+        events: React.PropTypes.array.isRequired,
+        triggerDisabled : React.PropTypes.bool
     },
 
     render() {
@@ -37,7 +38,7 @@ const EventTable = React.createClass({
                         <td>{ev.short_description}</td>
                         <td>{JSON.stringify(ev.value || '')}</td>
                         <td>
-                            <button className='btn btn-primary'
+                            <button className={ 'btn btn-primary ' + (this.props.triggerDisabled && 'disabled')}
                                     onClick={() => getMissionAC().askToTriggerEvent(ev.id)}
                                 >Trigger
                             </button>
@@ -129,7 +130,7 @@ var App = React.createClass({
                 <EventTable events={this.state.overdueEvents}/>
 
                 <h3>completed</h3>
-                <EventTable events={this.state.completedEvents}/>
+                <EventTable triggerDisabled={true} events={this.state.completedEvents}/>
             </div>
         );
     }
