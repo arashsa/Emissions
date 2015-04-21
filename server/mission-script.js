@@ -69,7 +69,7 @@ function run() {
     chapters.addChapterEvent({
         chapter: chapter,
         eventName: EventConstants.ADD_MESSAGE,
-        value: {text: 'Starter oppdrag ... klargjør dere for å motta oppgaver.', duration : 30},
+        value: {text: 'Starter oppdrag ... klargjør dere for å motta oppgaver.', duration : 15},
         triggerTime : 0,
         autoTrigger: true
     });
@@ -82,19 +82,41 @@ function run() {
 
     // sec
     chapters.addChapterEvent({
-        chapter: 1,
+        chapter: chapter,
         eventName: EventConstants.ADD_MESSAGE,
         value: {
             audience: 'security',
             text: 'Er alt klart for å starte prosedyren for flytting av satelitten? Innhent informasjon fra '
             + 'de andre gruppene og informer kommunikasjonsgruppa om status.'
         },
-        triggerTime : 3
+        triggerTime : 0,
+        autoTrigger : true
     });
+
 
     // CHAPTER 2
     chapter = 2;
     createRecurringTasks(chapter);
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SET_HIGH_C02,
+        description : 'Increase the CO2 level to a high level',
+        triggerTime : 0,
+        serverInternal : true,
+        autoTrigger : true
+    });
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.ADD_MESSAGE,
+        value: {
+            audience: 'security',
+            text: 'Farlig høyt CO2-nivå!',
+            level : 'warning'
+        },
+        triggerTime : 8
+    });
 
 
     // CHAPTER 3
