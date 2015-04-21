@@ -27,6 +27,7 @@ function getChapter(chapterNumber) {
  * @param [options.value] {*} some value to send to the client, for instance a string message
  * @param [options.short_description] {string} a textual description of less than 20 chars. Used to display to mission commander
  * @param [options.autoTrigger] {boolean} Trigger automatically on expectedTriggerTime. default false
+ * @param [options.serverInternal] {boolean} This will be handled specially and not sent to the client
  * @param [options.completable] {boolean} UNIMPLEMENTED.
  * @param [options.relativeTo] {string} UNIMPLEMENTED. Let the `triggerTime` be relative to another event's completion time.
  *

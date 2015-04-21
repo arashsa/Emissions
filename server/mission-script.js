@@ -81,6 +81,14 @@ function run() {
     chapter = 3;
     createRecurringTasks(chapter);
 
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: 'lower oxygen',
+        serverInternal : true,
+        triggerTime : 0,
+        autoTrigger: true
+    });
+
 }
 
 module.exports = {run};

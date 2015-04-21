@@ -8,7 +8,7 @@ var teamState = {};
 
 var oxygenRemaining = 100;
 var oxygenConsumption = 1;
-var heartRate = { min : 70, max : 80};
+var heartRate = {min: 70, max: 80};
 
 //var co2Level = 0;
 //var scrubFilterChanged = false;
@@ -22,14 +22,15 @@ var heartRate = { min : 70, max : 80};
 //    satelite3: [0, 0]
 //};
 
+
 function appState() {
     return {
         current_chapter: chapters.currentChapter(),
         mission_running: missionStarted,
         elapsed_mission_time: missionTime.usedTimeInSeconds(),
-        oxygen : oxygenRemaining,
-        oxygen_consumption : oxygenConsumption,
-        heart_rate : heartRate,
+        oxygen: oxygenRemaining,
+        oxygen_consumption: oxygenConsumption,
+        heart_rate: heartRate,
         science: teamState['science'],
         communication: teamState['communication'],
         security: teamState['security'],
@@ -41,7 +42,7 @@ function appState() {
 
 var createEventLists = function () {
     return {
-        currentChapter : chapters.currentChapter(),
+        currentChapter: chapters.currentChapter(),
         remaining: chapters.remainingEvents(),
         completed: chapters.completedEvents(),
         overdue: chapters.overdueEvents()
@@ -49,6 +50,12 @@ var createEventLists = function () {
 };
 
 var API = module.exports = function init(io) {
+
+    var internalEvents = {
+        'lower oxygen': function () {
+            setRemainingOxygen(50);
+        }
+    };
 
     io.sockets.on('connection', function (socket) {
         var socketId = socket.id;
@@ -88,12 +95,9 @@ var API = module.exports = function init(io) {
         });
 
         // only for testing
-        socket.on("set oxygen remaining", function (oxygen) {
-            oxygenRemaining = oxygen;
-            publishAppStateUpdate();
-        });
+        socket.on("set oxygen remaining", setRemainingOxygen);
 
-        socket.on('set oxygen consumption', (units)=>{
+        socket.on('set oxygen consumption', (units)=> {
             oxygenConsumption = units;
             publishAppStateUpdate();
         });
@@ -185,7 +189,7 @@ var API = module.exports = function init(io) {
      * Reset everything to initial values to make for a fresh start
      */
     function resetMission() {
-        var sendNewEventLists= _.throttle(() => io.emit(socketEvents.SET_EVENTS, createEventLists()), 1000);
+        var sendNewEventLists = _.throttle(() => io.emit(socketEvents.SET_EVENTS, createEventLists()), 1000);
         stopMission();
 
         missionTime.reset();
@@ -195,7 +199,14 @@ var API = module.exports = function init(io) {
         // set up all the events
         require('./mission-script').run();
 
-        chapters.addTriggerListener((event) => io.emit(event.eventName, event.value));
+        chapters.addTriggerListener((event) => {
+            if (event.serverInternal) {
+                var fn = internalEvents[event.eventName];
+                fn();
+            } else {
+                io.emit(event.eventName, event.value)
+            }
+        });
 
         // add a listener for trigger events
         // this listener is throttled, so that it will only be called at most once per second
@@ -203,23 +214,25 @@ var API = module.exports = function init(io) {
         chapters.addChapterListener(publishAppStateUpdate);
         chapters.addOverdueListener(()=> io.emit(socketEvents.SET_EVENTS, createEventLists()));
 
-
-        chapters.addTriggerListener(console.log.bind(console, 'triggerListener'));
-        chapters.addChapterListener(console.log.bind(console, 'chapterListener'));
-
         io.emit(socketEvents.MISSION_RESET);
     }
 
     var oxygenCounter;
-    function startConsumingOxygen(){
+
+    function startConsumingOxygen() {
         oxygenCounter = setInterval(() => {
             oxygenRemaining -= oxygenConsumption;
             publishAppStateUpdate();
-        }, 60*1000)
+        }, 60 * 1000)
     }
 
-    function stopConsumingOxygen(){
+    function stopConsumingOxygen() {
         clearInterval(oxygenCounter);
+    }
+
+    function setRemainingOxygen(oxygen) {
+        oxygenRemaining = oxygen;
+        publishAppStateUpdate();
     }
 
 
