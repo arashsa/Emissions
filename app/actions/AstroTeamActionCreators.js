@@ -19,6 +19,7 @@ if(false){
     require('./MissionActionCreators');
     require('../client-api');
 }
+const TimerActionCreators = require('./TimerActionCreators');
 
 window.__astActions = module.exports = {
 
@@ -44,6 +45,9 @@ window.__astActions = module.exports = {
     },
 
     startMonitorTask(){
+
+        TimerActionCreators.resetTimer(AstConstants.HEART_RATE_TIMER);
+        TimerActionCreators.resetTimer(AstConstants.RESPIRATION_TIMER);
         getMissionAC().startTask('astronaut', 'breathing_timer')
     }
 

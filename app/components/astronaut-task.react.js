@@ -8,8 +8,8 @@ const AstronautConstants = require('../constants/AstroTeamConstants');
 const AstronautActionCreators = require('../actions/AstroTeamActionCreators');
 const { parseNumber } = require('../utils');
 
-TimerActionCreators.setTimer('breath-timer', 15);
-TimerActionCreators.setTimer('heart-timer', 10);
+TimerActionCreators.setTimer(AstronautConstants.RESPIRATION_TIMER, 15);
+TimerActionCreators.setTimer(AstronautConstants.HEART_RATE_TIMER, 10);
 
 // lazy load due to avoid circular dependencies
 function lazyRequire(path) {
@@ -21,7 +21,7 @@ function lazyRequire(path) {
 }
 const getMissionAC = lazyRequire('../actions/MissionActionCreators');
 // for browserify to work it needs to find these magic strings
-if(false){
+if (false) {
     require('../actions/MissionActionCreators');
 }
 
@@ -61,14 +61,14 @@ module.exports = React.createClass({
         e.preventDefault();
         var el = React.findDOMNode(this.refs['breath-rate']);
         AstronautActionCreators.setOxygenConsumption(parseNumber(el.value))
-        getMissionAC().taskCompleted('astronaut','breathing_calculate')
+        getMissionAC().taskCompleted('astronaut', 'breathing_calculate')
     },
 
     _handleHeartRate(e){
         e.preventDefault();
         var el = React.findDOMNode(this.refs['heart-rate-input']);
         AstronautActionCreators.heartRateRead(parseNumber(el.value));
-        getMissionAC().taskCompleted('astronaut','heartrate_calculate')
+        getMissionAC().taskCompleted('astronaut', 'heartrate_calculate')
     },
 
     render() {
@@ -104,8 +104,8 @@ module.exports = React.createClass({
                     <HeartRateChart height={240}/>
                 </div>
 
-                <TimerPanel timerId='breath-timer' className='col-md-6'/>
-                <TimerPanel timerId='heart-timer' className='col-md-6'/>
+                <TimerPanel timerId={AstronautConstants.RESPIRATION_TIMER} className='col-md-6'/>
+                <TimerPanel timerId={AstronautConstants.HEART_RATE_TIMER} className='col-md-6'/>
 
             </div>
 
@@ -126,10 +126,11 @@ module.exports = React.createClass({
                 </div>
 
                 <div className="col-xs-6">
-                    <fieldset  disabled={ false }>
+                    <fieldset disabled={ false }>
                         <h3>Beregnet hjerterytme</h3>
+
                         <form onSubmit={this._handleHeartRate}>
-                            <input ref='heart-rate-input' type="number" min="50" max="200" />
+                            <input ref='heart-rate-input' type="number" min="50" max="200"/>
                             <button className='btn btn-primary'>Evaluer</button>
                         </form>
                     </fieldset>
