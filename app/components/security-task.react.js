@@ -105,7 +105,7 @@ module.exports = React.createClass({
             var number = this.state.qualityProgress;
             number += ms / totalDuration;
 
-            if (number > .99) {
+            if (number >= 1) {
                 clearInterval(tmp);
                 SecurityTeamAC.endDataQualityTest(!this.state.dataQualityFailing);
                 setTimeout(() => this.setState({qualityProgress : 0}),9000)
@@ -124,7 +124,7 @@ module.exports = React.createClass({
             var number = this.state.commProgress;
             number += ms / totalDuration;
 
-            if (number > .99) {
+            if (number >= 1) {
                 clearInterval(tmp);
                 SecurityTeamAC.endDataTransferTest(!this.state.dataTransferFailing);
                 setTimeout(() => this.setState({commProgress: 0}),9000)
