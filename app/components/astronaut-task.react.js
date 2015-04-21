@@ -4,6 +4,9 @@ const BreathRateChart = require('./breath-rate-chart.react');
 const TimerPanel = require('./timer-panel.react');
 const TimerActionCreators = require('../actions/TimerActionCreators');
 const OxygenStore = require('../stores/oxygen-store');
+const AstronautConstants = require('../constants/AstroTeamConstants');
+const AstronautActionCreators = require('../actions/AstroTeamActionCreators');
+const { parseNumber } = require('../utils');
 
 TimerActionCreators.setTimer('breath-timer', 15);
 TimerActionCreators.setTimer('heart-timer', 10);
@@ -38,6 +41,12 @@ module.exports = React.createClass({
         return {
             oxygenStore: OxygenStore.getState()
         };
+    },
+
+    _handleBreathRate(e){
+        e.preventDefault();
+        var el = React.findDOMNode(this.refs['breath-rate']);
+        AstronautActionCreators.setOxygenConsumption(parseNumber(el.value))
     },
 
     render() {
@@ -75,6 +84,21 @@ module.exports = React.createClass({
 
                 <TimerPanel timerId='breath-timer' className='col-md-6'/>
                 <TimerPanel timerId='heart-timer' className='col-md-6'/>
+
+            </div>
+
+            <div className="row">
+
+                <fieldset className="col-xs-6" disabled={ false }>
+                    <h3>Beregnet luftforbruk</h3>
+                    <form onSubmit={this._handleBreathRate}>
+                        <select ref='breath-rate'>
+                            <option value={1}>1 enhet per minutt</option>
+                            <option value={2}>2 enheter per minutt</option>
+                        </select>
+                        <button className='btn btn-primary'>Evaluer</button>
+                    </form>
+                </fieldset>
 
             </div>
 

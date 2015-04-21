@@ -6,11 +6,10 @@ const _ = require('lodash');
 var missionStarted = false;
 var teamState = {};
 
-//var missionLength = 0;
-//var originalMissionLength = 0;
-//var missionTime = 0;
-//var missionTimeLastUpdated = 0;
-//var oxygenRemaining = 100;
+var oxygenRemaining = 100;
+var oxygenConsumption = 1;
+var heartRate = { min : 70, max : 80};
+
 //var co2Level = 0;
 //var scrubFilterChanged = false;
 //var ranges = {
@@ -28,6 +27,9 @@ function appState() {
         current_chapter: chapters.currentChapter(),
         mission_running: missionStarted,
         elapsed_mission_time: missionTime.usedTimeInSeconds(),
+        oxygen : oxygenRemaining,
+        oxygen_consumption : oxygenConsumption,
+        heart_rate : heartRate,
         science: teamState['science'],
         communication: teamState['communication'],
         security: teamState['security'],
@@ -85,8 +87,15 @@ var API = module.exports = function init(io) {
             socket.emit("oxygen remaining", oxygenRemaining);
         });
 
+        // only for testing
         socket.on("set oxygen remaining", function (oxygen) {
             oxygenRemaining = oxygen;
+            publishAppStateUpdate();
+        });
+
+        socket.on('set oxygen consumption', (units)=>{
+            oxygenConsumption = units;
+            publishAppStateUpdate();
         });
 
         socket.on("get co2 level", function () {
@@ -143,6 +152,10 @@ var API = module.exports = function init(io) {
         })
     });
 
+    function publishAppStateUpdate() {
+        io.emit(socketEvents.APP_STATE, appState())
+    }
+
     function startMission() {
         //oxygenRemaining = 100;
         //co2Level = 0;
@@ -151,6 +164,7 @@ var API = module.exports = function init(io) {
 
         missionStarted = true;
         missionTime.start();
+        startConsumingOxygen();
 
         io.emit(socketEvents.MISSION_STARTED, appState());
         io.emit(socketEvents.SET_EVENTS, createEventLists());
@@ -161,6 +175,7 @@ var API = module.exports = function init(io) {
 
         missionStarted = false;
         missionTime.stop();
+        stopConsumingOxygen();
 
         io.emit(socketEvents.MISSION_STOPPED);
     }
@@ -184,7 +199,7 @@ var API = module.exports = function init(io) {
         // add a listener for trigger events
         // this listener is throttled, so that it will only be called at most once per second
         chapters.addTriggerListener(sendNewEventLists);
-        chapters.addChapterListener(()=> io.emit(socketEvents.APP_STATE, appState()));
+        chapters.addChapterListener(publishAppStateUpdate);
         chapters.addOverdueListener(()=> io.emit(socketEvents.SET_EVENTS, createEventLists()));
 
 
@@ -192,6 +207,18 @@ var API = module.exports = function init(io) {
         chapters.addChapterListener(console.log.bind(console, 'chapterListener'));
 
         io.emit(socketEvents.MISSION_RESET);
+    }
+
+    var oxygenCounter;
+    function startConsumingOxygen(){
+        oxygenCounter = setInterval(() => {
+            oxygenRemaining -= oxygenConsumption;
+            publishAppStateUpdate();
+        }, 60*1000)
+    }
+
+    function stopConsumingOxygen(){
+        clearInterval(oxygenCounter);
     }
 
 

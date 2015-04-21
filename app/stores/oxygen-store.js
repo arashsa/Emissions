@@ -1,5 +1,5 @@
 const Dispatcher = require('../appdispatcher');
-const MConstants = require('../constants/MissionConstants');
+const MissionConstants = require('../constants/MissionConstants');
 const AstConstants = require('../constants/AstroTeamConstants');
 const BaseStore = require('./base-store');
 
@@ -35,15 +35,16 @@ const OxygenStore = module.exports = Object.assign(new BaseStore, {
     dispatcherIndex: Dispatcher.register((payload) => {
 
         switch (payload.action) {
-            case AstConstants.SET_OXYGEN_CONSUMPTION:
-                if (payload.units) {
-                    consumptionPerMinute = payload.units;
+            case MissionConstants.RECEIVED_APP_STATE:
+                var appState = payload.appState;
+
+                if (appState.oxygen_consumption) {
+                    consumptionPerMinute = appState.oxygen_consumption;
                     OxygenStore.emitChange();
                 }
-                break;
-            case AstConstants.SET_OXYGEN_LEVEL:
-                if (payload.level) {
-                    remaining = payload.level;
+
+                if (appState.oxygen) {
+                    remaining = appState.oxygen;
                     OxygenStore.emitChange();
                 }
                 break;

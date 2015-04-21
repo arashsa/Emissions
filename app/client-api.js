@@ -106,7 +106,7 @@ var api = {
     },
 
     completeMission(){
-      socket.emit(EventConstants.COMPLETE_MISSION);
+        socket.emit(EventConstants.COMPLETE_MISSION);
     },
 
     /*
@@ -128,6 +128,15 @@ var api = {
 
     askForEvents(){
         socket.emit(EventConstants.GET_EVENTS);
+    },
+
+    setOxygenConsumption(units) {
+        socket.emit('set oxygen consumption', units);
+    },
+
+    // meant for testing - not actual client use
+    setOxygenLevel(units) {
+        socket.emit('set oxygen remaining', units);
     }
 
 };

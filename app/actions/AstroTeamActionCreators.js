@@ -2,6 +2,18 @@ const Dispatcher = require('../appdispatcher');
 const MConstants = require('../constants/MissionConstants');
 const AstConstants = require('../constants/AstroTeamConstants');
 
+// lazy load due to avoid circular dependencies
+const serverAPI = (function () {
+    var api;
+
+    return function () {
+        if (!api) {
+            api = require('../client-api');
+        }
+        return api;
+    }
+})();
+
 window.__astActions = module.exports = {
 
     /** @param rate {string} low or high (constant) */
@@ -9,21 +21,9 @@ window.__astActions = module.exports = {
         Dispatcher.dispatch({action: AstConstants.SET_BREATH_RATE, rate})
     },
 
-    setHeartRate(min, max){
-        Dispatcher.dispatch({action: AstConstants.SET_HEART_RATE, rate : {min,max}})
-    },
-
-    /**
-     * @param level the level to set it to
-     */
-        setOxygenLevel(level){
-        Dispatcher.dispatch({action: AstConstants.SET_OXYGEN_LEVEL, level})
-    },
-
     /* in units per minute */
     setOxygenConsumption(units) {
-        Dispatcher.dispatch({action: AstConstants.SET_OXYGEN_CONSUMPTION, units})
+        serverAPI().setOxygenConsumption(units);
     }
-
 
 };

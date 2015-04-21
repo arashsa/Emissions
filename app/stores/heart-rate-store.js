@@ -3,7 +3,7 @@ const MConstants = require('../constants/MissionConstants');
 const AstConstants = require('../constants/AstroTeamConstants');
 const BaseStore = require('./base-store');
 
-var current = { min : 60, max : 70};
+var current = {min: 60, max: 70};
 
 const HeartRateStore = module.exports = Object.assign(new BaseStore, {
 
@@ -15,13 +15,12 @@ const HeartRateStore = module.exports = Object.assign(new BaseStore, {
     dispatcherIndex: Dispatcher.register((payload) => {
 
         switch (payload.action) {
-            case AstConstants.SET_HEART_RATE:
-                var rate = payload.rate;
-                if (!(rate.min && rate.max)) {
-                    throw new Exception("Illegal heart rate. rate : { min, max }");
+            case MConstants.RECEIVED_APP_STATE:
+                var rate = payload.appState.heart_rate;
+                if (rate && rate.min && rate.max) {
+                    current = rate;
+                    HeartRateStore.emitChange();
                 }
-                current = rate;
-                HeartRateStore.emitChange();
                 break;
         }
 
