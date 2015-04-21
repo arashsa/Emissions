@@ -9,26 +9,20 @@ var teamState = {};
 var oxygenRemaining = 100;
 var oxygenConsumption = 1;
 var heartRate = {min: 70, max: 80};
+var qualityTestShouldFail = true;
 
-var co2Level = 10;
-//var scrubFilterChanged = false;
-//var ranges = {
-//    respiration: [0, 0],
-//    oxygenUse: [0, 0],
-//    heartRate: [0, 0],
-//    radiation: [0, 0],
-//    satelite1: [0, 0],
-//    satelite2: [0, 0],
-//    satelite3: [0, 0]
-//};
-
+var co2Level = 15;
+var scrubFilterChanged = false;
 
 function appState() {
     return {
         current_chapter: chapters.currentChapter(),
         mission_running: missionStarted,
         elapsed_mission_time: missionTime.usedTimeInSeconds(),
-        carbondioxid: co2Level,
+        elapsed_chapter_time: missionTime.usedTimeInSeconds()-chapters.chapterStart(),
+        quality_test_should_fail : qualityTestShouldFail,
+        carbon_dioxide: co2Level,
+        scrub_filter_changed  : scrubFilterChanged,
         oxygen: oxygenRemaining,
         oxygen_consumption: oxygenConsumption,
         heart_rate: heartRate,

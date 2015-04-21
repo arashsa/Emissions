@@ -6,8 +6,8 @@ const ScienceTeamConstants = require('../constants/ScienceTeamConstants');
 const MissionConstants = require('../constants/MissionConstants');
 const randomInt = require('../utils').randomInt;
 const radiationRange = {
-    min: 20,
-    max: 40
+    min: 5,
+    max: 20
 };
 var samples = [];
 var totalRadiation = 0;

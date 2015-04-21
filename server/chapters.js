@@ -39,7 +39,7 @@ function addChapterEvent(options) {
     check.assert.string(options.eventName);
     check.assert.number(options.triggerTime);
     check.assert.maybe.string(options.short_description);
-    check.assert(!options.short_description || options.short_description.length <= 20);
+    check.assert(!options.short_description || options.short_description.length <= 40);
     check.assert.maybe.boolean(options.autoTrigger);
     check.assert.maybe.boolean(options.completable);
     check.assert.maybe.boolean(options.relativeTo);
@@ -168,6 +168,10 @@ var Chapters = module.exports = _.extend(new EventEmitter(), {
         currentChapterNumber = null;
         this.removeAllListeners('trigger');
         this.removeAllListeners('chapter_change');
+    },
+
+    chapterStart(){
+      return chapterStart;
     },
 
     /**

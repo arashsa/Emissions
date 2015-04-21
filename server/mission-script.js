@@ -87,7 +87,8 @@ function run() {
         value: {
             audience: 'security',
             text: 'Er alt klart for å starte prosedyren for flytting av satelitten? Innhent informasjon fra '
-            + 'de andre gruppene og informer kommunikasjonsgruppa om status.'
+            + 'de andre gruppene og informer kommunikasjonsgruppa om status.',
+            duration : 20
         },
         triggerTime : 0,
         autoTrigger : true
@@ -101,7 +102,7 @@ function run() {
     chapters.addChapterEvent({
         chapter: chapter,
         eventName: EventConstants.SET_HIGH_C02,
-        description : 'Increase the CO2 level to a high level',
+        short_description: 'Increase the CO2 level to a high level',
         triggerTime : 0,
         serverInternal : true,
         autoTrigger : true
@@ -115,8 +116,10 @@ function run() {
             text: 'Farlig høyt CO2-nivå!',
             level : 'warning'
         },
-        triggerTime : 8
+        triggerTime : 8,
+        autoTrigger : true
     });
+
 
 
     // CHAPTER 3
