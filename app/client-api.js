@@ -52,13 +52,14 @@ var api = {
             this._appStateReceived(state);
         });
 
-        socket.on(EventConstants.AST_SET_BREATH_RATE, (rate)=> {
-            AstroTeamTeamActionCreators.setBreathRate(rate);
+        socket.on(EventConstants.AST_CHECK_VITALS, ()=> {
+            AstroTeamTeamActionCreators.startMonitorTask();
         });
 
-        socket.on(EventConstants.AST_SET_HEART_RATE, (rate)=> {
-            AstroTeamTeamActionCreators.set(rate);
+        socket.on(EventConstants.SCIENCE_CHECK_RADIATION, ()=> {
+            ScienceTeamActionCreators.startSampleTask();
         });
+
 
     },
 
@@ -83,13 +84,13 @@ var api = {
     },
 
     /*
-     * Send full app held state (for the current team) to server on change
+     * Send the client held state (for the current team) to server on change
      * The most important bits are held on server, and is not transferred back,
      * such as if the mission is running, the current chapter, etc.
-     * BEWARE: ONLY USING LOCAL STORAGE UNTIL SERVER COMMUNICATION IS UP AND RUNNING
+     *
+     * This is important to store on the server in case we drop the connection and reconnect in other session
      */
     sendTeamStateChange(teamId) {
-        console.log('TODO: ServerActionCreators.sendTeamStateChange');
         let state = {};
 
         state.team = teamId;
@@ -99,10 +100,11 @@ var api = {
         // TODO: factor out team specific state logic into unit of its own
         if (teamId === 'science') {
             state.radiation = RadiationStore.getState();
+        } else if(teamId === 'astronaut') {
+
         }
 
         socket.emit('set team state', state);
-        console.log('sending science state to server', state);
     },
 
     completeMission(){

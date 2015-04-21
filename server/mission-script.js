@@ -1,33 +1,66 @@
 const chapters = require('./chapters');
 const EventConstants = require('./EventConstants');
 
+var createRecurringTasks = function (chapter) {
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SCIENCE_CHECK_RADIATION,
+        triggerTime: 0,
+        autoTrigger: true
+    });
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SCIENCE_CHECK_RADIATION,
+        triggerTime: 3 * 60,
+        autoTrigger: true
+    });
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SCIENCE_CHECK_RADIATION,
+        triggerTime: 6 * 60,
+        autoTrigger: true
+    });
+
+    // ast
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.AST_CHECK_VITALS,
+        triggerTime: 0,
+        autoTrigger: true
+    });
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.AST_CHECK_VITALS,
+        triggerTime: 5*60,
+        autoTrigger: true
+    });
+
+};
+
 function run() {
 
+    chapters.setCurrentChapter(0);
 
     // CHAPTER 0
+    var chapter = 0;
     chapters.addChapterEvent({
-        chapter: 0,
+        chapter: chapter,
         eventName: EventConstants.ADD_MESSAGE,
-        value: {text: 'Starter oppdrag ... klargjør dere for å motta oppgaver.'},
-        triggerTime : 2,
+        value: {text: 'Starter oppdrag ... klargjør dere for å motta oppgaver.', duration : 30},
+        triggerTime : 0,
         autoTrigger: true
     });
+
 
     // CHAPTER 1
-    chapters.addChapterEvent({
-        chapter: 1,
-        eventName: EventConstants.SCIENCE_CHECK_RADIATION,
-        triggerTime: 1,
-        autoTrigger: true
-    });
+    chapter = 1;
 
-    chapters.addChapterEvent({
-        chapter: 1,
-        eventName: EventConstants.AST_CHECK_VITALS,
-        triggerTime: 2,
-        autoTrigger: true
-    });
+    createRecurringTasks(1);
 
+    // sec
     chapters.addChapterEvent({
         chapter: 1,
         eventName: EventConstants.ADD_MESSAGE,
@@ -39,7 +72,15 @@ function run() {
         triggerTime : 3
     });
 
-    chapters.setCurrentChapter(0);
+    // CHAPTER 2
+    chapter = 2;
+    createRecurringTasks(chapter);
+
+
+    // CHAPTER 3
+    chapter = 3;
+    createRecurringTasks(chapter);
+
 }
 
 module.exports = {run};

@@ -2,37 +2,37 @@ const Dispatcher = require('../appdispatcher');
 const MConstants = require('../constants/MissionConstants');
 const AstConstants = require('../constants/AstroTeamConstants');
 const MessageActionCreators = require('./MessageActionCreators');
+const utils = require('../utils');
 
 // lazy load due to avoid circular dependencies
-const serverAPI = (function () {
-    var api;
-
-    return function () {
-        if (!api) {
-            api = require('../client-api');
-        }
-        return api;
+function lazyRequire(path) {
+    let tmp = null;
+    return ()=> {
+        if (!tmp) tmp = require(path);
+        return tmp;
     }
-})();
+}
+const getServerAPI = lazyRequire('../client-api');
+const getMissionAC = lazyRequire('./MissionActionCreators');
+// for browserify to work it needs to find these magic strings
+if(false){
+    require('./MissionActionCreators');
+    require('../client-api');
+}
 
 window.__astActions = module.exports = {
 
-    /** @param rate {string} low or high (constant) */
-        setBreathRate(rate){
-        Dispatcher.dispatch({action: AstConstants.SET_BREATH_RATE, rate})
-    },
-
     /* in units per minute */
     setOxygenConsumption(units) {
-        serverAPI().setOxygenConsumption(units);
+        getServerAPI().setOxygenConsumption(units);
     },
 
     heartRateRead(rate){
         var text, level
-        if(rate < 90){
+        if (rate < 90) {
             level = 'info';
             text = 'Fine verdier';
-        }else if (rate > 120){
+        } else if (rate > 120) {
             text = 'Veldig høye verdier!';
             level = 'danger';
         } else {
@@ -40,7 +40,11 @@ window.__astActions = module.exports = {
             level = 'warning';
         }
 
-        MessageActionCreators.addMessage({text, level, duration : 20});
+        MessageActionCreators.addMessage({text, level, duration: 20});
+    },
+
+    startMonitorTask(){
+        getMissionAC().startTask('astronaut', 'breathing_timer')
     }
 
 };

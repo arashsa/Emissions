@@ -71,6 +71,8 @@ var tmp = {
     taskCompleted(teamId, taskId)   {
         AppDispatcher.dispatch({action: MissionConstants.COMPLETED_TASK, taskId, teamId});
         serverAPI().sendTeamStateChange(teamId);
+
+        // also publish this to server as separate event? - maybe to trigger something at certain point?
     },
 
     askToStartNextChapter(){

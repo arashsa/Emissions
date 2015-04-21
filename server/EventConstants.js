@@ -21,8 +21,6 @@ module.exports = keyMirror({
 
     // ASTRONAUT TEAM EVENTS
     AST_CHECK_VITALS : null,
-    AST_SET_BREATH_RATE : null,
-    AST_SET_HEART_RATE : null,
 
     // COMMUNICATION TEAM EVENTS
     COMM_INFORM_ASTRONAUT : null

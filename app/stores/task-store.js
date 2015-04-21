@@ -37,10 +37,21 @@ var assignments = {
         awaiting : awaitingNewInstructions,
         breathing_timer: {
            text : 'Start klokken, og tell antall innpust (topper) på pustegrafen.',
-            next : 'breathing_calculate'
+            next : 'breathing_calculate',
+            plain_info : true
         },
         breathing_calculate : {
-            text : 'Regn ut og evaluer oksygenforbruket pr minutt i %. Gjennomsnittlig oksygenforbruk med 25 innpust er 0,5%. Hint:(antall innpust pr minutt / (25/0.5))'
+            text : 'Hvor mange innpust blir det på ett minutt? Bruk tallet du finner til å regne ut oksygenforbruket pr minutt. Gjennomsnittlig oksygenforbruk med 25 innpust i minuttet er 1 oksygenenhet.',
+            next: 'heartrate_timer'
+        },
+        heartrate_timer : {
+            text : 'Start klokka og tell antall hjerteslag på ti sekunder',
+            next : 'heartrate_calculate',
+            plain_info : true
+        },
+        heartrate_calculate : {
+            text : 'Finn nå ut hvor mange slag det blir i minuttet. Evaluer resultatet ved å skrive det inn i tekstfeltet.',
+            next : 'awaiting'
         }
     }
 };
@@ -64,7 +75,8 @@ var TaskStore = Object.assign(new BaseStore(), {
         return {
             currentTaskId: this.getCurrentTaskId(),
             currentTask: this.getCurrentTask().text,
-            nextTaskId : this.getCurrentTask().next
+            nextTaskId : this.getCurrentTask().next,
+            plainInfo : this.getCurrentTask().plain_info
         };
     },
 

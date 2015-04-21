@@ -42,14 +42,20 @@ function b(a) {
     return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b)
 }
 
-function lazyRequire(path) {
+/**
+ * Cannot get this to work no matter what I use as the path
+ */
+/*function lazyRequire(path) {
+    // trim away '/app'
+    //let newPath = path.slice(4);
     let tmp = null;
     return ()=> {
         if (!tmp) tmp = require(path);
         return tmp;
     }
 }
+*/
 
 module.exports = {
-    cleanRootPath, randomInt, parseNumber, uuid: b, lazyRequire
+    cleanRootPath, randomInt, parseNumber, uuid: b
 };

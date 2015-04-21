@@ -11,6 +11,18 @@ const React = require('react'),
     AstronautTask = require('./astronaut-task.react'),
     { format } = require('util');
 
+// lazyrequire
+if (false) {
+    require('../actions/MissionActionCreators');
+}
+function lazyRequire(path) {
+    let tmp = null;
+    return ()=> {
+        if (!tmp) tmp = require(path);
+        return tmp;
+    }
+}
+const getMissionAC = lazyRequire('../actions/MissionActionCreators');
 
 function urlOfTask(taskId) {
     return format('/%s/task/%s', RouteStore.getTeamId(), taskId);
@@ -93,11 +105,18 @@ const Task = React.createClass({
     },
 
     _createSubTaskUI() {
-        switch(RouteStore.getTeamId()){
-            case 'science': return <ScienceTask appstate={this.state}/>
-            case 'astronaut': return <AstronautTask appstate={this.state}/>
-            default: return <div>Not yet created</div>
+        switch (RouteStore.getTeamId()) {
+            case 'science':
+                return <ScienceTask appstate={this.state}/>
+            case 'astronaut':
+                return <AstronautTask appstate={this.state}/>
+            default:
+                return <div>Not yet created</div>
         }
+    },
+
+    _handleTaskOKClick(){
+         getMissionAC().taskCompleted( RouteStore.getTeamId(),  this.state.taskStore.currentTaskId);
     },
 
     render() {
@@ -149,6 +168,11 @@ const Task = React.createClass({
                         <div className='jumbotron taskbox'>
                             <h2 className='taskbox__header'>Oppgave</h2>
                             <span className={'taskbox__text ' + blink}> {this.state.taskStore.currentTask} </span>
+
+                            { this.state.taskStore.plainInfo
+                            && <button className="btn-primary btn"
+                                       onClick={ this._handleTaskOKClick }
+                                >OK</button> }
                         </div>
                     </div>
                 </div>

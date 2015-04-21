@@ -11,6 +11,20 @@ const { parseNumber } = require('../utils');
 TimerActionCreators.setTimer('breath-timer', 15);
 TimerActionCreators.setTimer('heart-timer', 10);
 
+// lazy load due to avoid circular dependencies
+function lazyRequire(path) {
+    let tmp = null;
+    return ()=> {
+        if (!tmp) tmp = require(path);
+        return tmp;
+    }
+}
+const getMissionAC = lazyRequire('../actions/MissionActionCreators');
+// for browserify to work it needs to find these magic strings
+if(false){
+    require('../actions/MissionActionCreators');
+}
+
 module.exports = React.createClass({
 
     statics: {},
@@ -47,12 +61,14 @@ module.exports = React.createClass({
         e.preventDefault();
         var el = React.findDOMNode(this.refs['breath-rate']);
         AstronautActionCreators.setOxygenConsumption(parseNumber(el.value))
+        getMissionAC().taskCompleted('astronaut','breathing_calculate')
     },
 
     _handleHeartRate(e){
         e.preventDefault();
         var el = React.findDOMNode(this.refs['heart-rate-input']);
         AstronautActionCreators.heartRateRead(parseNumber(el.value));
+        getMissionAC().taskCompleted('astronaut','heartrate_calculate')
     },
 
     render() {
