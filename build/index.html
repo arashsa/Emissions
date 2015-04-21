@@ -3,6 +3,11 @@
 <head>
     <link rel="stylesheet" href="/main.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/jslib/loadcss.min.js"></script>
+    <script>
+        // to avoid blocking css loads when developing without internet
+        loadCSS("//fonts.googleapis.com/css?family=Orbitron|Tangerine");
+    </script>
 </head>
 <body>
 <script>document.write('<script src="//' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
@@ -18,11 +23,6 @@
 <script src="/jslib/react-router.js"></script>
 <script src="/jslib/amcharts.js"></script>
 <script src="/jslib/socket.io.js"></script>
-<script src="/jslib/loadcss.min.js"></script>
-<script>
-    // to avoid blocking css loads when developing without internet
-    loadCSS("//fonts.googleapis.com/css?family=Orbitron|Tangerine");
-</script>
 
 
 <script src="/main.js"></script>
