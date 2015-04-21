@@ -64,8 +64,8 @@ var assignments = {
             next : 'awaiting'
         },
 
-        tyr_v_check : {
-            text : 'NOT SURE ABOUT THIS ONE. I THINK IT WILL BE TRIGGERED WITHOUT ANY NEED FOR INSTRUCTIONS',
+        signal_test : {
+            text : 'Sjekk om dataoverføringer lar seg gjøre. Om det går bra kan dere teste om datakvaliteten er tilfredsstillende',
             next : 'awaiting'
         }
     },

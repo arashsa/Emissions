@@ -5,6 +5,7 @@ const MissionConstants = require('./constants/MissionConstants');
 const MissionActionCreators = require('./actions/MissionActionCreators');
 const MessageActionCreators = require('./actions/MessageActionCreators');
 const ScienceTeamActionCreators = require('./actions/ScienceActionCreators');
+const SecurityTeamActionCreators  = require('./actions/SecurityTeamActionCreators');
 const AstroTeamTeamActionCreators = require('./actions/AstroTeamActionCreators');
 const RadiationStore = require('./stores/radiation-store');
 const TimerStore = require('./stores/timer-store');
@@ -64,7 +65,7 @@ var api = {
         });
 
         socket.on(EventConstants.SECURITY_CHECK_DATA_TRANSFER, ()=> {
-            require('./actions/SecurityTeamAcrtionCreators').startDataTransferCheck();
+            SecurityTeamActionCreators.startDataTransferCheck();
         });
 
 
