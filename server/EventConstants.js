@@ -23,7 +23,9 @@ module.exports = keyMirror({
     AST_CHECK_VITALS : null,
 
     // COMMUNICATION TEAM EVENTS
-    COMM_INFORM_ASTRONAUT : null
+    COMM_INFORM_ASTRONAUT : null,
+    COMM_CHECK_SAT_LINK: null,
+
 
     // SECURITY TEAM EVENTS
 });

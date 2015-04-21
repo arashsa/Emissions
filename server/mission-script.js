@@ -2,6 +2,8 @@ const chapters = require('./chapters');
 const EventConstants = require('./EventConstants');
 
 var createRecurringTasks = function (chapter) {
+
+    //science
     chapters.addChapterEvent({
         chapter: chapter,
         eventName: EventConstants.SCIENCE_CHECK_RADIATION,
@@ -37,6 +39,24 @@ var createRecurringTasks = function (chapter) {
         triggerTime: 5*60,
         autoTrigger: true
     });
+
+    // communiction
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.COMM_CHECK_SAT_LINK,
+        triggerTime: 0,
+        autoTrigger: true
+    });
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.COMM_CHECK_SAT_LINK,
+        triggerTime: 10*60,
+        autoTrigger: true
+    });
+
+    // security
+    // no recurring events
 
 };
 
