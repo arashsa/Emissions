@@ -18,7 +18,7 @@ const BreathRateStore = module.exports = Object.assign(new BaseStore, {
     dispatcherIndex: Dispatcher.register((payload) => {
 
         switch (payload.action) {
-            case MissionConstants.RECEIVED_APP_STATE:
+            case MConstants.RECEIVED_APP_STATE:
                 var appState = payload.appState;
 
                 if(appState.breath_rate === 'high') {

@@ -30,6 +30,7 @@ var actions = module.exports = {
             MessageActionCreators.addMessage({
                 text: 'TEST OK', duration: 2, level: 'info'
             });
+            actions.sendReadyForSafeMode();
         }
         getMissionAC().taskCompleted('security', 'signal_test')
     },
@@ -47,6 +48,14 @@ var actions = module.exports = {
                 text: 'TEST OK', duration: 2, level: 'info'
             });
         }
+    },
+
+    sendReadyForSafeMode(){
+        getServerAPI().setReadyForSafeMode();
+    },
+
+    setInSafeMode(){
+        getServerAPI().setInSafeMode();
     }
 };
 

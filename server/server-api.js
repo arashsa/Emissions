@@ -5,6 +5,7 @@ const _ = require('lodash');
 
 var missionStarted;
 var teamState;
+var satelliteInSafeMode;
 
 var oxygenRemaining;
 var oxygenConsumption;
@@ -16,15 +17,18 @@ var radiationLevel;
 var co2Level;
 var scrubFilterChanged;
 var chosenSatellite;
+var readyForSafeMode;
 
 function appState() {
     return {
         current_chapter: chapters.currentChapter(),
         mission_running: missionStarted,
+        satellite_in_safe_mode : satelliteInSafeMode,
         elapsed_mission_time: missionTime.usedTimeInSeconds(),
         elapsed_chapter_time: Math.round(missionTime.usedTimeInSeconds() - chapters.chapterStart()),
         quality_test_should_fail: qualityTestShouldFail,
         transfer_test_should_fail: transferTestShouldFail,
+        ready_for_safe_mode: readyForSafeMode,
         chosen_satellite: chosenSatellite,
         carbon_dioxide: co2Level,
         scrub_filter_changed: scrubFilterChanged,
@@ -176,7 +180,17 @@ var API = module.exports = function init(io) {
         socket.on(EventConstants.COMPLETE_MISSION, ()=> {
             stopMission();
             socket.broadcast.emit(EventConstants.MISSION_COMPLETED);
-        })
+        });
+
+        socket.on('ready for safe mode', () => {
+            readyForSafeMode = true;
+            publishAppStateUpdate();
+        });
+
+        socket.on('set in safe mode', () => {
+            satelliteInSafeMode = true;
+            publishAppStateUpdate();
+        });
     });
 
     function publishAppStateUpdate() {
@@ -291,6 +305,7 @@ var API = module.exports = function init(io) {
 
     function resetValues() {
 
+        satelliteInSafeMode = false;
         missionStarted = false;
         teamState = {};
 
@@ -307,6 +322,8 @@ var API = module.exports = function init(io) {
         scrubFilterChanged = false;
 
         chosenSatellite = 2;
+
+        readyForSafeMode = false;
     }
 
 

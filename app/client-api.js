@@ -5,7 +5,7 @@ const MissionConstants = require('./constants/MissionConstants');
 const MissionActionCreators = require('./actions/MissionActionCreators');
 const MessageActionCreators = require('./actions/MessageActionCreators');
 const ScienceTeamActionCreators = require('./actions/ScienceActionCreators');
-const SecurityTeamActionCreators  = require('./actions/SecurityTeamActionCreators');
+const SecurityTeamActionCreators = require('./actions/SecurityTeamActionCreators');
 const AstroTeamTeamActionCreators = require('./actions/AstroTeamActionCreators');
 const RadiationStore = require('./stores/radiation-store');
 const TimerStore = require('./stores/timer-store');
@@ -128,7 +128,7 @@ var api = {
     },
 
     askToChangeScrubFilter(){
-      socket.emit('set scrub filter changed')
+        socket.emit('set scrub filter changed')
     },
 
     _appStateReceived(appState) {
@@ -141,6 +141,14 @@ var api = {
 
     setOxygenConsumption(units) {
         socket.emit('set oxygen consumption', units);
+    },
+
+    setReadyForSafeMode(){
+        socket.emit('ready for safe mode');
+    },
+
+    setInSafeMode(){
+        socket.emit('set in safe mode');
     },
 
     // meant for testing - not actual client use

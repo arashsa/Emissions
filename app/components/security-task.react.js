@@ -86,6 +86,7 @@ module.exports = React.createClass({
         state.commProgress = 0;
         state.qualityProgress = 0;
         state.dataQualityFailing = true;
+        state.readyForSafeMode = false;
         return state;
     },
 
@@ -108,7 +109,7 @@ module.exports = React.createClass({
             if (number >= 1) {
                 clearInterval(tmp);
                 SecurityTeamAC.endDataQualityTest(!this.state.dataQualityFailing);
-                setTimeout(() => this.setState({qualityProgress : 0}),9000)
+                setTimeout(() => this.setState({qualityProgress: 0}), 9000)
             }
 
             this.setState({qualityProgress: number})
@@ -127,7 +128,7 @@ module.exports = React.createClass({
             if (number >= 1) {
                 clearInterval(tmp);
                 SecurityTeamAC.endDataTransferTest(!this.state.dataTransferFailing);
-                setTimeout(() => this.setState({commProgress: 0}),9000)
+                setTimeout(() => this.setState({commProgress: 0}), 9000)
             }
 
 
@@ -155,7 +156,8 @@ module.exports = React.createClass({
         return {
             oxygenStore: OxygenStore.getState(),
             dataQualityFailing: CommunicationQualityStore.qualityTestShouldFail(),
-            dataTransferFailing: CommunicationQualityStore.transferTestShould()
+            dataTransferFailing: CommunicationQualityStore.transferTestShould(),
+            readyForSafeMode: CommunicationQualityStore.readyForSafeMode()
         };
     },
 
@@ -172,10 +174,20 @@ module.exports = React.createClass({
 
             <div className="row">
 
-                <ul className='col-sm-6'>
-                    <li>Scrubfilter byttet: {CO2Store.filterChanged() ? 'ja' : 'nei'}</li>
-                    <li>Oksygenindikator: {indicator} </li>
-                </ul>
+
+                <div className="col-sm-6">
+
+                    <button
+                        style={{ marginBottom: '20px'}}
+                        className={ 'btn btn-primary ' + (this.state.readyForSafeMode? '' : 'disabled')}
+                        onClick={SecurityTeamAC.setInSafeMode}
+                        >Send i SAFE MODE</button>
+
+                    <ul className=''>
+                        <li>Scrubfilter byttet: {CO2Store.filterChanged() ? 'ja' : 'nei'}</li>
+                        <li>Oksygenindikator: {indicator} </li>
+                    </ul>
+                </div>
 
                 <div className='col-xs-12 col-sm-6'>
                     <h3>Innhold karbondioksid i drakten av total luftmengde</h3>

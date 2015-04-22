@@ -92,7 +92,8 @@ var App = React.createClass({
             remainingEvents: EventStore.remaining(),
             running: MissionStore.isMissionRunning(),
             chapter: MissionStore.currentChapter(),
-            chapterTime: MissionStore.chapterTime()
+            chapterTime: MissionStore.chapterTime(),
+            safeMode : MissionStore.isSatelliteInSafeMode()
         });
     },
 
@@ -119,6 +120,7 @@ var App = React.createClass({
                         <dt>Total tid</dt>
                         <dd><MissionTimer /></dd>
                     </dl>
+                    Satellite in safe mode? {this.state.safeMode? "Yes" : "No" }
 
                 </div>
 

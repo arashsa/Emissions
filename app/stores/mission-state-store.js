@@ -8,6 +8,7 @@ const { MISSION_STARTED_EVENT,MISSION_STOPPED_EVENT, RECEIVED_APP_STATE } =  req
 var missionRunning = false, missionHasBeenStopped = false;
 var currentChapter = null;
 var chapterTime = 0;
+var inSafeMode = false;
 
 var MissionStateStore = Object.assign(new BaseStore(), {
 
@@ -19,6 +20,10 @@ var MissionStateStore = Object.assign(new BaseStore(), {
     handleMissionStopped() {
         missionRunning = false;
         this.emitChange();
+    },
+
+    isSatelliteInSafeMode(){
+        return inSafeMode;
     },
 
     isMissionRunning() {
@@ -52,6 +57,7 @@ var MissionStateStore = Object.assign(new BaseStore(), {
                 missionRunning = appState.mission_running;
                 currentChapter = appState.current_chapter;
                 chapterTime = appState.elapsed_chapter_time;
+                inSafeMode = appState.satellite_in_safe_mode;
                 return MissionStateStore.emitChange();
         }
 
