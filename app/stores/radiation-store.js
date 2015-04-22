@@ -91,6 +91,7 @@ const RadiationStore = Object.assign(new BaseStore(), {
 
                 RadiationStore.emitChange();
                 break;
+
             case MissionConstants.MISSION_WAS_RESET:
                 samples = [];
                 lastCalculatedAverage = null;

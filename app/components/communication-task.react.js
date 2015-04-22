@@ -1,6 +1,7 @@
 const React = require('react');
 const OxygenStore = require('../stores/oxygen-store');
 const { parseNumber } = require('../utils');
+const { randomInt } = require('../utils');
 
 // lazy load due to avoid circular dependencies
 function lazyRequire(path) {
@@ -14,6 +15,7 @@ const getMissionAC = lazyRequire('../actions/MissionActionCreators');
 // for browserify to work it needs to find these magic strings
 require('../actions/MissionActionCreators');
 
+var lowThreshold = 30, mediumThreshold = 70;
 
 var satellites = [
     {name: 'Satelitt 1', freq: {min: 2.8, max: 3.4}, reception: 90, color: 'green'},
@@ -21,6 +23,27 @@ var satellites = [
     {name: 'Satelitt 3', freq: {min: 3.6, max: 4.0}, reception: 60, color: 'orange'}
 ];
 
+function color(reception) {
+    if (reception > mediumThreshold) {
+        return 'green';
+    }
+    if (reception > lowThreshold) {
+        return 'orange';
+    }
+    return 'red';
+}
+
+var i=0;
+function newValues(){
+    satellites[(i+0)%3].reception = randomInt(25,65);
+    satellites[(i+1)%3].reception = randomInt(45,85);
+    satellites[(i+2)%3].reception = randomInt(25,65);
+    i++;
+
+    chart.validateData();
+}
+
+setInterval(newValues, 1000*60*4);
 
 var chart;
 function initGraph(domElement) {
@@ -81,24 +104,29 @@ const SatelliteTable = React.createClass({
 
     render(){
 
-        return (<table className={"table table-bordered table-striped" + this.props.className }>
-            <thead>
-            <tr>
-                <th>Satelitt</th>
-                <th>Frekvensområde</th>
-            </tr>
-            </thead>
+        return (
+            <div {...this.props} >
 
-            <tbody>
-            {
-                this.props.satellites.map((sat, i) =>
-                    <tr key={i}>
-                        <td>{sat.name}</td>
-                        <td>{sat.freq.min} - {sat.freq.max}</td>
-                    </tr>)
-            }
-            </tbody>
-        </table>);
+                <table className={"table table-bordered table-striped "}>
+                    <thead>
+                    <tr>
+                        <th>Satelitt</th>
+                        <th>Frekvensområde</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {
+                        this.props.satellites.map((sat, i) =>
+                            <tr key={i}>
+                                <td>{sat.name}</td>
+                                <td>{sat.freq.min} - {sat.freq.max}</td>
+                            </tr>)
+                    }
+                    </tbody>
+                </table>
+            </div>
+        );
 
     }
 
@@ -113,7 +141,9 @@ module.exports = React.createClass({
     mixins: [],
 
     getInitialState() {
-        return this._getState();
+        return {
+            chosenSatellite: satellites[0]
+        };
     },
     componentWillMount() {
     },
@@ -128,12 +158,26 @@ module.exports = React.createClass({
     render() {
 
         return (
-            <div className='row'>
+            <div>
 
-                <SatelliteTable satellites={satellites} className='col-sm-6'/>
+                <div className='row'>
+                    <SatelliteTable satellites={satellites} className='col-sm-6'/>
 
-                <SatelliteReceptionChart style={{ height : '250px'}} className='col-sm-6'/>
+                    <SatelliteReceptionChart style={{ height : '250px'}} className='col-sm-6'/>
+                </div>
+
+                <div className="row">
+                    <h3>Velg satelitt og tilhørende frekvensområde</h3>
+                    <select>
+                        { satellites.map((sat) =>  <option key={sat.name} value={sat.name}>{sat.name}</option>) }
+                    </select>
+
+                    <h4>Velg frekvens:</h4>
+                    <input type='number' />
+                </div>
+
             </div> );
+
     }
 
 });
