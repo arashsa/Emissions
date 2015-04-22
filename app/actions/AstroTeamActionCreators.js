@@ -15,10 +15,8 @@ function lazyRequire(path) {
 const getServerAPI = lazyRequire('../client-api');
 const getMissionAC = lazyRequire('./MissionActionCreators');
 // for browserify to work it needs to find these magic strings
-if(false){
-    require('./MissionActionCreators');
-    require('../client-api');
-}
+require('./MissionActionCreators');
+require('../client-api');
 const TimerActionCreators = require('./TimerActionCreators');
 
 window.__astActions = module.exports = {
@@ -29,7 +27,7 @@ window.__astActions = module.exports = {
     },
 
     heartRateRead(rate){
-        var text, level
+        var text, level;
         if (rate < 90) {
             level = 'info';
             text = 'Fine verdier';

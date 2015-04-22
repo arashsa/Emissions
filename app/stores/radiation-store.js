@@ -75,8 +75,10 @@ const RadiationStore = Object.assign(new BaseStore(), {
                 samples = [];
                 RadiationStore.emitChange();
                 break;
+
             case MissionConstants.RECEIVED_APP_STATE:
                 let appState = payload.appState;
+
 
                 if(appState.science && appState.science.radiation) {
                     let radiation = appState.science.radiation;

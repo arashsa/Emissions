@@ -109,9 +109,28 @@ function run() {
     createRecurringTasks(chapter);
 
     // ast
-    // TODO : heart rate => 100, orange
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SET_HEART_RATE_MEDIUM,
+        triggerTime: 0,
+        autoTrigger: true,
+        serverInternal : true
+    });
 
-    // TODO: new check after 5 minutes
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SET_HEART_RATE_LOW,
+        triggerTime: 4*60,
+        autoTrigger: true,
+        serverInternal : true
+    });
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.AST_CHECK_VITALS,
+        triggerTime: 5*60,
+        autoTrigger: true
+    });
 
 
     // CHAPTER 5
@@ -135,7 +154,13 @@ function run() {
         autoTrigger: true
     });
 
-    // TODO: trigger radiation change to orange
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: 'set radiation medium',
+        triggerTime: 0,
+        autoTrigger: true,
+        serverInternal : true
+    });
 
 
     // CHAPTER 6
@@ -143,32 +168,75 @@ function run() {
     chapter = 6;
     createRecurringTasks(chapter);
 
-    // TODO: set breath (50) and heart rate 120 (RED)
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SET_HEART_RATE_HIGH,
+        triggerTime: 0,
+        autoTrigger: true,
+        serverInternal : true
+    });
 
-    // TODO: set radiation GREEN
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: 'set breathrate high',
+        triggerTime: 0,
+        autoTrigger: true,
+        serverInternal : true
+    });
 
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: 'set radiation low',
+        triggerTime: 0,
+        autoTrigger: true,
+        serverInternal : true
+    });
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.SET_HEART_RATE_LOW,
+        triggerTime: 180,
+        autoTrigger: true,
+        serverInternal : true
+    });
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: 'set breathrate low',
+        triggerTime: 180,
+        autoTrigger: true,
+        serverInternal : true
+    });
+
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: EventConstants.AST_CHECK_VITALS,
+        triggerTime: 5*60,
+        autoTrigger: true
+    });
 
     // CHAPTER 7
     chapter = 7;
-
-    // TODO: set radiation RED 90
 
     createRecurringTasks(chapter);
 
     chapters.addChapterEvent({
         chapter: chapter,
-        eventName: 'set quality ok',
-        short_description : 'Set the quality of the transfer to be OK',
-        triggerTime: 20,
-        autoTrigger: false,
+        eventName: 'set radiation high',
+        triggerTime: 0,
+        autoTrigger: true,
         serverInternal : true
     });
 
 
-
-
-
-
+    chapters.addChapterEvent({
+        chapter: chapter,
+        eventName: 'set quality ok',
+        short_description : 'Trigger manually. Set the quality of the transfer to be OK.',
+        triggerTime: 20,
+        autoTrigger: false,
+        serverInternal : true
+    });
 
 }
 

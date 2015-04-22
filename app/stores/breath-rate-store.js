@@ -18,8 +18,15 @@ const BreathRateStore = module.exports = Object.assign(new BaseStore, {
     dispatcherIndex: Dispatcher.register((payload) => {
 
         switch (payload.action) {
-            case AstConstants.SET_BREATH_RATE:
-                current = payload.rate;
+            case MissionConstants.RECEIVED_APP_STATE:
+                var appState = payload.appState;
+
+                if(appState.breath_rate === 'high') {
+                    current = AstConstants.HIGH_RESP_RATE;
+                } else {
+                    current = AstConstants.LOW_RESP_RATE;
+                }
+
                 BreathRateStore.emitChange();
                 break;
         }

@@ -107,7 +107,6 @@ var api = {
 
         if (teamId === 'science') {
             state.radiation = RadiationStore.getState();
-        } else if(teamId === 'astronaut') {
         }
 
         socket.emit('set team state', state);
