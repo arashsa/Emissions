@@ -58,6 +58,7 @@ var MissionStateStore = Object.assign(new BaseStore(), {
                 currentChapter = appState.current_chapter;
                 chapterTime = appState.elapsed_chapter_time;
                 inSafeMode = appState.satellite_in_safe_mode;
+
                 return MissionStateStore.emitChange();
         }
 

@@ -2,6 +2,7 @@ const React = require('react');
 const OxygenStore = require('../stores/oxygen-store');
 const { parseNumber } = require('../utils');
 const { randomInt } = require('../utils');
+const MissionStateStore = require('../stores/mission-state-store');
 
 // lazy load due to avoid circular dependencies
 function lazyRequire(path) {
@@ -40,10 +41,19 @@ function newValues(){
     satellites[(i+2)%3].reception = randomInt(25,65);
     i++;
 
-    chart.validateData();
+    chart && chart.validateData();
 }
 
-setInterval(newValues, 1000*60*4);
+var currentChapter;
+
+MissionStateStore.addChangeListener(() =>{
+    var isNewChapter = (currentChapter !== MissionStateStore.currentChapter());
+    currentChapter = MissionStateStore.currentChapter();
+
+    if(isNewChapter && currentChapter !== 3) {
+        newValues();
+    }
+});
 
 var chart;
 function initGraph(domElement) {

@@ -163,6 +163,7 @@ var API = module.exports = function init(io) {
         socket.on(EventConstants.ADVANCE_CHAPTER, () => {
             chapters.advanceChapter();
             socket.emit(EventConstants.SET_EVENTS, createEventLists());
+            publishAppStateUpdate();
         });
 
         socket.on('set team state', function (state) {
