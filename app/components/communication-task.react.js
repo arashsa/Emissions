@@ -13,8 +13,10 @@ function lazyRequire(path) {
     }
 }
 const getMissionAC = lazyRequire('../actions/MissionActionCreators');
+const getMessageAC = lazyRequire('../actions/MessageActionCreators');
 // for browserify to work it needs to find these magic strings
 require('../actions/MissionActionCreators');
+require('../actions/MessageActionCreators');
 
 var lowThreshold = 30, mediumThreshold = 70;
 
@@ -34,11 +36,11 @@ function color(reception) {
     return 'red';
 }
 
-var i=0;
-function newValues(){
-    satellites[(i+0)%3].reception = randomInt(25,65);
-    satellites[(i+1)%3].reception = randomInt(45,85);
-    satellites[(i+2)%3].reception = randomInt(25,65);
+var i = 0;
+function newValues() {
+    satellites[(i + 0) % 3].reception = randomInt(25, 65);
+    satellites[(i + 1) % 3].reception = randomInt(45, 85);
+    satellites[(i + 2) % 3].reception = randomInt(25, 65);
     i++;
 
     chart && chart.validateData();
@@ -46,11 +48,11 @@ function newValues(){
 
 var currentChapter;
 
-MissionStateStore.addChangeListener(() =>{
+MissionStateStore.addChangeListener(() => {
     var isNewChapter = (currentChapter !== MissionStateStore.currentChapter());
     currentChapter = MissionStateStore.currentChapter();
 
-    if(isNewChapter && currentChapter !== 3) {
+    if (isNewChapter && currentChapter !== 3) {
         newValues();
     }
 });
@@ -111,7 +113,6 @@ const SatelliteTable = React.createClass({
         satellites: React.PropTypes.array.isRequired
     },
 
-
     render(){
 
         return (
@@ -152,7 +153,7 @@ module.exports = React.createClass({
 
     getInitialState() {
         return {
-            chosenSatellite: satellites[0]
+            chosenSatellite: satellites[2]
         };
     },
     componentWillMount() {
@@ -161,8 +162,32 @@ module.exports = React.createClass({
     componentWillUnmount() {
     },
 
-    _getState(){
-        return {};
+    _onSubmit(e){
+        e.preventDefault();
+        console.log(e);
+        let selectBox = React.findDOMNode(this.refs['select-sat']);
+        let freqBox = React.findDOMNode(this.refs['freq']);
+        var actions = getMessageAC();
+
+        let selectedSat = selectBox.value;
+        let ok = false;
+
+        var satObj = satellites.filter((sat) => sat.name === selectedSat)[0];
+        var mean = (satObj.freq.max + satObj.freq.min)/2;
+        var delta = 0.1;
+
+        debugger;
+        if(Math.abs(parseNumber(freqBox.value)-mean) <= delta) {
+            ok = true;
+        } else {
+            actions.addTransientMessage({text : 'Greide ikke koble til satelitt. Riktig frekvens?'})
+        }
+
+        if(ok) {
+            freqBox.value = '';
+            actions.addMessage({text : 'Byttet til ' + selectedSat})
+            this.state.chosenSatellite = satObj;
+        }
     },
 
     render() {
@@ -177,13 +202,16 @@ module.exports = React.createClass({
                 </div>
 
                 <div className="row">
-                    <h3>Velg satelitt og tilhørende frekvensområde</h3>
-                    <select>
-                        { satellites.map((sat) =>  <option key={sat.name} value={sat.name}>{sat.name}</option>) }
-                    </select>
+                    <form onSubmit={this._onSubmit}>
+                        <h3>Velg satelitt og tilhørende frekvensområde</h3>
 
-                    <h4>Velg frekvens:</h4>
-                    <input type='number' />
+                        <select ref='select-sat' onSelect={this._onSelect} defaultValue={this.state.chosenSatellite.name}>
+                            { satellites.map((sat) =>  <option key={sat.name} value={sat.name}>{sat.name}</option>) }
+                        </select>
+
+                        <h4>Velg frekvens:</h4>
+                        <input step="0.1" ref='freq' type='number' />
+                    </form>
                 </div>
 
             </div> );
