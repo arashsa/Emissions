@@ -77,14 +77,16 @@ const RadiationStore = Object.assign(new BaseStore(), {
                 break;
 
             case MissionConstants.RECEIVED_APP_STATE:
-                let appState = payload.appState;
+                let appState = payload.appState,
+                    radiationLevel = appState.radiation_level;
 
+                RadiationStore._setRadiationLevel(radiationLevel.low,radiationLevel.high);
 
                 if(appState.science && appState.science.radiation) {
-                    let radiation = appState.science.radiation;
-                    samples = radiation.samples;
-                    lastCalculatedAverage = radiation.lastCalculatedAverage;
-                    totalRadiation = radiation.total;
+                    let radiationState = appState.science.radiation;
+                    samples = radiationState.samples;
+                    lastCalculatedAverage = radiationState.lastCalculatedAverage;
+                    totalRadiation = radiationState.total;
                 }
 
                 RadiationStore.emitChange();

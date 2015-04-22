@@ -132,7 +132,7 @@ module.exports = React.createClass({
 
                 <SatelliteTable satellites={satellites} className='col-sm-6'/>
 
-                <SatelliteReceptionChart className='col-sm-6'/>
+                <SatelliteReceptionChart style={{ height : '250px'}} className='col-sm-6'/>
             </div> );
     }
 

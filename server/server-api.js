@@ -36,6 +36,7 @@ function appState() {
         oxygen_consumption: oxygenConsumption,
         heart_rate: heartRate,
         breath_rate: breathRate,
+        radiation_level : radiationLevel,
         science: teamState['science'],
         communication: teamState['communication'],
         security: teamState['security'],
