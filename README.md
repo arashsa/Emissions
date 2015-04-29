@@ -1,6 +1,6 @@
 # NAROM eMission prototype
 
-Browser rendered application written using React and the Flux architectural pattern. The development environment is based on a modified version of the boilerplate created by [Christian Alfoni](git@github.com:christianalfoni/react-app-boilerplate.git)
+Browser rendered application written using the [React](http://facebook.github.io/react/), [Socket.IO](http://socket.io/) and the [Flux architectural pattern](https://facebook.github.io/flux/). The development environment is based on a modified version of the boilerplate created by [Christian Alfoni](git@github.com:christianalfoni/react-app-boilerplate.git)
 
 ## Development
 * Run `gulp`
