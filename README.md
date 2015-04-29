@@ -47,4 +47,4 @@ There are lots of things to do, and of course, a lot more than what I write here
 - Implement per-session authentication (MC has keys) to avoid kids ruining sessions by messing with other teams
 - Concurrent multi-session support? If there only ever will be one session at a time (because Andøya needs physical personnel), there is no need for this.
 - A log for the mission commander of what is happening at which time, and whether teams have accomplished this or that.
-- Add the WebRTC video functionality back in that was present earlier. Check out at the [old code](https://github.com/fatso83/Emissions/commit/12bccc3ab4a37c38c13f49f7b26bf6d311a2b2c8)
+- Add the WebRTC video functionality back in that was present earlier. Check out at the [old code](https://github.com/fatso83/Emissions/tree/12bccc3ab4a37c38c13f49f7b26bf6d311a2b2c8)
