@@ -14,11 +14,6 @@ var livereload = require('gulp-livereload');
 var jasminePhantomJs = require('gulp-jasmine2-phantomjs');
 var babelify = require("babelify");
 
-
-// External dependencies you do not want to rebundle while developing,
-// but include in your application deployment
-var dependencies = [];
-
 var browserifyTask = function (options) {
     //process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
 
@@ -43,11 +38,6 @@ var browserifyTask = function (options) {
         })
     );
 
-    // We set our dependencies as externals on our app bundler when developing
-    (options.development ? dependencies : []).forEach(function (dep) {
-        appBundler.external(dep);
-    });
-
     // The rebundle process
     var rebundle = function () {
         var start = Date.now();
@@ -71,10 +61,6 @@ var browserifyTask = function (options) {
 
     rebundle();
 
-    // We create a separate bundle for our dependencies as they
-    // should not rebundle on file changes. This only happens when
-    // we develop. When deploying the dependencies will be included
-    // in the application bundle
     if (options.development) {
 
         var testFiles = glob.sync('./specs/**/*-spec.js');
@@ -87,10 +73,6 @@ var browserifyTask = function (options) {
                 optional: ["runtime"]
             })
         );
-
-        dependencies.forEach(function (dep) {
-            testBundler.external(dep);
-        });
 
         var rebundleTests = function () {
             var start = Date.now();
@@ -108,24 +90,6 @@ var browserifyTask = function (options) {
         testBundler = watchify(testBundler);
         testBundler.on('update', rebundleTests);
         rebundleTests();
-
-        var vendorsBundler = browserify({
-            debug: true,
-            require: dependencies
-        });
-
-        // Run the vendor bundle
-        var start = new Date();
-        console.log('Building VENDORS bundle');
-        vendorsBundler.bundle()
-            .on('error', gutil.log)
-            .pipe(source('vendors.js'))
-            .pipe(gulpif(!options.development, streamify(uglify())))
-            .pipe(gulp.dest(options.dest))
-            .pipe(notify(function () {
-                console.log('VENDORS bundle built in ' + (Date.now() - start) + 'ms');
-            }));
-
     }
 
 };

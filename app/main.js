@@ -15,7 +15,7 @@ serverCommunication.setup();
 window.onfocus=serverCommunication.askForMissionTime;
 
 // run startup actions - usually only relevant when developing
-require('./client-bootstrap').run();
+// require('./client-bootstrap').run();
 
 router.run((Handler, state) => {
     // pass the state down into the RouteHandlers, as that will make
