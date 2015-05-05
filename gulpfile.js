@@ -11,7 +11,6 @@ var cssmin = require('gulp-cssmin');
 var gutil = require('gulp-util');
 var glob = require('glob');
 var livereload = require('gulp-livereload');
-var jasminePhantomJs = require('gulp-jasmine2-phantomjs');
 var babelify = require("babelify");
 
 var browserifyTask = function (options) {
