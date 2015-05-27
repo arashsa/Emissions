@@ -14,7 +14,7 @@ var createRecurringTasks = function (chapter) {
     chapters.addChapterEvent({
         chapter: chapter,
         eventName: EventConstants.SCIENCE_CHECK_RADIATION,
-        triggerTime: 3 * 60,
+        triggerTime: 2 * 60 + 30,
         autoTrigger: true
     });
 
@@ -128,7 +128,7 @@ function run() {
     chapters.addChapterEvent({
         chapter: chapter,
         eventName: EventConstants.AST_CHECK_VITALS,
-        triggerTime: 5*60,
+        triggerTime: 3*60 + 30,
         autoTrigger: true
     });
 
