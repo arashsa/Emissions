@@ -176,7 +176,6 @@ module.exports = React.createClass({
         var mean = (satObj.freq.max + satObj.freq.min)/2;
         var delta = 0.1;
 
-        debugger;
         if(Math.abs(parseNumber(freqBox.value)-mean) <= delta) {
             ok = true;
         } else {
