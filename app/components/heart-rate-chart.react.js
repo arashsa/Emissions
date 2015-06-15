@@ -78,7 +78,7 @@ function createHeartRateSamples(min, max) {
     msUntilNextHeartRateBufferFrame = 0;
 
     //temporary fix
-    var beatsPerMinute = randomInt(100, 180);
+    var beatsPerMinute = randomInt(120, 190);
     var msBetweenBeats = 60 * 1000 / beatsPerMinute;
     var msUntilNextBeat = msBetweenBeats;
 
