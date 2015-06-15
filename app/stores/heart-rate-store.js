@@ -3,7 +3,7 @@ const MConstants = require('../constants/MissionConstants');
 const AstConstants = require('../constants/AstroTeamConstants');
 const BaseStore = require('./base-store');
 
-var current = {min: 60, max: 70};
+var current = {min: 120, max: 130};
 
 const HeartRateStore = module.exports = Object.assign(new BaseStore, {
 
